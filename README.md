@@ -2,8 +2,9 @@
 
 **S&P Global & CRISIL Campus Hackathon 2026 Submission**
 
-**Candidate Name:** [MY NAME]  
-**College Email ID:** [MY COLLEGE EMAIL]  
+**Candidate Name:** Arpit Sharma  
+**College Email ID:** asharma32_be22@thapar.edu  
+**GitHub Profile:** [arpitsharma2028](https://github.com/arpitsharma2028)  
 **College / Campus:** Thapar Institute of Engineering and Technology (TIET)  
 
 **Demo Video Link:** [TO BE ADDED]  
@@ -22,9 +23,10 @@ Standard approaches to unstructured financial text suffer from:
 3. **Decoupled Risk Architecture:** Risk engines generate alerts in isolation without directly connecting to real-time portfolio allocation and stress-testing engines.
 
 ### The FinSight AI Approach
-**FinSight AI** is a unified, CPU-optimized NLP Risk Intelligence and Automated Portfolio Rebalancing platform designed to run locally on a standard Windows laptop with zero cloud dependencies. It converts multi-source financial and social text into structured quantitative signals and drives two downstream execution engines:
+**FinSight AI** is a unified, CPU-optimized NLP Risk Intelligence, Automated Portfolio Rebalancing, and Quantitative Forecasting platform designed to run locally on a standard Windows laptop with zero cloud dependencies. It converts multi-source financial and social text into structured quantitative signals and drives three downstream execution engines:
 - **Module A (Tactical Index Rebalancer):** Continuously adjusts weights across a 16-asset blue-chip index using a bounded sensitivity formula with strict $100\%$ weight normalization.
 - **Module B (Strategic Wholesale Stress Testing):** Evaluates multi-asset wholesale banking capital preservation ($50M across Equities, Bonds, Derivatives, Cash) when NLP impact scores breach the $\ge 7.0$ high-risk threshold.
+- **Market Intelligence & Monte Carlo Forecasting:** 100-path Geometric Brownian Motion (GBM) probability cone simulation (optionally conditioned by NLP sentiment drift), Base-100 normalized multi-stock correlation, 52-week tail risk analytics, and live Yahoo Finance integration with fallback caching.
 
 ---
 

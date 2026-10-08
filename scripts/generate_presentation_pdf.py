@@ -158,11 +158,12 @@ def build_pdf():
     
     # Metadata Box
     meta_data = [
-        [Paragraph("<b>Candidate Name:</b>", body_text), Paragraph("Lead Engineer (Campus Hackathon Team)", body_text)],
+        [Paragraph("<b>Candidate Name:</b>", body_text), Paragraph("Arpit Sharma", body_text)],
+        [Paragraph("<b>College Email ID:</b>", body_text), Paragraph("asharma32_be22@thapar.edu (GitHub: arpitsharma2028)", body_text)],
         [Paragraph("<b>College / Campus:</b>", body_text), Paragraph("Thapar Institute of Engineering and Technology (TIET)", body_text)],
         [Paragraph("<b>Hackathon:</b>", body_text), Paragraph("S&P Global & CRISIL Campus Hackathon 2026", body_text)],
-        [Paragraph("<b>Track:</b>", body_text), Paragraph("AI/NLP Financial Risk Engineering & Multi-Asset Rebalancing", body_text)],
-        [Paragraph("<b>Architecture:</b>", body_text), Paragraph("FastAPI • scikit-learn NLP Engine • SQLite (WAL) • React/Vite Dashboard", body_text)]
+        [Paragraph("<b>Core Modules:</b>", body_text), Paragraph("NLP Risk Engine • Module A Rebalancer • Module B Stress Testing • Monte Carlo", body_text)],
+        [Paragraph("<b>Architecture:</b>", body_text), Paragraph("FastAPI • scikit-learn • yfinance • SQLite (WAL) • React/Vite Dashboard", body_text)]
     ]
     t1 = Table(meta_data, colWidths=[150, 450])
     t1.setStyle(TableStyle([
