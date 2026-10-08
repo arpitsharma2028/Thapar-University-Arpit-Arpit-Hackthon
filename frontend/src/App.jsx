@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import ErrorBoundary from './components/ErrorBoundary';
 import Overview from './pages/Overview';
 import RiskIntelligence from './pages/RiskIntelligence';
 import ModuleARebalancer from './pages/ModuleARebalancer';
@@ -191,61 +192,63 @@ export default function App() {
         />
 
         <main style={{ flex: 1 }}>
-          {activeTab === 'overview' && (
-            <Overview
-              metrics={metrics}
-              portfolio={portfolio}
-              onRunDemo={handleRunDemoScenario}
-              onSimulateEvent={() => handleSimulateEvent(0.025)}
-              onRebalanceTrigger={handleRebalanceTrigger}
-              onStressTrigger={handleStressTrigger}
-              onNavigateTab={setActiveTab}
-              loading={loading}
-            />
-          )}
+          <ErrorBoundary>
+            {activeTab === 'overview' && (
+              <Overview
+                metrics={metrics}
+                portfolio={portfolio}
+                onRunDemo={handleRunDemoScenario}
+                onSimulateEvent={() => handleSimulateEvent(0.025)}
+                onRebalanceTrigger={handleRebalanceTrigger}
+                onStressTrigger={handleStressTrigger}
+                onNavigateTab={setActiveTab}
+                loading={loading}
+              />
+            )}
 
-          {activeTab === 'risk-engine' && (
-            <RiskIntelligence
-              metrics={metrics}
-              onRebalanceTrigger={handleRebalanceTrigger}
-              onStressTrigger={handleStressTrigger}
-              showToast={showToast}
-            />
-          )}
+            {activeTab === 'risk-engine' && (
+              <RiskIntelligence
+                metrics={metrics}
+                onRebalanceTrigger={handleRebalanceTrigger}
+                onStressTrigger={handleStressTrigger}
+                showToast={showToast}
+              />
+            )}
 
-          {activeTab === 'module-a' && (
-            <ModuleARebalancer
-              portfolio={portfolio}
-              onSimulateEvent={handleSimulateEvent}
-              onSimulateBatch={handleSimulateBatch}
-              onResetPortfolio={handleResetPortfolio}
-              lastRebalanceResult={lastRebalanceResult}
-              loading={loading}
-            />
-          )}
+            {activeTab === 'module-a' && (
+              <ModuleARebalancer
+                portfolio={portfolio}
+                onSimulateEvent={handleSimulateEvent}
+                onSimulateBatch={handleSimulateBatch}
+                onResetPortfolio={handleResetPortfolio}
+                lastRebalanceResult={lastRebalanceResult}
+                loading={loading}
+              />
+            )}
 
-          {activeTab === 'module-b' && (
-            <ModuleBStressTesting
-              showToast={showToast}
-            />
-          )}
+            {activeTab === 'module-b' && (
+              <ModuleBStressTesting
+                showToast={showToast}
+              />
+            )}
 
-          {activeTab === 'market-intel' && (
-            <MarketIntelligence
-              showToast={showToast}
-            />
-          )}
+            {activeTab === 'market-intel' && (
+              <MarketIntelligence
+                showToast={showToast}
+              />
+            )}
 
-          {activeTab === 'events' && (
-            <EventExplorer
-              onRebalanceTrigger={handleRebalanceTrigger}
-              onStressTrigger={handleStressTrigger}
-            />
-          )}
+            {activeTab === 'events' && (
+              <EventExplorer
+                onRebalanceTrigger={handleRebalanceTrigger}
+                onStressTrigger={handleStressTrigger}
+              />
+            )}
 
-          {activeTab === 'history' && (
-            <SimulationHistory />
-          )}
+            {activeTab === 'history' && (
+              <SimulationHistory />
+            )}
+          </ErrorBoundary>
         </main>
       </div>
 

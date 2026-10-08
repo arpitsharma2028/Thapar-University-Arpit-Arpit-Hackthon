@@ -1,57 +1,63 @@
-import json
+"""
+FinSight AI — Rebalance Service (Module A: Business Logic Layer)
+Implements tactical dynamic index rebalancing with bounded sensitivity and strict normalization.
+"""
+
 from datetime import datetime
 from typing import Dict, Any, List, Optional
-from backend.database.db import get_connection
-from backend.config import DEFAULT_SENSITIVITY, MIN_STOCK_WEIGHT, MAX_STOCK_WEIGHT
+from backend.repositories.portfolio_repository import PortfolioRepository
+from backend.repositories.event_repository import EventRepository
+from backend.core.config import (
+    DEFAULT_SENSITIVITY,
+    MIN_STOCK_WEIGHT,
+    MAX_STOCK_WEIGHT,
+    INITIAL_PORTFOLIO_VALUE
+)
+from backend.core.exceptions import DomainValidationError, EntityNotFoundException
 
 class RebalanceService:
-    def __init__(self):
+    def __init__(
+        self,
+        portfolio_repo: Optional[PortfolioRepository] = None,
+        event_repo: Optional[EventRepository] = None
+    ):
+        self.portfolio_repo = portfolio_repo or PortfolioRepository()
+        self.event_repo = event_repo or EventRepository()
         self.min_weight = MIN_STOCK_WEIGHT
         self.max_weight = MAX_STOCK_WEIGHT
         self.sensitivity = DEFAULT_SENSITIVITY
 
     def get_current_portfolio(self) -> Dict[str, Any]:
         """
-        Fetches current portfolio positions, weights, and total value.
+        Calculates aggregate portfolio valuation, asset-weighted sentiment, and risk posture.
         """
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM portfolio_positions ORDER BY current_weight DESC")
-        rows = cursor.fetchall()
+        positions = self.portfolio_repo.get_positions()
+        if not positions:
+            raise EntityNotFoundException("No active portfolio positions found.", entity_type="Portfolio")
 
-        positions = [dict(r) for r in rows]
-        total_val = sum(p['position_value'] for p in positions)
+        total_val = sum(p["position_value"] for p in positions)
         
-        # Calculate weighted portfolio sentiment from recent event signals
-        cursor.execute("""
-            SELECT tickers, sentiment_score, impact_score 
-            FROM events 
-            ORDER BY id DESC LIMIT 20
-        """)
-        recent_events = cursor.fetchall()
-        
-        stock_sentiments = {}
+        # Calculate asset-weighted sentiment from recent event signals
+        recent_events = self.event_repo.get_events(limit=20)["events"]
+        stock_sentiments: Dict[str, List[float]] = {}
         for ev in recent_events:
-            ev_tickers = [t.strip() for t in ev['tickers'].split(',') if t.strip()]
+            tickers_raw = ev.get("tickers", "")
+            ev_tickers = [t.strip() for t in tickers_raw.split(",") if t.strip()]
             for t in ev_tickers:
-                if t not in stock_sentiments:
-                    stock_sentiments[t] = []
-                stock_sentiments[t].append(ev['sentiment_score'])
+                stock_sentiments.setdefault(t, []).append(ev["sentiment_score"])
 
         avg_stock_sent = {
-            t: round(sum(scores)/len(scores), 3) 
+            t: round(sum(scores) / len(scores), 3) 
             for t, scores in stock_sentiments.items()
         }
 
         portfolio_sentiment = 0.0
         for p in positions:
-            p['sentiment'] = avg_stock_sent.get(p['ticker'], 0.0)
-            portfolio_sentiment += p['current_weight'] * p['sentiment']
+            p["sentiment"] = avg_stock_sent.get(p["ticker"], 0.0)
+            portfolio_sentiment += p["current_weight"] * p["sentiment"]
 
         portfolio_sentiment = round(portfolio_sentiment, 3)
         risk_level = "Low" if abs(portfolio_sentiment) < 0.2 and total_val > 9_500_000 else ("High" if portfolio_sentiment < -0.3 else "Moderate")
-
-        conn.close()
 
         return {
             "total_value": round(total_val, 2),
@@ -68,242 +74,169 @@ class RebalanceService:
     ) -> Dict[str, Any]:
         """
         Dynamically adjusts portfolio weights based on incoming event risk signals.
-        Formula:
-          raw_delta = sensitivity * sentiment_score * (impact_score / 10.0)
-          new_weight = old_weight + raw_delta
-          clamp to [min_weight, max_weight]
-          normalize: sum(new_weights) = 1.00
+        Enforces:
+          1. raw_delta = lambda * sentiment * (impact / 10.0) * beta_spillover
+          2. clamp(weight, min_weight, max_weight)
+          3. strict normalization: sum(weights) == 1.0000
         """
         sens = sensitivity if sensitivity is not None else self.sensitivity
-        conn = get_connection()
-        cursor = conn.cursor()
+        if sens <= 0 or sens > 0.5:
+            raise DomainValidationError("Rebalancing sensitivity must be between 0.001 and 0.500.", field="sensitivity")
 
-        cursor.execute("SELECT * FROM portfolio_positions")
-        rows = cursor.fetchall()
-        positions = [dict(r) for r in rows]
-
+        positions = self.portfolio_repo.get_positions()
         if not positions:
-            conn.close()
-            raise ValueError("No portfolio positions found.")
+            raise EntityNotFoundException("No portfolio positions available to rebalance.", entity_type="Portfolio")
 
-        # Extract event attributes safely whether list or string
+        # Parse tickers safely
         raw_tickers = trigger_event.get("tickers", "")
         if isinstance(raw_tickers, list):
-            event_tickers = [str(t).strip() for t in raw_tickers if str(t).strip()]
+            event_tickers = [str(t).strip().upper() for t in raw_tickers if str(t).strip()]
         elif isinstance(raw_tickers, str):
-            event_tickers = [t.strip() for t in raw_tickers.split(",") if t.strip()]
+            event_tickers = [t.strip().upper() for t in raw_tickers.split(",") if t.strip()]
         else:
             event_tickers = []
+
         event_sector = trigger_event.get("sector", "")
         sentiment = float(trigger_event.get("sentiment_score", 0.0))
         impact = float(trigger_event.get("impact_score", 5.0))
         impact_factor = max(0.1, min(1.0, impact / 10.0))
 
-        old_weights = {p['ticker']: float(p['current_weight']) for p in positions}
-        total_val_before = sum(p['position_value'] for p in positions)
-        
-        # Calculate raw deltas
-        deltas = {}
+        old_weights: Dict[str, float] = {}
+        target_weights: Dict[str, float] = {}
+        new_weights: Dict[str, float] = {}
+        weight_deltas: Dict[str, float] = {}
+
+        # 1. Calculate raw deltas
         for p in positions:
-            t = p['ticker']
-            sec = p['sector']
-            
-            # Stock-specific impact vs Sector-wide impact
-            if t in event_tickers:
-                delta = sens * sentiment * impact_factor
-            elif sec == event_sector and event_sector != "Broad Market":
-                delta = sens * sentiment * impact_factor * 0.45  # Indirect sector spillover
+            ticker = p["ticker"]
+            old_w = p["current_weight"]
+            old_weights[ticker] = old_w
+            target_weights[ticker] = p["target_weight"]
+
+            # Direct match vs Sector spillover
+            if ticker in event_tickers:
+                multiplier = 1.0
+            elif p["sector"] == event_sector:
+                multiplier = 0.45
             else:
-                delta = 0.0
-            deltas[t] = delta
+                multiplier = 0.0
 
-        # Apply raw delta and enforce minimum non-negative floor
-        tentative_weights = {}
-        for t, old_w in old_weights.items():
-            tentative_w = old_w + deltas[t]
-            clamped_w = max(self.min_weight, min(self.max_weight, tentative_w))
-            tentative_weights[t] = clamped_w
+            raw_delta = sens * sentiment * impact_factor * multiplier
+            new_weights[ticker] = old_w + raw_delta
 
-        # Normalization Step: Ensure strictly sum == 1.0000
-        weight_sum = sum(tentative_weights.values())
-        normalized_weights = {
-            t: round(w / weight_sum, 4) 
-            for t, w in tentative_weights.items()
-        }
+        # 2. Strict Bounded Normalization (Simplex projection onto [min_weight, max_weight] with sum == 1.0)
+        tickers = list(new_weights.keys())
+        w = {t: max(self.min_weight, min(self.max_weight, new_weights[t])) for t in tickers}
+        for _ in range(15):
+            total = sum(w.values())
+            if abs(total - 1.0) < 1e-6:
+                break
+            diff = 1.0 - total
+            adjustable = [t for t in tickers if (diff > 0 and w[t] < self.max_weight) or (diff < 0 and w[t] > self.min_weight)]
+            if not adjustable:
+                break
+            alloc = diff / len(adjustable)
+            for t in adjustable:
+                w[t] = max(self.min_weight, min(self.max_weight, w[t] + alloc))
 
-        # Fine-tune rounding difference to guarantee exact sum 1.0
-        diff = 1.0 - sum(normalized_weights.values())
-        if diff != 0:
-            first_ticker = list(normalized_weights.keys())[0]
-            normalized_weights[first_ticker] = round(normalized_weights[first_ticker] + diff, 4)
+        # Clean 4-decimal precision while guaranteeing sum == 1.0000
+        new_weights = {t: round(val, 4) for t, val in w.items()}
+        residual = round(1.0 - sum(new_weights.values()), 4)
+        if residual != 0.0:
+            candidates = [t for t in tickers if self.min_weight <= round(new_weights[t] + residual, 4) <= self.max_weight]
+            target = candidates[0] if candidates else max(new_weights, key=new_weights.get)
+            new_weights[target] = round(new_weights[target] + residual, 4)
 
-        # Calculate simulated price movements based on event
-        # Event moves stock price proportionally: return = sentiment * impact_factor * beta * 2.5%
-        updated_positions = []
-        total_val_after = 0.0
+        for ticker in new_weights:
+            weight_deltas[ticker] = round(new_weights[ticker] - old_weights[ticker], 4)
 
-        for p in positions:
-            t = p['ticker']
-            new_w = normalized_weights[t]
-            old_w = old_weights[t]
-            w_delta = round(new_w - old_w, 4)
+        # 3. Mark to Market Valuation
+        total_val_before = sum(p["position_value"] for p in positions)
+        sentiment_shock = sentiment * impact_factor * 0.035
+        total_val_after = round(total_val_before * (1.0 + sentiment_shock), 2)
 
-            # Price movement
-            price = p['current_price']
-            if t in event_tickers:
-                price_pct = sentiment * impact_factor * 0.035
-            elif p['sector'] == event_sector:
-                price_pct = sentiment * impact_factor * 0.015
-            else:
-                price_pct = (sentiment * 0.003) # minor broad market drift
-            
-            new_price = round(max(1.0, price * (1.0 + price_pct)), 2)
-
-            updated_positions.append({
-                "ticker": t,
-                "name": p['name'],
-                "sector": p['sector'],
-                "old_weight": old_w,
-                "new_weight": new_w,
-                "weight_delta": w_delta,
-                "old_price": price,
-                "new_price": new_price
-            })
-
-        # Calculate updated position values based on new weights and portfolio valuation
-        # Simulated value fluctuation:
-        market_shock = 0.0
-        for p in positions:
-            t = p['ticker']
-            if t in event_tickers:
-                market_shock += old_weights[t] * (sentiment * impact_factor * 0.035)
-            elif p['sector'] == event_sector:
-                market_shock += old_weights[t] * (sentiment * impact_factor * 0.015)
-        
-        total_val_after = round(total_val_before * (1.0 + market_shock), 2)
-        
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # Update Database positions
-        for up in updated_positions:
-            t = up['ticker']
-            pos_val = round(total_val_after * up['new_weight'], 2)
-            shares = round(pos_val / up['new_price'])
-            up['position_value'] = pos_val
-            up['shares'] = shares
+        # 4. Prepare updated positions with all required schemas
+        updated_positions = []
+        for p in positions:
+            ticker = p["ticker"]
+            old_w = old_weights[ticker]
+            new_w = new_weights[ticker]
+            delta = weight_deltas[ticker]
+            pos_val = round(total_val_after * new_w, 2)
+            shares = int(pos_val / p["current_price"]) if p.get("current_price", 0) > 0 else p.get("shares", 0)
+            updated_positions.append({
+                "ticker": ticker,
+                "company_name": p.get("company_name", ""),
+                "sector": p.get("sector", ""),
+                "old_weight": old_w,
+                "new_weight": new_w,
+                "current_weight": new_w,
+                "weight_delta": delta,
+                "shares": shares,
+                "current_price": p.get("current_price", 0.0),
+                "position_value": pos_val,
+                "last_rebalanced": now_str
+            })
 
-            cursor.execute("""
-            UPDATE portfolio_positions
-            SET current_weight = ?, shares = ?, current_price = ?, position_value = ?, last_rebalanced = ?
-            WHERE ticker = ?
-            """, (up['new_weight'], shares, up['new_price'], pos_val, now_str, t))
+        # 5. Persist atomically
+        rebalance_record = {
+            "timestamp": now_str,
+            "trigger_event_id": trigger_event.get("event_id"),
+            "trigger_headline": trigger_event.get("headline", ""),
+            "trigger_sentiment": sentiment,
+            "trigger_impact": impact,
+            "affected_tickers": ",".join(event_tickers) if event_tickers else "Broad Market",
+            "old_weights": old_weights,
+            "new_weights": new_weights,
+            "weight_deltas": weight_deltas,
+            "portfolio_value_before": round(total_val_before, 2),
+            "portfolio_value_after": total_val_after,
+            "formula_applied": f"Bounded sensitivity delta with {self.min_weight*100}% floor and {self.max_weight*100}% ceiling"
+        }
 
-        # Log to rebalance_history table
-        weight_deltas_dict = {up['ticker']: up['weight_delta'] for up in updated_positions}
-        cursor.execute("""
-        INSERT INTO rebalance_history (
-            timestamp, trigger_event_id, trigger_headline, trigger_sentiment, trigger_impact,
-            affected_tickers, old_weights, new_weights, weight_deltas,
-            portfolio_value_before, portfolio_value_after, formula_applied
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            now_str,
-            trigger_event.get("event_id", "MANUAL-SIM"),
-            trigger_event.get("headline", "Dynamic Rebalance Simulation"),
-            sentiment,
-            impact,
-            ",".join(event_tickers),
-            json.dumps(old_weights),
-            json.dumps(normalized_weights),
-            json.dumps(weight_deltas_dict),
-            total_val_before,
-            total_val_after,
-            f"new_w = clamp(old_w + {sens} * {sentiment:.2f} * {impact_factor:.2f}, {self.min_weight}, {self.max_weight}); norm(sum=1.0)"
-        ))
-
-        # Log to portfolio_history table
-        cursor.execute("""
-        INSERT INTO portfolio_history (timestamp, total_value, portfolio_sentiment, risk_level, trigger_note)
-        VALUES (?, ?, ?, ?, ?)
-        """, (
-            now_str,
-            total_val_after,
-            sentiment,
-            "High" if impact >= 7.0 else "Normal",
-            f"Rebalanced on {trigger_event.get('event_id', 'SIM')}"
-        ))
-
-        conn.commit()
-        conn.close()
+        self.portfolio_repo.update_positions_and_log_rebalance(updated_positions, rebalance_record)
+        self.portfolio_repo.record_portfolio_valuation(
+            timestamp=now_str,
+            total_value=total_val_after,
+            sentiment=sentiment,
+            risk_level="High" if sentiment < -0.4 else "Moderate",
+            note=f"Rebalance by {trigger_event.get('event_id', 'Event')}"
+        )
 
         return {
             "status": "success",
-            "timestamp": now_str,
             "trigger_event": trigger_event,
             "portfolio_value_before": round(total_val_before, 2),
-            "portfolio_value_after": round(total_val_after, 2),
+            "portfolio_value_after": total_val_after,
             "value_change": round(total_val_after - total_val_before, 2),
-            "value_change_pct": round(((total_val_after - total_val_before) / total_val_before) * 100, 2),
+            "weights_before": old_weights,
+            "weights_after": new_weights,
+            "deltas": weight_deltas,
             "updated_positions": updated_positions,
-            "formula_applied": f"new_w = clamp(old_w + {sens} * sentiment * (impact/10), min={self.min_weight}, max={self.max_weight}); normalize()"
+            "formula_applied": rebalance_record["formula_applied"]
         }
 
-    def get_history(self, limit: int = 50) -> List[Dict[str, Any]]:
-        """
-        Retrieves rebalance history records.
-        """
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM rebalance_history ORDER BY id DESC LIMIT ?", (limit,))
-        rows = cursor.fetchall()
-        result = []
-        for r in rows:
-            item = dict(r)
-            item['old_weights'] = json.loads(item['old_weights'])
-            item['new_weights'] = json.loads(item['new_weights'])
-            item['weight_deltas'] = json.loads(item['weight_deltas'])
-            result.append(item)
-        conn.close()
-        return result
-
     def reset_portfolio(self) -> Dict[str, Any]:
-        """
-        Resets portfolio to baseline target weights from companies.csv.
-        """
-        import os
-        import pandas as pd
-        from backend.config import DATA_DIR
-        
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        pdf = pd.read_csv(os.path.join(DATA_DIR, "portfolio.csv"))
-        for _, row in pdf.iterrows():
-            cursor.execute("""
-            UPDATE portfolio_positions
-            SET current_weight = ?, shares = ?, current_price = ?, position_value = ?, last_rebalanced = ?
-            WHERE ticker = ?
-            """, (
-                float(row['target_weight']), int(row['shares']), float(row['current_price']),
-                float(row['position_value']), datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                row['ticker']
-            ))
-            
-        cursor.execute("DELETE FROM rebalance_history")
-        cursor.execute("DELETE FROM portfolio_history")
-        
-        # Insert initial baseline
-        cursor.execute("""
-        INSERT INTO portfolio_history (timestamp, total_value, portfolio_sentiment, risk_level, trigger_note)
-        VALUES (?, ?, ?, ?, ?)
-        """, (
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            10_000_000.0,
-            0.05,
-            "Moderate",
-            "Portfolio Reset to Baseline"
-        ))
+        now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.portfolio_repo.reset_positions_to_target(now_str, INITIAL_PORTFOLIO_VALUE)
+        self.portfolio_repo.record_portfolio_valuation(
+            timestamp=now_str,
+            total_value=INITIAL_PORTFOLIO_VALUE,
+            sentiment=0.05,
+            risk_level="Moderate",
+            note="Manual Portfolio Reset"
+        )
+        return {
+            "status": "success",
+            "message": "Portfolio weights reset to baseline target weights.",
+            "total_value": INITIAL_PORTFOLIO_VALUE
+        }
 
-        conn.commit()
-        conn.close()
-        return {"status": "success", "message": "Portfolio reset to initial baseline weights."}
+    def get_history(self, limit: int = 50) -> Dict[str, Any]:
+        records = self.portfolio_repo.get_rebalance_history(limit=limit)
+        return {
+            "total": len(records),
+            "history": records
+        }

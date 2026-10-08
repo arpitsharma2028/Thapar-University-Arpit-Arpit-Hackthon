@@ -163,7 +163,7 @@ export default function MarketIntelligence({ showToast }) {
               onChange={(e) => setSelectedSymbol(e.target.value)}
               style={{ width: '180px', fontWeight: 700, fontSize: '0.95rem' }}
             >
-              {companies.map((c) => (
+              {(Array.isArray(companies) ? companies : []).map((c) => (
                 <option key={c.ticker} value={c.ticker}>
                   ${c.ticker} — {c.name}
                 </option>
@@ -340,7 +340,7 @@ export default function MarketIntelligence({ showToast }) {
               onChange={(e) => setCompareSym1(e.target.value)}
               style={{ width: '110px', fontSize: '0.85rem' }}
             >
-              {companies.map((c) => (
+              {(Array.isArray(companies) ? companies : []).map((c) => (
                 <option key={c.ticker} value={c.ticker}>${c.ticker}</option>
               ))}
             </select>
@@ -353,7 +353,7 @@ export default function MarketIntelligence({ showToast }) {
               onChange={(e) => setCompareSym2(e.target.value)}
               style={{ width: '110px', fontSize: '0.85rem' }}
             >
-              {companies.map((c) => (
+              {(Array.isArray(companies) ? companies : []).map((c) => (
                 <option key={c.ticker} value={c.ticker}>${c.ticker}</option>
               ))}
             </select>

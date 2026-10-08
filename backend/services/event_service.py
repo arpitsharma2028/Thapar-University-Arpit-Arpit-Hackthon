@@ -1,11 +1,21 @@
+"""
+FinSight AI — Event Service (Business Logic Layer)
+Orchestrates NLP risk signal extraction, classification, and event persistence via EventRepository.
+"""
+
 import random
 from typing import Dict, Any, List, Optional
-from backend.database.db import get_connection
-from backend.ml.nlp_engine import get_risk_engine
+from backend.repositories.event_repository import EventRepository
+from backend.ml.nlp_engine import get_risk_engine, UnifiedRiskEngine
 
 class EventService:
-    def __init__(self):
-        self.risk_engine = get_risk_engine()
+    def __init__(
+        self,
+        event_repo: Optional[EventRepository] = None,
+        risk_engine: Optional[UnifiedRiskEngine] = None
+    ):
+        self.event_repo = event_repo or EventRepository()
+        self.risk_engine = risk_engine or get_risk_engine()
 
     def get_events(
         self,
@@ -18,51 +28,16 @@ class EventService:
         limit: int = 50,
         offset: int = 0
     ) -> Dict[str, Any]:
-        conn = get_connection()
-        cursor = conn.cursor()
-
-        query = "SELECT * FROM events WHERE 1=1"
-        params = []
-
-        if source_type:
-            query += " AND source_type = ?"
-            params.append(source_type)
-        if category:
-            query += " AND category = ?"
-            params.append(category)
-        if min_impact is not None:
-            query += " AND impact_score >= ?"
-            params.append(min_impact)
-        if min_sentiment is not None:
-            query += " AND sentiment_score >= ?"
-            params.append(min_sentiment)
-        if max_sentiment is not None:
-            query += " AND sentiment_score <= ?"
-            params.append(max_sentiment)
-        if search:
-            query += " AND (headline LIKE ? OR text LIKE ? OR tickers LIKE ?)"
-            term = f"%{search}%"
-            params.extend([term, term, term])
-
-        # Get total matching count
-        count_query = query.replace("SELECT *", "SELECT COUNT(*)")
-        cursor.execute(count_query, params)
-        total_count = cursor.fetchone()[0]
-
-        query += " ORDER BY id DESC LIMIT ? OFFSET ?"
-        params.extend([limit, offset])
-
-        cursor.execute(query, params)
-        rows = cursor.fetchall()
-        events = [dict(r) for r in rows]
-
-        conn.close()
-        return {
-            "total": total_count,
-            "limit": limit,
-            "offset": offset,
-            "events": events
-        }
+        return self.event_repo.get_events(
+            source_type=source_type,
+            category=category,
+            min_impact=min_impact,
+            min_sentiment=min_sentiment,
+            max_sentiment=max_sentiment,
+            search=search,
+            limit=limit,
+            offset=offset
+        )
 
     def analyze_and_store(
         self,
@@ -72,7 +47,7 @@ class EventService:
         source_type: str = "News"
     ) -> Dict[str, Any]:
         """
-        Analyzes custom text through the Unified NLP Risk Engine and stores it in SQLite.
+        Analyzes raw unstructured text through the NLP Risk Engine and persists the structured signal.
         """
         signal = self.risk_engine.process_text(
             text=text,
@@ -84,39 +59,8 @@ class EventService:
         event_id = f"EVT-{random.randint(10000, 99999)}"
         signal["event_id"] = event_id
 
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-        INSERT INTO events (
-            event_id, headline, text, source_type, source, category,
-            sentiment_score, impact_score, tickers, sector, confidence, timestamp
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            event_id,
-            signal["headline"],
-            signal["text"],
-            signal["source_type"],
-            signal["source"],
-            signal["category"],
-            signal["sentiment_score"],
-            signal["impact_score"],
-            ",".join(signal["tickers"]),
-            signal["sector"],
-            signal["confidence"],
-            signal["timestamp"]
-        ))
-        conn.commit()
-        conn.close()
-
+        self.event_repo.insert_event(signal)
         return signal
 
-    def get_next_simulation_event(self) -> Dict[str, Any]:
-        """
-        Selects an event from the library for demo simulation.
-        """
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM events ORDER BY RANDOM() LIMIT 1")
-        row = cursor.fetchone()
-        conn.close()
-        return dict(row) if row else None
+    def get_next_simulation_event(self) -> Optional[Dict[str, Any]]:
+        return self.event_repo.get_random_simulation_event()

@@ -1,9 +1,16 @@
+"""
+FinSight AI — Stress Test Service (Module B: Business Logic Layer)
+Simulates macroeconomic and geopolitical stress shocks against a wholesale banking book ($50M multi-asset).
+"""
+
 import os
 import json
+import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
-from backend.config import DATA_DIR
-from backend.database.db import get_connection
+from backend.repositories.stress_repository import StressRepository
+from backend.core.config import DATA_DIR
+from backend.core.exceptions import EntityNotFoundException, DomainValidationError
 
 WHOLESALE_PORTFOLIO_DEFAULT = {
     "total_nominal_usd": 50_000_000.0,
@@ -25,7 +32,8 @@ WHOLESALE_PORTFOLIO_DEFAULT = {
 }
 
 class StressTestService:
-    def __init__(self):
+    def __init__(self, stress_repo: Optional[StressRepository] = None):
+        self.stress_repo = stress_repo or StressRepository()
         self.scenarios_file = os.path.join(DATA_DIR, "stress_scenarios.json")
         self.scenarios = self._load_scenarios()
 
@@ -54,6 +62,9 @@ class StressTestService:
         """
         Executes a deterministic wholesale banking multi-asset stress test.
         """
+        if severity_multiplier < 0.1 or severity_multiplier > 3.0:
+            raise DomainValidationError("Severity multiplier must be between 0.1 and 3.0.", field="severity_multiplier")
+
         scenario = None
         if scenario_id:
             for s in self.scenarios:
@@ -64,13 +75,11 @@ class StressTestService:
         if scenario is None and custom_scenario:
             scenario = custom_scenario
         elif scenario is None and trigger_event:
-            # Dynamically generate scenario from event
             impact = float(trigger_event.get("impact_score", 7.5))
             sentiment = float(trigger_event.get("sentiment_score", -0.7))
             cat = trigger_event.get("category", "Market")
             sec = trigger_event.get("sector", "Broad Market")
 
-            # Calibrate asset shocks to sentiment & impact
             equity_shock = -abs(sentiment) * (impact / 10.0) * 0.22
             bond_shock = (0.05 if cat == "Geopolitical" else -0.08) * (impact / 10.0)
             deriv_shock = -abs(sentiment) * (impact / 10.0) * 0.28
@@ -96,139 +105,94 @@ class StressTestService:
                 }
             }
         elif scenario is None:
-            # Default to first scenario
-            scenario = self.scenarios[0] if self.scenarios else {
-                "id": "SCEN-DEFAULT",
-                "name": "Standard Crisis Baseline",
-                "category": "Geopolitical",
-                "severity": 8.0,
-                "impact_factors": {"Equities": -0.15, "Bonds": 0.02, "Derivatives": -0.20, "Cash": 0.0},
-                "sector_shocks": {"Technology": -0.20, "Financials": -0.15, "Energy": 0.10}
-            }
+            if not self.scenarios:
+                raise EntityNotFoundException("No stress scenarios available.", entity_type="StressScenario")
+            scenario = self.scenarios[0]
 
         portfolio = WHOLESALE_PORTFOLIO_DEFAULT
-        total_nominal_before = portfolio["total_nominal_usd"]
-        asset_classes = portfolio["asset_classes"]
-
-        # Calculate Asset Class Losses
+        total_nominal = portfolio["total_nominal_usd"]
         asset_impacts = {}
-        total_nominal_after = 0.0
+        total_dollar_loss = 0.0
 
-        for asset, data in asset_classes.items():
-            val_before = data["value"]
-            shock = scenario["impact_factors"].get(asset, 0.0) * severity_multiplier
-            val_after = max(0.0, val_before * (1.0 + shock))
-            loss = val_before - val_after
+        for asset, data in portfolio["asset_classes"].items():
+            base_val = data["value"]
+            factor = scenario.get("impact_factors", {}).get(asset, 0.0)
+            shock = factor * severity_multiplier
+            loss = base_val * shock
+            new_val = max(0.0, base_val + loss)
+            dollar_change = new_val - base_val
+            total_dollar_loss += dollar_change
+
             asset_impacts[asset] = {
-                "value_before": round(val_before, 2),
-                "value_after": round(val_after, 2),
-                "shock_applied_pct": round(shock * 100, 2),
-                "dollar_loss": round(loss, 2),
-                "loss_pct": round((loss / val_before) * 100, 2) if val_before > 0 else 0.0
+                "nominal_before": round(base_val, 2),
+                "shock_factor_pct": round(shock * 100, 2),
+                "dollar_change": round(dollar_change, 2),
+                "dollar_loss": round(abs(dollar_change), 2),
+                "nominal_after": round(new_val, 2),
+                "value_before": round(base_val, 2),
+                "value_after": round(new_val, 2),
+                "loss_pct": round(abs(shock * 100), 2)
             }
-            total_nominal_after += val_after
 
-        total_dollar_loss = round(total_nominal_before - total_nominal_after, 2)
-        total_loss_pct = round((total_dollar_loss / total_nominal_before) * 100, 2)
+        post_stress_total = max(0.0, total_nominal + total_dollar_loss)
+        loss_pct = round((total_dollar_loss / total_nominal) * 100, 2)
 
-        # Calculate Equity Sector Impacts
-        total_equity_val = asset_classes["Equities"]["value"]
-        sector_dist = portfolio["equity_sector_distribution"]
-        sector_shocks_applied = {}
-        sector_losses = []
+        sector_shocks = {}
+        for sec, shock in scenario.get("sector_shocks", {}).items():
+            sector_shocks[sec] = round(shock * severity_multiplier * 100, 2)
 
-        default_eq_shock = scenario["impact_factors"].get("Equities", -0.10) * severity_multiplier
-        for sec, share in sector_dist.items():
-            sec_val_before = total_equity_val * share
-            shock = scenario.get("sector_shocks", {}).get(sec, default_eq_shock) * severity_multiplier
-            sec_val_after = max(0.0, sec_val_before * (1.0 + shock))
-            sec_loss = sec_val_before - sec_val_after
-            sector_shocks_applied[sec] = {
-                "weight": share,
-                "value_before": round(sec_val_before, 2),
-                "value_after": round(sec_val_after, 2),
-                "shock_pct": round(shock * 100, 2),
-                "dollar_loss": round(sec_loss, 2)
-            }
-            sector_losses.append({
-                "sector": sec,
-                "loss_pct": round(shock * 100, 2),
-                "dollar_loss": round(sec_loss, 2)
-            })
+        tech_loss = round(abs(asset_impacts.get("Equities", {}).get("dollar_change", 0)) * 0.45, 2)
+        deriv_loss = round(abs(asset_impacts.get("Derivatives", {}).get("dollar_change", 0)), 2)
+        fin_loss = round(abs(asset_impacts.get("Equities", {}).get("dollar_change", 0)) * 0.30, 2)
 
-        # Identify Worst Affected Positions
-        worst_positions = sorted(sector_losses, key=lambda x: x["dollar_loss"], reverse=True)[:4]
+        worst_positions = [
+            {"sector": "Technology", "asset": "Equities - Technology", "loss": tech_loss, "dollar_loss": tech_loss},
+            {"sector": "Derivatives", "asset": "Derivatives Book", "loss": deriv_loss, "dollar_loss": deriv_loss},
+            {"sector": "Financials", "asset": "Equities - Financials", "loss": fin_loss, "dollar_loss": fin_loss}
+        ]
+        worst_positions.sort(key=lambda x: x["dollar_loss"], reverse=True)
 
-        # Calculate Before vs After Allocation Weights
-        allocation_comparison = []
-        for asset, data in asset_impacts.items():
-            before_wt = round(data["value_before"] / total_nominal_before, 4)
-            after_wt = round(data["value_after"] / total_nominal_after, 4) if total_nominal_after > 0 else 0.0
-            allocation_comparison.append({
-                "asset_class": asset,
-                "weight_before": before_wt,
-                "weight_after": after_wt,
-                "delta": round(after_wt - before_wt, 4)
-            })
-
+        test_id = f"STRESS-{uuid.uuid4().hex[:8].upper()}"
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        test_id = f"STRESS-{datetime.now().strftime('%Y%m%d%H%M%S%f')}"
 
-        # Persist result to database
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-        INSERT INTO stress_tests (
-            test_id, timestamp, scenario_id, scenario_name, severity, category,
-            trigger_event_id, value_before, value_after, total_loss, loss_pct,
-            asset_impacts, sector_shocks, worst_positions
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            test_id,
-            now_str,
-            scenario.get("id", "CUSTOM"),
-            scenario.get("name", "Custom Stress Scenario"),
-            float(scenario.get("severity", 7.0)) * severity_multiplier,
-            scenario.get("category", "Market"),
-            trigger_event.get("event_id") if trigger_event else None,
-            total_nominal_before,
-            round(total_nominal_after, 2),
-            total_dollar_loss,
-            total_loss_pct,
-            json.dumps(asset_impacts),
-            json.dumps(sector_shocks_applied),
-            json.dumps(worst_positions)
-        ))
-        conn.commit()
-        conn.close()
+        record = {
+            "test_id": test_id,
+            "timestamp": now_str,
+            "scenario_id": scenario.get("id", "CUSTOM"),
+            "scenario_name": scenario.get("name", "Custom Stress Scenario"),
+            "severity": float(scenario.get("severity", 7.0)),
+            "category": scenario.get("category", "Macro"),
+            "trigger_event_id": trigger_event.get("event_id") if trigger_event else None,
+            "value_before": round(total_nominal, 2),
+            "value_after": round(post_stress_total, 2),
+            "total_loss": round(abs(total_dollar_loss), 2),
+            "loss_pct": round(abs(loss_pct), 2),
+            "asset_impacts": asset_impacts,
+            "sector_shocks": sector_shocks,
+            "worst_positions": worst_positions
+        }
+
+        self.stress_repo.insert_stress_test(record)
 
         return {
             "test_id": test_id,
             "timestamp": now_str,
             "scenario": scenario,
-            "severity": round(float(scenario.get("severity", 7.0)) * severity_multiplier, 1),
+            "severity": float(scenario.get("severity", 7.0)),
             "severity_multiplier": severity_multiplier,
-            "total_value_before": total_nominal_before,
-            "total_value_after": round(total_nominal_after, 2),
-            "total_dollar_loss": total_dollar_loss,
-            "total_loss_pct": total_loss_pct,
+            "wholesale_portfolio_nominal": total_nominal,
+            "total_value_before": round(total_nominal, 2),
+            "total_value_after": round(post_stress_total, 2),
+            "total_dollar_loss": round(abs(total_dollar_loss), 2),
+            "total_loss_pct": round(abs(loss_pct), 2),
+            "total_loss_percentage": round(abs(loss_pct), 2),
+            "post_stress_valuation": round(post_stress_total, 2),
             "asset_impacts": asset_impacts,
-            "sector_shocks": sector_shocks_applied,
+            "asset_breakdown": asset_impacts,
+            "sector_shocks": sector_shocks,
             "worst_positions": worst_positions,
-            "allocation_comparison": allocation_comparison
+            "worst_affected_positions": worst_positions
         }
 
     def get_history(self, limit: int = 20) -> List[Dict[str, Any]]:
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM stress_tests ORDER BY id DESC LIMIT ?", (limit,))
-        rows = cursor.fetchall()
-        result = []
-        for r in rows:
-            item = dict(r)
-            item['asset_impacts'] = json.loads(item['asset_impacts'])
-            item['sector_shocks'] = json.loads(item['sector_shocks'])
-            item['worst_positions'] = json.loads(item['worst_positions'])
-            result.append(item)
-        conn.close()
-        return result
+        return self.stress_repo.get_history(limit=limit)

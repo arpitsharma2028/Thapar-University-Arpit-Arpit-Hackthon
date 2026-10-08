@@ -1,19 +1,29 @@
+"""
+FinSight AI — Metrics & Diagnostics API Router
+Provides aggregate KPIs, risk distributions, health checks, and systemic pipeline execution with Dependency Injection.
+"""
+
 import datetime
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from backend.services.metrics_service import MetricsService
 from backend.services.event_service import EventService
 from backend.services.rebalance_service import RebalanceService
 from backend.services.stress_test_service import StressTestService
 from backend.models.schemas import HealthResponse
+from backend.api.deps import (
+    get_metrics_service,
+    get_event_service,
+    get_rebalance_service,
+    get_stress_service
+)
+from backend.core.config import settings
 
 router = APIRouter(tags=["Metrics & Diagnostics"])
-metrics_service = MetricsService()
-event_service = EventService()
-rebalance_service = RebalanceService()
-stress_service = StressTestService()
 
 @router.get("/api/metrics")
-def get_metrics():
+def get_metrics(
+    metrics_service: MetricsService = Depends(get_metrics_service)
+):
     """
     Returns aggregate platform KPIs, risk metrics, and valuation history.
     """
@@ -26,8 +36,8 @@ def health_check():
     """
     return {
         "status": "healthy",
-        "service": "FinSight AI Quantitative Risk Intelligence Platform",
-        "version": "1.1.0",
+        "service": settings.SERVICE_NAME,
+        "version": settings.VERSION,
         "nlp_engine_loaded": True,
         "database_connected": True,
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -35,7 +45,11 @@ def health_check():
 
 @router.post("/api/pipeline/execute")
 @router.post("/api/demo/scenario")
-def execute_systemic_risk_pipeline():
+def execute_systemic_risk_pipeline(
+    event_service: EventService = Depends(get_event_service),
+    rebalance_service: RebalanceService = Depends(get_rebalance_service),
+    stress_service: StressTestService = Depends(get_stress_service)
+):
     """
     Executes an end-to-end multi-engine systemic risk pipeline:
     1. Ingests and extracts risk signals from a high-severity geopolitical event

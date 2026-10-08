@@ -1,27 +1,33 @@
-from fastapi import APIRouter, HTTPException, Query
-from typing import Dict, Any, List, Optional
+"""
+FinSight AI — Portfolio & Rebalance API Router
+Provides tactical dynamic index rebalancing endpoints (Module A) with Dependency Injection.
+"""
+
+from typing import Dict, Any, Optional
+from fastapi import APIRouter, Query, Depends
 from backend.services.rebalance_service import RebalanceService
 from backend.services.event_service import EventService
 from backend.models.schemas import RebalanceRequest, BatchSimulateRequest
+from backend.api.deps import get_rebalance_service, get_event_service
 
 router = APIRouter(tags=["Portfolio & Tactical Rebalancer"])
-rebalance_service = RebalanceService()
-event_service = EventService()
 
 @router.get("/api/portfolio")
-def get_portfolio():
+def get_portfolio(
+    rebalance_service: RebalanceService = Depends(get_rebalance_service)
+):
     """
     Returns current index portfolio positions, weights, and aggregate sentiment.
     """
-    try:
-        return rebalance_service.get_current_portfolio()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return rebalance_service.get_current_portfolio()
 
 @router.post("/api/portfolio/rebalance")
-def execute_rebalance(req: RebalanceRequest):
+def execute_rebalance(
+    req: RebalanceRequest,
+    rebalance_service: RebalanceService = Depends(get_rebalance_service)
+):
     """
-    MODULE A: Dynamically rebalances portfolio weights based on a risk signal.
+    MODULE A: Dynamically rebalances portfolio weights based on an incoming risk signal.
     """
     trigger_event = {
         "event_id": req.event_id or "MANUAL-TRIGGER",
@@ -31,13 +37,14 @@ def execute_rebalance(req: RebalanceRequest):
         "sentiment_score": req.sentiment_score,
         "impact_score": req.impact_score
     }
-    try:
-        return rebalance_service.rebalance(trigger_event, req.sensitivity)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return rebalance_service.rebalance(trigger_event, req.sensitivity)
 
 @router.post("/api/portfolio/simulate")
-def simulate_events(req: Optional[BatchSimulateRequest] = None):
+def simulate_events(
+    req: Optional[BatchSimulateRequest] = None,
+    rebalance_service: RebalanceService = Depends(get_rebalance_service),
+    event_service: EventService = Depends(get_event_service)
+):
     """
     Simulates rebalancing against either 1 next event or a batch of N events.
     """
@@ -68,14 +75,19 @@ def simulate_events(req: Optional[BatchSimulateRequest] = None):
     }
 
 @router.get("/api/rebalance-history")
-def get_rebalance_history(limit: int = Query(50, ge=1, le=100)):
+def get_rebalance_history(
+    limit: int = Query(50, ge=1, le=100),
+    rebalance_service: RebalanceService = Depends(get_rebalance_service)
+):
     """
     Returns complete chronological audit log of portfolio rebalancing decisions.
     """
     return rebalance_service.get_history(limit=limit)
 
 @router.post("/api/portfolio/reset")
-def reset_portfolio():
+def reset_portfolio(
+    rebalance_service: RebalanceService = Depends(get_rebalance_service)
+):
     """
     Resets portfolio allocations back to initial baseline target weights.
     """
