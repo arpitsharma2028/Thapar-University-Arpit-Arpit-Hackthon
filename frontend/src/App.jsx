@@ -199,6 +199,7 @@ export default function App() {
               onSimulateEvent={() => handleSimulateEvent(0.025)}
               onRebalanceTrigger={handleRebalanceTrigger}
               onStressTrigger={handleStressTrigger}
+              onNavigateTab={setActiveTab}
               loading={loading}
             />
           )}

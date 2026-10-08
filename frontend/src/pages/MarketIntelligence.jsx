@@ -4,23 +4,22 @@ import {
   TrendingDown,
   LineChart as LineChartIcon,
   GitCompare,
-  Sparkles,
+  Activity,
   RefreshCw,
   Sliders,
   DollarSign,
-  Activity,
   Layers,
   Info
 } from 'lucide-react';
 import {
   ResponsiveContainer,
+  ComposedChart,
   LineChart,
   Line,
   XAxis,
   YAxis,
   Tooltip,
   Legend,
-  AreaChart,
   Area
 } from 'recharts';
 import StatCard from '../components/StatCard';
@@ -230,7 +229,7 @@ export default function MarketIntelligence({ showToast }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Sparkles size={18} color="#a855f7" />
+              <Activity size={18} color="#38bdf8" />
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 Monte Carlo Probabilistic Price Forecasting (Geometric Brownian Motion)
               </h3>
@@ -292,7 +291,7 @@ export default function MarketIntelligence({ showToast }) {
         {/* Monte Carlo Probability Cone Area Chart */}
         <div style={{ height: '300px', width: '100%' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={forecastData?.forecast || []} margin={{ top: 10, right: 15, left: -10, bottom: 5 }}>
+            <ComposedChart data={forecastData?.forecast || []} margin={{ top: 10, right: 15, left: -10, bottom: 5 }}>
               <defs>
                 <linearGradient id="coneGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.35}/>
@@ -313,7 +312,7 @@ export default function MarketIntelligence({ showToast }) {
               <Area type="monotone" dataKey="upper" stroke="#a855f7" fillOpacity={1} fill="url(#coneGrad)" name="upper" />
               <Area type="monotone" dataKey="lower" stroke="#a855f7" fillOpacity={0} name="lower" />
               <Line type="monotone" dataKey="median" stroke="#38bdf8" strokeWidth={2.5} dot={false} name="median" />
-            </AreaChart>
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
       </div>

@@ -3,11 +3,12 @@ import {
   DollarSign,
   TrendingUp,
   ShieldAlert,
-  Zap,
   Activity,
   ArrowUpRight,
   Layers,
-  Sparkles
+  BarChart2,
+  ArrowRight,
+  RefreshCw
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -19,17 +20,26 @@ import {
   PieChart,
   Pie,
   Cell,
-  Legend
+  Legend,
+  ComposedChart,
+  Area
 } from 'recharts';
 import StatCard from '../components/StatCard';
 import SentimentBadge from '../components/SentimentBadge';
 import SeverityBadge from '../components/SeverityBadge';
 import EventCategoryBadge from '../components/EventCategoryBadge';
 import EventModal from '../components/EventModal';
+import {
+  fetchGainersLosers,
+  fetchStockSummary,
+  fetchMonteCarloForecast
+} from '../api/client';
 
 const SECTOR_COLORS = [
   '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#64748b', '#ef4444'
 ];
+
+const PREVIEW_TICKERS = ["NVDA", "AAPL", "MSFT", "TSLA", "JPM", "XOM"];
 
 export default function Overview({
   metrics,
@@ -38,9 +48,17 @@ export default function Overview({
   onSimulateEvent,
   onRebalanceTrigger,
   onStressTrigger,
+  onNavigateTab,
   loading
 }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // Market Intelligence preview states (from reference quantitative engine)
+  const [gainersLosers, setGainersLosers] = useState({ gainers: [], losers: [] });
+  const [marketSymbol, setMarketSymbol] = useState("NVDA");
+  const [marketSummary, setMarketSummary] = useState(null);
+  const [marketForecast, setMarketForecast] = useState(null);
+  const [loadingMarket, setLoadingMarket] = useState(false);
 
   const totalValue = portfolio?.total_value || metrics?.portfolio?.total_value || 10000000;
   const portfolioSentiment = portfolio?.portfolio_sentiment ?? 0.05;
@@ -48,6 +66,37 @@ export default function Overview({
   const var95 = metrics?.portfolio?.var_95_1day || 245000;
   const rebalanceCount = metrics?.portfolio?.total_rebalances || 0;
   const stressCount = metrics?.portfolio?.total_stress_tests || 0;
+
+  useEffect(() => {
+    async function loadMarketStats() {
+      try {
+        const gl = await fetchGainersLosers();
+        if (gl) setGainersLosers(gl);
+      } catch (e) {
+        console.error("Failed to load gainers/losers:", e);
+      }
+    }
+    loadMarketStats();
+  }, []);
+
+  useEffect(() => {
+    async function loadSymbolStats() {
+      setLoadingMarket(true);
+      try {
+        const [sum, fc] = await Promise.all([
+          fetchStockSummary(marketSymbol),
+          fetchMonteCarloForecast(marketSymbol, 14, true)
+        ]);
+        setMarketSummary(sum);
+        setMarketForecast(fc);
+      } catch (e) {
+        console.error(`Failed to load market metrics for ${marketSymbol}:`, e);
+      } finally {
+        setLoadingMarket(false);
+      }
+    }
+    loadSymbolStats();
+  }, [marketSymbol]);
 
   // Valuation History data for Recharts
   const historyData = (metrics?.portfolio_history && metrics.portfolio_history.length > 0)
@@ -85,7 +134,7 @@ export default function Overview({
         border: '1px solid rgba(59, 130, 246, 0.3)',
         borderRadius: '10px',
         padding: '12px 18px',
-        marginBottom: '24px',
+        marginBottom: '16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -101,8 +150,7 @@ export default function Overview({
             padding: '3px 8px',
             borderRadius: '4px',
             textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            animation: 'pulse 2s infinite'
+            letterSpacing: '0.06em'
           }}>
             LIVE FEED
           </span>
@@ -116,9 +164,75 @@ export default function Overview({
             disabled={loading}
             className="btn btn-sm btn-secondary"
           >
-            <Zap size={14} color="#f59e0b" />
+            <Activity size={14} color="#38bdf8" />
             <span>Process Next Signal</span>
           </button>
+        </div>
+      </div>
+
+      {/* Top Gainers & Losers Market Strip */}
+      <div style={{
+        background: 'var(--bg-secondary)',
+        border: '1px solid var(--border-color)',
+        borderRadius: '8px',
+        padding: '10px 16px',
+        marginBottom: '24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '12px'
+      }}>
+        {/* Gainers */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '0.70rem', fontWeight: 800, color: '#10b981', letterSpacing: '0.05em' }}>
+            MARKET GAINERS:
+          </span>
+          {(gainersLosers.gainers || []).slice(0, 3).map((g) => (
+            <span
+              key={g.symbol}
+              onClick={() => setMarketSymbol(g.symbol)}
+              className="mono-text"
+              style={{
+                fontSize: '0.78rem',
+                background: 'rgba(16, 185, 129, 0.12)',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                padding: '2px 8px',
+                borderRadius: '4px',
+                color: '#34d399',
+                cursor: 'pointer'
+              }}
+              title="Click to inspect Monte Carlo forecast"
+            >
+              ${g.symbol} +{g.daily_return?.toFixed(2)}%
+            </span>
+          ))}
+        </div>
+
+        {/* Losers */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '0.70rem', fontWeight: 800, color: '#ef4444', letterSpacing: '0.05em' }}>
+            MARKET LOSERS:
+          </span>
+          {(gainersLosers.losers || []).slice(0, 3).map((l) => (
+            <span
+              key={l.symbol}
+              onClick={() => setMarketSymbol(l.symbol)}
+              className="mono-text"
+              style={{
+                fontSize: '0.78rem',
+                background: 'rgba(239, 68, 68, 0.12)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                padding: '2px 8px',
+                borderRadius: '4px',
+                color: '#f87171',
+                cursor: 'pointer'
+              }}
+              title="Click to inspect Monte Carlo forecast"
+            >
+              ${l.symbol} {l.daily_return?.toFixed(2)}%
+            </span>
+          ))}
         </div>
       </div>
 
@@ -155,7 +269,7 @@ export default function Overview({
         />
       </div>
 
-      {/* Charts Section */}
+      {/* Section 1: Valuation Trend + Sector Allocation */}
       <div className="grid-cols-12" style={{ marginBottom: '24px' }}>
         {/* Left: Valuation Trend */}
         <div className="glass-card" style={{ gridColumn: 'span 7' }}>
@@ -245,7 +359,121 @@ export default function Overview({
         </div>
       </div>
 
-      {/* Recent Risk Engine Events Feed Table */}
+      {/* Section 2: Stochastic Monte Carlo Forecasting Panel (Direct from reference repo quantitative algorithms) */}
+      <div className="glass-card" style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <BarChart2 size={18} color="#38bdf8" />
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                Stochastic Price Forecasting (Geometric Brownian Motion)
+              </h3>
+              <span className="badge" style={{ background: '#1e293b', color: '#38bdf8' }}>
+                100 Paths • P5 to P95 Cone
+              </span>
+            </div>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+              14-Day Monte Carlo price projection conditioned on historical volatility and FinSight NLP risk sentiment drift
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {PREVIEW_TICKERS.map((sym) => (
+                <button
+                  key={sym}
+                  onClick={() => setMarketSymbol(sym)}
+                  className={`btn btn-sm ${marketSymbol === sym ? 'btn-primary' : 'btn-outline'}`}
+                  style={{ padding: '3px 9px', fontSize: '0.75rem' }}
+                >
+                  ${sym}
+                </button>
+              ))}
+            </div>
+
+            {onNavigateTab && (
+              <button
+                onClick={() => onNavigateTab('market-intel')}
+                className="btn btn-sm btn-outline"
+                style={{ borderColor: '#38bdf8', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '4px' }}
+                title="Open full interactive market analytics and correlation matrix"
+              >
+                <span>Full Analytics</span>
+                <ArrowRight size={13} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Summary Metric Ribbon */}
+        {marketSummary && (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gap: '10px',
+            marginBottom: '16px',
+            background: 'rgba(15, 23, 42, 0.6)',
+            padding: '12px',
+            borderRadius: '8px',
+            border: '1px solid var(--border-color)'
+          }}>
+            <div>
+              <span style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase' }}>Current Price</span>
+              <div className="mono-text" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>
+                ${marketSummary.current_price?.toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <span style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase' }}>52-Week Range</span>
+              <div className="mono-text" style={{ fontSize: '0.90rem', color: '#cbd5e1' }}>
+                ${marketSummary.low_52w?.toFixed(0)} — ${marketSummary.high_52w?.toFixed(0)}
+              </div>
+            </div>
+            <div>
+              <span style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase' }}>Ann. Volatility</span>
+              <div className="mono-text" style={{ fontSize: '0.90rem', color: '#f59e0b' }}>
+                {marketSummary.volatility_score}%
+              </div>
+            </div>
+            <div>
+              <span style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase' }}>Sentiment Drift Boost</span>
+              <div className="mono-text" style={{ fontSize: '0.90rem', color: marketForecast?.sentiment_drift_boost >= 0 ? '#10b981' : '#ef4444' }}>
+                {marketForecast?.sentiment_drift_boost > 0 ? '+' : ''}{marketForecast?.sentiment_drift_boost}%
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 14-Day Monte Carlo Area Chart */}
+        <div style={{ height: '260px', width: '100%' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={marketForecast?.forecast || []} margin={{ top: 10, right: 15, left: -10, bottom: 5 }}>
+              <defs>
+                <linearGradient id="overviewConeGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.35}/>
+                  <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.05}/>
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="date" stroke="#64748b" fontSize={11} />
+              <YAxis
+                domain={['auto', 'auto']}
+                stroke="#64748b"
+                fontSize={11}
+                tickFormatter={(val) => `$${val}`}
+              />
+              <Tooltip
+                contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }}
+                formatter={(val, name) => [`$${val}`, name === 'upper' ? '95th Percentile' : (name === 'median' ? 'Median (50th)' : '5th Percentile')]}
+              />
+              <Area type="monotone" dataKey="upper" stroke="#a855f7" fillOpacity={1} fill="url(#overviewConeGrad)" name="upper" />
+              <Area type="monotone" dataKey="lower" stroke="#a855f7" fillOpacity={0} name="lower" />
+              <Line type="monotone" dataKey="median" stroke="#38bdf8" strokeWidth={2.5} dot={false} name="median" />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Section 3: Recent Risk Engine Events Feed Table */}
       <div className="glass-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div>
