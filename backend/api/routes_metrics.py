@@ -26,21 +26,22 @@ def health_check():
     """
     return {
         "status": "healthy",
-        "service": "FinSight AI Risk Intelligence Platform",
-        "version": "1.0.0-hackathon",
+        "service": "FinSight AI Quantitative Risk Intelligence Platform",
+        "version": "1.1.0",
         "nlp_engine_loaded": True,
         "database_connected": True,
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
+@router.post("/api/pipeline/execute")
 @router.post("/api/demo/scenario")
-def run_demo_scenario():
+def execute_systemic_risk_pipeline():
     """
-    Automated execution of the official Hackathon Demo Scenario:
-    1. Analyzes a severe negative geopolitical event
+    Executes an end-to-end multi-engine systemic risk pipeline:
+    1. Ingests and extracts risk signals from a high-severity geopolitical event
     2. Executes tactical dynamic index rebalancing (Module A)
-    3. Detects impact >= 7.0 and triggers strategic wholesale portfolio stress test (Module B)
-    4. Returns coordinated before/after results for instant demo review.
+    3. Triggers strategic wholesale portfolio stress testing (Module B)
+    4. Returns synchronized before/after risk analytics.
     """
     sample_text = (
         "Middle East shipping tensions escalate as naval patrols reroute tankers away from key straits; "

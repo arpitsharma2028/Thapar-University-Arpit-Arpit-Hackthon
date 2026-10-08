@@ -1,12 +1,33 @@
 import sqlite3
-import json
-from typing import Dict, Any, List, Optional
+import logging
+from contextlib import contextmanager
+from typing import Generator
 from backend.config import DB_PATH
 
-def get_connection():
+logger = logging.getLogger("finsight.database")
+
+def get_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(DB_PATH, timeout=30.0, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
+
+@contextmanager
+def get_db_cursor() -> Generator[sqlite3.Cursor, None, None]:
+    """
+    Context manager providing automatic transaction commit, rollback on exception,
+    and guaranteed connection closure.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        yield cursor
+        conn.commit()
+    except Exception as exc:
+        conn.rollback()
+        logger.error(f"Database transaction rolled back due to error: {exc}")
+        raise
+    finally:
+        conn.close()
 
 def init_db():
     conn = get_connection()
@@ -14,7 +35,7 @@ def init_db():
     conn.execute("PRAGMA busy_timeout = 30000")
     cursor = conn.cursor()
 
-    # Events table
+    # Risk Events Table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS events (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,8 +54,10 @@ def init_db():
         timestamp TEXT NOT NULL
     )
     """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_events_category ON events(category)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp)")
 
-    # Portfolio Positions table
+    # Portfolio Positions Table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS portfolio_positions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,7 +73,7 @@ def init_db():
     )
     """)
 
-    # Rebalance History table
+    # Rebalance Audit Trail Table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS rebalance_history (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -69,7 +92,7 @@ def init_db():
     )
     """)
 
-    # Stress Tests table
+    # Stress Test Scenarios Table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS stress_tests (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -90,7 +113,7 @@ def init_db():
     )
     """)
 
-    # Stock OHLCV Historical / Realtime Cache table (inspired by stock-data-intelligence-dashboard)
+    # Historical and Real-Time OHLCV Market Data Cache Table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS stock_ohlcv (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -107,8 +130,9 @@ def init_db():
         UNIQUE(symbol, date)
     )
     """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_stock_ohlcv_sym_date ON stock_ohlcv(symbol, date)")
 
-    # Portfolio Value History table
+    # Mark-to-Market Valuation History Table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS portfolio_history (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -122,7 +146,8 @@ def init_db():
 
     conn.commit()
     conn.close()
-    print("[OK] SQLite database initialized successfully.")
+    logger.info("Database schema initialized and verified.")
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     init_db()

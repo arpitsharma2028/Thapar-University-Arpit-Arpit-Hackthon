@@ -1,8 +1,11 @@
 import os
 import joblib
 import re
+import logging
 from typing import Dict, Any, Tuple
 from backend.config import MODELS_DIR
+
+logger = logging.getLogger("finsight.sentiment")
 
 # Financial domain polarity lexicon (adapted from Loughran-McDonald & market sentiment)
 POSITIVE_FINANCIAL_WORDS = {
@@ -39,7 +42,7 @@ class SentimentAnalyzer:
             try:
                 self.ml_pipeline = joblib.load(self.model_path)
             except Exception as e:
-                print(f"Warning: Failed to load sentiment ML model ({e}). Using rule-assisted lexicon engine.")
+                logger.warning(f"Could not load sentiment ML model ({e}). Using rule-assisted lexicon engine.")
                 self.ml_pipeline = None
 
     def analyze(self, text: str) -> Tuple[float, float]:

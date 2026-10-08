@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, RotateCcw, Zap, Sparkles } from 'lucide-react';
+import { Play, RotateCcw, Activity } from 'lucide-react';
 
 export default function Header({
   title,
@@ -14,62 +14,66 @@ export default function Header({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '20px 32px',
+      padding: '18px 32px',
       borderBottom: '1px solid var(--border-color)',
-      background: 'rgba(15, 23, 42, 0.75)',
+      background: 'rgba(15, 23, 42, 0.85)',
       backdropFilter: 'blur(8px)',
       position: 'sticky',
       top: 0,
       zIndex: 50
     }}>
       <div>
-        <h1 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '-0.02em' }}>
           {title}
         </h1>
         {subtitle && (
-          <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '2px' }}>
+          <p style={{ fontSize: '0.80rem', color: '#94a3b8', marginTop: '2px' }}>
             {subtitle}
           </p>
         )}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        {/* 1-Click Demo Scenario Button */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        {/* Coordinated Systemic Stress Pipeline Execution */}
         <button
           onClick={onRunDemo}
           disabled={loading}
           className="btn btn-primary"
           style={{
-            background: 'linear-gradient(135deg, #7c3aed, #2563eb)',
-            borderColor: '#9333ea',
-            boxShadow: '0 0 15px rgba(124, 58, 237, 0.4)'
+            background: '#2563eb',
+            borderColor: '#3b82f6',
+            color: '#ffffff'
           }}
-          title="Executes the full Hackathon Judge Demo scenario end-to-end"
+          title="Executes an end-to-end systemic stress test pipeline across all engines"
         >
-          <Sparkles size={16} />
-          <span>Run Demo Scenario</span>
+          <Play size={15} />
+          <span>Execute Stress Pipeline</span>
         </button>
 
-        {/* Simulate Single Event */}
+        {/* Process Next Ingested Event */}
         <button
           onClick={onSimulateEvent}
           disabled={loading}
-          className="btn btn-success"
-          title="Simulate next event signal from the Risk Engine"
+          className="btn btn-outline"
+          style={{
+            borderColor: 'rgba(56, 189, 248, 0.4)',
+            color: '#38bdf8'
+          }}
+          title="Ingest and process next sequential risk event signal"
         >
-          <Zap size={16} />
-          <span>Simulate Event</span>
+          <Activity size={15} />
+          <span>Ingest Next Signal</span>
         </button>
 
-        {/* Reset Portfolio */}
+        {/* Reset Portfolio to Baseline */}
         <button
           onClick={onResetPortfolio}
           disabled={loading}
           className="btn btn-outline"
-          title="Reset portfolio to baseline weights"
+          title="Reset portfolio positions to baseline target weights"
         >
-          <RotateCcw size={15} />
-          <span>Reset</span>
+          <RotateCcw size={14} />
+          <span>Reset Weights</span>
         </button>
       </div>
     </header>

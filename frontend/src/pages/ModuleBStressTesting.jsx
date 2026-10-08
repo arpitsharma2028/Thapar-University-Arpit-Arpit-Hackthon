@@ -318,7 +318,7 @@ export default function ModuleBStressTesting({ showToast }) {
               Baseline Wholesale Banking Asset Portfolio ($50.0M)
             </h3>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-              Structured wholesale multi-asset balance sheet exposures (Simulated Demo Data)
+              Structured wholesale multi-asset balance sheet exposures (Equities, Bonds, Derivatives, Cash)
             </p>
           </div>
         </div>

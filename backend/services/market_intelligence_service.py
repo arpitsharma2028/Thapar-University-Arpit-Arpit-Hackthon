@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
@@ -7,6 +8,8 @@ from typing import Dict, Any, List, Optional
 import yfinance as yf
 from backend.database.db import get_connection
 from backend.ml.entity_extractor import TICKER_MAP
+
+logger = logging.getLogger("finsight.market")
 
 class MarketIntelligenceService:
     def __init__(self):
@@ -32,11 +35,10 @@ class MarketIntelligenceService:
         df = pd.DataFrame()
 
         try:
-            # Download via yfinance (suppress extra prints)
             ticker_obj = yf.Ticker(symbol)
             df = ticker_obj.history(period=period)
         except Exception as e:
-            print(f"[MarketService] yfinance fetch warning for {symbol}: {e}")
+            logger.warning(f"Market data fetch warning for {symbol}: {e}")
             df = pd.DataFrame()
 
         data_source = "yfinance"

@@ -1,5 +1,6 @@
 import sys
 import os
+import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,34 +10,37 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+logger = logging.getLogger("finsight.main")
+
 from backend.database.db import init_db
 from backend.ml.nlp_engine import get_risk_engine
 from backend.api import events_router, portfolio_router, stress_router, metrics_router, market_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: ensure DB and pre-warm NLP Engine
-    print("=" * 60)
-    print("Starting FinSight AI — Market & Portfolio Risk Intelligence Engine")
-    print("=" * 60)
+    logger.info("Initializing FinSight AI Market & Portfolio Risk Intelligence Engine...")
     init_db()
-    # Pre-warm ML models
     get_risk_engine()
+    logger.info("Core engine services and statistical models operational.")
     yield
-    print("Shutting down FinSight AI Engine...")
+    logger.info("Shutting down FinSight AI Engine...")
 
 app = FastAPI(
-    title="FinSight AI — Market & Portfolio Risk Intelligence Platform",
+    title="FinSight AI — Quantitative Risk Intelligence Platform",
     description=(
-        "API for S&P Global & CRISIL Campus Hackathon 2026. "
-        "Provides NLP risk event extraction, tactical index dynamic rebalancing (Module A), "
-        "wholesale portfolio stress testing (Module B), and Monte Carlo quantitative forecasting."
+        "Institutional platform for high-frequency unstructured financial text processing, "
+        "tactical index dynamic rebalancing (Module A), wholesale multi-asset portfolio stress testing (Module B), "
+        "and stochastic Monte Carlo price forecasting."
     ),
     version="1.1.0",
     lifespan=lifespan
 )
 
-# Enable CORS for frontend Vite dev server (and any origin for hackathon evaluation)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -45,7 +49,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register routers
 app.include_router(events_router)
 app.include_router(portfolio_router)
 app.include_router(stress_router)
@@ -55,7 +58,8 @@ app.include_router(market_router)
 @app.get("/")
 def root():
     return {
-        "message": "Welcome to FinSight AI API",
+        "service": "FinSight AI Quantitative Risk Intelligence Platform",
+        "version": "1.1.0",
         "documentation": "/docs",
         "health": "/api/health"
     }

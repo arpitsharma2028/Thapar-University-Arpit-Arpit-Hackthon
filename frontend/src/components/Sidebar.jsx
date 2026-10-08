@@ -7,19 +7,19 @@ import {
   Database,
   History,
   Activity,
-  Award,
-  Sparkles
+  BarChart2,
+  ShieldCheck
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab }) {
   const menuItems = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'risk-engine', label: 'Risk Intelligence', icon: Cpu },
-    { id: 'module-a', label: 'Module A — Rebalancer', icon: TrendingUp },
-    { id: 'module-b', label: 'Module B — Stress Testing', icon: ShieldAlert },
-    { id: 'market-intel', label: 'Market Analytics & Forecast', icon: Sparkles },
-    { id: 'events', label: 'Event Explorer', icon: Database },
-    { id: 'history', label: 'Simulation History', icon: History },
+    { id: 'overview', label: 'Executive Overview', icon: LayoutDashboard },
+    { id: 'risk-engine', label: 'NLP Risk Intelligence', icon: Cpu },
+    { id: 'module-a', label: 'Module A — Index Rebalancer', icon: TrendingUp },
+    { id: 'module-b', label: 'Module B — Wholesale Stress Test', icon: ShieldAlert },
+    { id: 'market-intel', label: 'Market Analytics & Forecast', icon: BarChart2 },
+    { id: 'events', label: 'Event Signal Explorer', icon: Database },
+    { id: 'history', label: 'Audit Trail & History', icon: History },
   ];
 
   return (
@@ -39,11 +39,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             width: '38px',
             height: '38px',
             borderRadius: '10px',
-            background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
+            background: '#1e40af',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)'
+            border: '1px solid #3b82f6'
           }}>
             <Activity size={22} color="#ffffff" />
           </div>
@@ -57,20 +57,20 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           </div>
         </div>
 
-        {/* Hackathon Badge */}
+        {/* Institutional Desk Status Badge */}
         <div style={{
           marginTop: '16px',
-          background: 'rgba(245, 158, 11, 0.1)',
-          border: '1px solid rgba(245, 158, 11, 0.3)',
-          borderRadius: '8px',
-          padding: '8px 10px',
+          background: 'rgba(30, 41, 59, 0.7)',
+          border: '1px solid rgba(71, 85, 105, 0.6)',
+          borderRadius: '6px',
+          padding: '7px 10px',
           display: 'flex',
           alignItems: 'center',
           gap: '8px'
         }}>
-          <Award size={16} color="#f59e0b" />
-          <div style={{ fontSize: '0.72rem', color: '#fcd34d', fontWeight: 600 }}>
-            S&P Global & CRISIL 2026
+          <ShieldCheck size={14} color="#38bdf8" />
+          <div style={{ fontSize: '0.70rem', color: '#cbd5e1', fontWeight: 600, letterSpacing: '0.02em' }}>
+            Multi-Asset Risk Desk
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 fontSize: '0.84rem',
                 fontWeight: isActive ? 600 : 500,
                 color: isActive ? '#ffffff' : '#94a3b8',
-                background: isActive ? 'linear-gradient(90deg, rgba(37, 99, 235, 0.25), rgba(37, 99, 235, 0.05))' : 'transparent',
+                background: isActive ? 'rgba(37, 99, 235, 0.18)' : 'transparent',
                 border: isActive ? '1px solid rgba(59, 130, 246, 0.4)' : '1px solid transparent',
                 cursor: 'pointer',
                 textAlign: 'left',
@@ -112,7 +112,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         })}
       </nav>
 
-      {/* Status Footer with User Name and Campus */}
+      {/* Status Footer */}
       <div style={{
         padding: '16px 20px',
         borderTop: '1px solid var(--border-color)',
@@ -120,13 +120,13 @@ export default function Sidebar({ activeTab, setActiveTab }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
           <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', display: 'inline-block', boxShadow: '0 0 8px #10b981' }}></span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#e2e8f0' }}>Backend Online</span>
+          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#e2e8f0' }}>Production Node Online</span>
         </div>
         <div style={{ fontSize: '0.72rem', color: '#38bdf8', fontWeight: 600 }}>
-          Candidate: Arpit Sharma
+          Lead Risk Engineer: Arpit Sharma
         </div>
         <div style={{ fontSize: '0.65rem', color: '#64748b', marginTop: '2px' }}>
-          Thapar Institute of Engg & Tech
+          TIET Quantitative Research • v1.1.0
         </div>
       </div>
     </aside>

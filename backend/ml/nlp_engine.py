@@ -1,10 +1,13 @@
 import datetime
+import logging
 from typing import Dict, Any, Optional
 from backend.ml.feature_extraction import clean_financial_text
 from backend.ml.sentiment_analyzer import SentimentAnalyzer
 from backend.ml.event_classifier import EventClassifier
 from backend.ml.impact_scorer import ImpactScorer
 from backend.ml.entity_extractor import EntityExtractor
+
+logger = logging.getLogger("finsight.nlp")
 
 class UnifiedRiskEngine:
     _instance = None
@@ -16,12 +19,12 @@ class UnifiedRiskEngine:
         return cls._instance
 
     def __init__(self):
-        print("Initializing Unified NLP Risk Engine components...")
+        logger.info("Initializing NLP Risk Engine components...")
         self.sentiment_analyzer = SentimentAnalyzer()
         self.event_classifier = EventClassifier()
         self.impact_scorer = ImpactScorer()
         self.entity_extractor = EntityExtractor()
-        print("[OK] Unified NLP Risk Engine successfully loaded.")
+        logger.info("NLP Risk Engine components initialized successfully.")
 
     def process_text(
         self,

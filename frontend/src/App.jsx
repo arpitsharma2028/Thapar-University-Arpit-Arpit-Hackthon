@@ -47,22 +47,22 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // 1-Click Interactive Hackathon Demo Scenario
+  // End-to-end Systemic Risk Pipeline Simulation
   const handleRunDemoScenario = async () => {
     setLoading(true);
-    showToast("Executing 1-Click Hackathon Demo Scenario...", "info");
+    showToast("Executing systemic risk pipeline simulation...", "info");
     try {
       const result = await runDemoScenario();
       setLastRebalanceResult(result.step_2_module_a_rebalance);
       await loadPlatformData();
       showToast(
-        `Demo Complete! Geopolitical Shock parsed -> Index Rebalanced -> Wholesale Stress Loss -$${(result.step_3_module_b_stress_test.total_dollar_loss / 1000000).toFixed(2)}M`,
+        `Systemic shock processed: Geopolitical event parsed -> Index rebalanced -> Wholesale stress loss: -$${(result.step_3_module_b_stress_test.total_dollar_loss / 1000000).toFixed(2)}M`,
         "success"
       );
       setActiveTab('overview');
     } catch (err) {
       console.error(err);
-      showToast("Failed to run demo scenario. Verify backend is running.", "error");
+      showToast("Failed to execute stress pipeline. Verify backend service is online.", "error");
     } finally {
       setLoading(false);
     }

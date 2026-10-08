@@ -184,7 +184,7 @@ Interactive OpenAPI / Swagger documentation is available at `http://127.0.0.1:80
 #### 1. System Health & Metrics
 - `GET /api/health`: Returns API and NLP engine health status.
 - `GET /api/metrics`: Returns portfolio valuation, VaR 95%, category distribution, and event counts.
-- `POST /api/demo/scenario`: Executes the automated 1-Click Hackathon Judge scenario.
+- `POST /api/pipeline/execute` (alias `/api/demo/scenario`): Executes the synchronized end-to-end systemic risk pipeline across NLP, Module A, and Module B.
 
 #### 2. Risk Events & NLP Analysis
 - `GET /api/events`: Lists historical and live signals with filters (`source_type`, `category`, `min_impact`, `search`).

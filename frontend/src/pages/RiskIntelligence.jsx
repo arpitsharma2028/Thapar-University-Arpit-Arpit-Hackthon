@@ -108,7 +108,7 @@ export default function RiskIntelligence({
         {/* Preset Sample Buttons */}
         <div style={{ marginBottom: '14px' }}>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginRight: '8px', fontWeight: 600 }}>
-            Load Demo Prompt:
+            Pre-Calibrated Test Signals:
           </span>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
             {SAMPLE_PROMPTS.map((p, idx) => (

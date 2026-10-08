@@ -1,8 +1,11 @@
 import os
 import re
 import joblib
+import logging
 from typing import Dict, Any
 from backend.config import MODELS_DIR
+
+logger = logging.getLogger("finsight.impact")
 
 SEVERITY_KEYWORDS = {
     # High severity (adds 2.0 - 3.5)
@@ -28,7 +31,7 @@ class ImpactScorer:
             try:
                 self.ml_pipeline = joblib.load(self.model_path)
             except Exception as e:
-                print(f"Warning: Could not load impact regressor model ({e}). Using heuristic model.")
+                logger.warning(f"Could not load impact regressor model ({e}). Using heuristic model.")
                 self.ml_pipeline = None
 
     def predict(self, text: str, sentiment_score: float, category: str) -> float:

@@ -1,8 +1,11 @@
 import os
 import joblib
 import re
+import logging
 from typing import Dict, Any, Tuple
 from backend.config import MODELS_DIR
+
+logger = logging.getLogger("finsight.classifier")
 
 EVENT_CATEGORIES = [
     "Geopolitical",
@@ -38,7 +41,7 @@ class EventClassifier:
             try:
                 self.ml_pipeline = joblib.load(self.model_path)
             except Exception as e:
-                print(f"Warning: Could not load event classifier model ({e}). Using feature matcher.")
+                logger.warning(f"Could not load event classifier model ({e}). Using feature matcher.")
                 self.ml_pipeline = None
 
     def classify(self, text: str) -> Tuple[str, float]:
