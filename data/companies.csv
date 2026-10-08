@@ -1,0 +1,17 @@
+ticker,name,sector,industry,base_weight,beta,market_cap_b
+AAPL,Apple Inc.,Technology,Consumer Electronics,0.08457711442786069,1.15,2850.0
+MSFT,Microsoft Corporation,Technology,Software & Cloud,0.08457711442786069,1.1,2980.0
+NVDA,NVIDIA Corporation,Technology,Semiconductors,0.07960199004975124,1.72,2200.0
+GOOGL,Alphabet Inc.,Communication Services,Interactive Media,0.07462686567164178,1.08,2100.0
+AMZN,Amazon.com Inc.,Consumer Discretionary,E-Commerce & Cloud,0.07462686567164178,1.2,1850.0
+JPM,JPMorgan Chase & Co.,Financials,Diversified Banking,0.06965174129353234,0.95,570.0
+BAC,Bank of America Corp,Financials,Commercial Banking,0.054726368159203974,1.05,290.0
+V,Visa Inc.,Financials,Payment Processing,0.059701492537313425,0.92,550.0
+JNJ,Johnson & Johnson,Healthcare,Pharmaceuticals,0.054726368159203974,0.65,380.0
+UNH,UnitedHealth Group Inc.,Healthcare,Managed Healthcare,0.059701492537313425,0.7,440.0
+XOM,Exxon Mobil Corporation,Energy,Integrated Oil & Gas,0.06467661691542288,0.88,480.0
+CVX,Chevron Corporation,Energy,Integrated Oil & Gas,0.04975124378109452,0.85,280.0
+PG,Procter & Gamble Co.,Consumer Staples,Household Products,0.054726368159203974,0.55,375.0
+TSLA,Tesla Inc.,Consumer Discretionary,Automotive & Clean Tech,0.04975124378109452,2.1,560.0
+CAT,Caterpillar Inc.,Industrials,Heavy Machinery,0.044776119402985065,1.12,170.0
+NEE,NextEra Energy Inc.,Utilities,Renewable Energy,0.03980099502487562,0.6,150.0

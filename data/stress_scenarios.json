@@ -1,0 +1,222 @@
+[
+  {
+    "id": "SCEN-GEO-01",
+    "name": "Global Geopolitical Escalation & Supply Chain Severance",
+    "category": "Geopolitical",
+    "severity": 9.2,
+    "description": "Simulated multi-theater maritime blockade disrupting 30% of global semiconductor trade and shipping lanes, triggering emergency commodity rationing.",
+    "impact_factors": {
+      "Equities": -0.165,
+      "Bonds": 0.045,
+      "Derivatives": -0.22,
+      "Cash": 0.0,
+      "Commodities": 0.28
+    },
+    "sector_shocks": {
+      "Technology": -0.225,
+      "Consumer Discretionary": -0.18,
+      "Financials": -0.14,
+      "Healthcare": -0.05,
+      "Energy": 0.19,
+      "Utilities": -0.04,
+      "Industrials": -0.15
+    },
+    "wholesale_portfolio": {
+      "total_nominal_usd": 50000000.0,
+      "asset_classes": {
+        "Equities": {
+          "value": 22500000.0,
+          "share": 0.45
+        },
+        "Bonds": {
+          "value": 15000000.0,
+          "share": 0.3
+        },
+        "Derivatives": {
+          "value": 7500000.0,
+          "share": 0.15
+        },
+        "Cash": {
+          "value": 5000000.0,
+          "share": 0.1
+        }
+      }
+    }
+  },
+  {
+    "id": "SCEN-MACRO-02",
+    "name": "Sudden 150 bps Stagflationary Rate Shock",
+    "category": "Macroeconomic",
+    "severity": 8.5,
+    "description": "Unanticipated central bank emergency monetary tightening of 150 bps to combat sticky energy inflation, depressing fixed income valuations and corporate credit spreads.",
+    "impact_factors": {
+      "Equities": -0.135,
+      "Bonds": -0.088,
+      "Derivatives": -0.16,
+      "Cash": 0.015,
+      "Commodities": -0.07
+    },
+    "sector_shocks": {
+      "Technology": -0.19,
+      "Consumer Discretionary": -0.16,
+      "Financials": 0.04,
+      "Healthcare": -0.06,
+      "Energy": -0.03,
+      "Utilities": -0.12,
+      "Industrials": -0.11
+    },
+    "wholesale_portfolio": {
+      "total_nominal_usd": 50000000.0,
+      "asset_classes": {
+        "Equities": {
+          "value": 22500000.0,
+          "share": 0.45
+        },
+        "Bonds": {
+          "value": 15000000.0,
+          "share": 0.3
+        },
+        "Derivatives": {
+          "value": 7500000.0,
+          "share": 0.15
+        },
+        "Cash": {
+          "value": 5000000.0,
+          "share": 0.1
+        }
+      }
+    }
+  },
+  {
+    "id": "SCEN-CREDIT-03",
+    "name": "Systemic Credit Contagion & Commercial Real Estate Default Cascade",
+    "category": "Credit",
+    "severity": 8.9,
+    "description": "Liquidity crisis triggered by multi-billion debt default across major European/US commercial property syndicates, spiking credit default swap spreads.",
+    "impact_factors": {
+      "Equities": -0.175,
+      "Bonds": -0.065,
+      "Derivatives": -0.28,
+      "Cash": 0.005,
+      "Commodities": -0.12
+    },
+    "sector_shocks": {
+      "Technology": -0.11,
+      "Consumer Discretionary": -0.145,
+      "Financials": -0.26,
+      "Healthcare": -0.04,
+      "Energy": -0.09,
+      "Utilities": -0.05,
+      "Industrials": -0.13
+    },
+    "wholesale_portfolio": {
+      "total_nominal_usd": 50000000.0,
+      "asset_classes": {
+        "Equities": {
+          "value": 22500000.0,
+          "share": 0.45
+        },
+        "Bonds": {
+          "value": 15000000.0,
+          "share": 0.3
+        },
+        "Derivatives": {
+          "value": 7500000.0,
+          "share": 0.15
+        },
+        "Cash": {
+          "value": 5000000.0,
+          "share": 0.1
+        }
+      }
+    }
+  },
+  {
+    "id": "SCEN-TECH-04",
+    "name": "Global Tech Monopoly Breakup & AI Compute Sanctions",
+    "category": "Regulatory",
+    "severity": 8.1,
+    "description": "Coordinated international antitrust rulings requiring break-up of cloud ecosystems alongside heavy computing export embargoes.",
+    "impact_factors": {
+      "Equities": -0.14,
+      "Bonds": 0.02,
+      "Derivatives": -0.19,
+      "Cash": 0.0,
+      "Commodities": -0.04
+    },
+    "sector_shocks": {
+      "Technology": -0.27,
+      "Consumer Discretionary": -0.13,
+      "Financials": -0.05,
+      "Healthcare": 0.02,
+      "Energy": 0.01,
+      "Utilities": 0.03,
+      "Industrials": -0.08
+    },
+    "wholesale_portfolio": {
+      "total_nominal_usd": 50000000.0,
+      "asset_classes": {
+        "Equities": {
+          "value": 22500000.0,
+          "share": 0.45
+        },
+        "Bonds": {
+          "value": 15000000.0,
+          "share": 0.3
+        },
+        "Derivatives": {
+          "value": 7500000.0,
+          "share": 0.15
+        },
+        "Cash": {
+          "value": 5000000.0,
+          "share": 0.1
+        }
+      }
+    }
+  },
+  {
+    "id": "SCEN-COMM-05",
+    "name": "Global Energy Embargo & Commodity Super-Cycle Spike",
+    "category": "Market",
+    "severity": 7.8,
+    "description": "Strait closure and production cutbacks pushing Brent crude to $140/bbl and European natural gas up 85%, compressing industrial margins.",
+    "impact_factors": {
+      "Equities": -0.115,
+      "Bonds": -0.045,
+      "Derivatives": -0.15,
+      "Cash": 0.01,
+      "Commodities": 0.35
+    },
+    "sector_shocks": {
+      "Technology": -0.12,
+      "Consumer Discretionary": -0.17,
+      "Financials": -0.08,
+      "Healthcare": -0.04,
+      "Energy": 0.31,
+      "Utilities": -0.09,
+      "Industrials": -0.16
+    },
+    "wholesale_portfolio": {
+      "total_nominal_usd": 50000000.0,
+      "asset_classes": {
+        "Equities": {
+          "value": 22500000.0,
+          "share": 0.45
+        },
+        "Bonds": {
+          "value": 15000000.0,
+          "share": 0.3
+        },
+        "Derivatives": {
+          "value": 7500000.0,
+          "share": 0.15
+        },
+        "Cash": {
+          "value": 5000000.0,
+          "share": 0.1
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,17 @@
+ticker,name,sector,target_weight,current_weight,shares,current_price,position_value,last_rebalanced
+AAPL,Apple Inc.,Technology,0.0846,0.0846,4634,182.5,845705.0,2026-10-08 23:52:00
+MSFT,Microsoft Corporation,Technology,0.0846,0.0846,2037,415.2,845762.4,2026-10-08 23:52:00
+NVDA,NVIDIA Corporation,Technology,0.0796,0.0796,910,875.0,796250.0,2026-10-08 23:52:00
+GOOGL,Alphabet Inc.,Communication Services,0.0746,0.0746,4802,155.4,746230.8,2026-10-08 23:52:00
+AMZN,Amazon.com Inc.,Consumer Discretionary,0.0746,0.0746,4171,178.9,746191.9,2026-10-08 23:52:00
+JPM,JPMorgan Chase & Co.,Financials,0.0697,0.0696,3512,198.3,696429.6,2026-10-08 23:52:00
+BAC,Bank of America Corp,Financials,0.0547,0.0547,14594,37.5,547275.0,2026-10-08 23:52:00
+V,Visa Inc.,Financials,0.0597,0.0597,2144,278.4,596889.6,2026-10-08 23:52:00
+JNJ,Johnson & Johnson,Healthcare,0.0547,0.0547,3598,152.1,547255.8,2026-10-08 23:52:00
+UNH,UnitedHealth Group Inc.,Healthcare,0.0597,0.0597,1239,482.0,597198.0,2026-10-08 23:52:00
+XOM,Exxon Mobil Corporation,Energy,0.0647,0.0647,5453,118.6,646725.8,2026-10-08 23:52:00
+CVX,Chevron Corporation,Energy,0.0498,0.0497,3185,156.2,497497.0,2026-10-08 23:52:00
+PG,Procter & Gamble Co.,Consumer Staples,0.0547,0.0547,3362,162.8,547333.6,2026-10-08 23:52:00
+TSLA,Tesla Inc.,Consumer Discretionary,0.0498,0.0497,2836,175.4,497434.4,2026-10-08 23:52:00
+CAT,Caterpillar Inc.,Industrials,0.0448,0.0448,1298,345.0,447810.0,2026-10-08 23:52:00
+NEE,NextEra Energy Inc.,Utilities,0.0398,0.0398,5836,68.2,398015.2,2026-10-08 23:52:00
