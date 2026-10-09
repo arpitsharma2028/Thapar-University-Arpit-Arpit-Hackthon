@@ -131,14 +131,14 @@ export default function ModuleBStressTesting({ showToast }) {
                 onClick={() => setSelectedScenarioId(scen.id)}
                 style={{
                   background: isSelected
-                    ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.12) 100%)'
-                    : 'rgba(255, 255, 255, 0.035)',
-                  border: isSelected ? '1px solid rgba(239, 68, 68, 0.65)' : '1px solid var(--glass-border)',
+                    ? 'var(--glass-elevated)'
+                    : 'var(--glass-secondary)',
+                  border: isSelected ? '1px solid var(--glass-border-hover)' : '1px solid var(--glass-border)',
                   backdropFilter: 'blur(12px)',
                   WebkitBackdropFilter: 'blur(12px)',
                   boxShadow: isSelected
-                    ? '0 4px 18px rgba(239, 68, 68, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2)'
-                    : 'inset 0 1px 1px rgba(255, 255, 255, 0.05)',
+                    ? 'var(--glass-inner-shadow), 0 4px 14px rgba(0, 0, 0, 0.14)'
+                    : 'none',
                   borderRadius: '11px',
                   padding: '14px',
                   cursor: 'pointer',
@@ -147,14 +147,14 @@ export default function ModuleBStressTesting({ showToast }) {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                   <EventCategoryBadge category={scen.category} />
-                  <span className="mono-text" style={{ fontSize: '0.72rem', color: '#ef4444', fontWeight: 700 }}>
+                  <span className="mono-text" style={{ fontSize: '0.72rem', color: 'var(--accent-negative)', fontWeight: 700 }}>
                     Severity {scen.severity}/10
                   </span>
                 </div>
-                <div style={{ fontSize: '0.86rem', fontWeight: 700, color: '#f8fafc', marginBottom: '4px' }}>
+                <div style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
                   {scen.name}
                 </div>
-                <div style={{ fontSize: '0.74rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
                   {scen.description.slice(0, 85)}...
                 </div>
               </div>
@@ -165,7 +165,7 @@ export default function ModuleBStressTesting({ showToast }) {
         {/* Parameter Adjuster & Execute Row */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: '320px' }}>
-            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#e2e8f0' }}>
+            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
               Severity Multiplier:
             </span>
             <input
@@ -175,9 +175,9 @@ export default function ModuleBStressTesting({ showToast }) {
               step="0.1"
               value={severityMultiplier}
               onChange={(e) => setSeverityMultiplier(parseFloat(e.target.value))}
-              style={{ flex: 1, accentColor: '#ef4444', cursor: 'pointer' }}
+              style={{ flex: 1, accentColor: 'var(--accent-negative)', cursor: 'pointer' }}
             />
-            <span className="mono-text" style={{ fontSize: '0.88rem', fontWeight: 700, color: '#ef4444', minWidth: '40px' }}>
+            <span className="mono-text" style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--accent-negative)', minWidth: '40px' }}>
               {severityMultiplier.toFixed(1)}x
             </span>
           </div>
@@ -186,7 +186,6 @@ export default function ModuleBStressTesting({ showToast }) {
             onClick={() => handleRunStress()}
             disabled={loading}
             className="btn btn-danger btn-lg"
-            style={{ boxShadow: '0 0 16px rgba(239, 68, 68, 0.4)' }}
           >
             <Play size={18} />
             <span>{loading ? "Simulating Systemic Shock..." : "Execute Stress Test"}</span>
@@ -199,50 +198,50 @@ export default function ModuleBStressTesting({ showToast }) {
         <div style={{ marginBottom: '28px' }}>
           {/* Top Loss KPI Row */}
           <div className="grid-cols-4" style={{ marginBottom: '20px' }}>
-            <div className="glass-card" style={{ borderColor: 'rgba(239, 68, 68, 0.4)' }}>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>
+            <div className="glass-card">
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                 Pre-Stress Wholesale Value
               </div>
-              <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: '#f8fafc', marginTop: '4px' }}>
+              <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
                 ${(stressResult.total_value_before / 1000000).toFixed(2)}M
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
                 100% Book Capital
               </div>
             </div>
 
-            <div className="glass-card" style={{ borderColor: 'rgba(255, 69, 58, 0.45)', background: 'linear-gradient(135deg, rgba(255, 69, 58, 0.12) 0%, rgba(235, 238, 242, 0.04) 100%)' }}>
-              <div style={{ fontSize: '0.75rem', color: '#fca5a5', textTransform: 'uppercase', fontWeight: 600 }}>
+            <div className="glass-card">
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
                 Total Simulated Capital Loss
               </div>
-              <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--apple-red)', marginTop: '4px' }}>
+              <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--accent-negative)', marginTop: '4px' }}>
                 -${(stressResult.total_dollar_loss / 1000000).toFixed(2)}M
               </div>
-              <div style={{ fontSize: '0.78rem', color: '#f87171', marginTop: '4px', fontWeight: 700 }}>
+              <div style={{ fontSize: '0.78rem', color: 'var(--accent-negative)', marginTop: '4px', fontWeight: 700 }}>
                 -{stressResult.total_loss_pct}% of Portfolio
               </div>
             </div>
 
-            <div className="glass-card" style={{ borderColor: 'rgba(239, 68, 68, 0.4)' }}>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>
+            <div className="glass-card">
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                 Post-Stress Book Value
               </div>
               <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
                 ${(stressResult.total_value_after / 1000000).toFixed(2)}M
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
                 Residual Capital Cushion
               </div>
             </div>
 
-            <div className="glass-card" style={{ borderColor: 'rgba(239, 68, 68, 0.4)' }}>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>
+            <div className="glass-card">
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                 Scenario Calibrated Severity
               </div>
               <div style={{ marginTop: '8px' }}>
                 <SeverityBadge score={stressResult.severity} />
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '8px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px' }}>
                 Multiplier: {stressResult.severity_multiplier}x
               </div>
             </div>
@@ -261,13 +260,13 @@ export default function ModuleBStressTesting({ showToast }) {
               <div style={{ height: '240px', width: '100%' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={assetChartData} margin={{ top: 10, right: 10, left: -15, bottom: 5 }}>
-                    <XAxis dataKey="asset" stroke="#64748b" fontSize={11} />
-                    <YAxis stroke="#64748b" fontSize={11} tickFormatter={(val) => `$${val}M`} />
+                    <XAxis dataKey="asset" stroke="#9699A2" fontSize={11} />
+                    <YAxis stroke="#9699A2" fontSize={11} tickFormatter={(val) => `$${val}M`} />
                     <Tooltip
-                      contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
+                      contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.94)', border: '1px solid rgba(255, 255, 255, 0.16)', borderRadius: '12px', color: '#F5F5F7' }}
                       formatter={(val, name) => [`$${val}M`, name === 'dollarLoss' ? 'Loss Amount' : name]}
                     />
-                    <Bar dataKey="dollarLoss" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="dollarLoss" fill="var(--accent-negative)" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

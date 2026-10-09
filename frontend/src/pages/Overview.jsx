@@ -129,23 +129,19 @@ export default function Overview({
     <div className="page-wrapper">
       {/* Live Alert Ticker */}
       <div className="glass-panel" style={{
-        background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.20)',
-        borderRadius: '14px',
         padding: '12px 18px',
         marginBottom: '16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '12px',
-        boxShadow: 'var(--shadow-sm), inset 0 1px 1px rgba(255, 255, 255, 0.15)'
+        gap: '12px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{
-            background: 'var(--apple-red-surface)',
-            color: 'var(--apple-red)',
-            border: '1px solid rgba(255, 69, 58, 0.4)',
+            background: 'rgba(255, 105, 97, 0.14)',
+            color: 'var(--accent-negative)',
+            border: '1px solid rgba(255, 105, 97, 0.28)',
             fontSize: '0.68rem',
             fontWeight: 700,
             padding: '3px 8px',
@@ -156,10 +152,10 @@ export default function Overview({
             alignItems: 'center',
             gap: '5px'
           }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--apple-red)', boxShadow: '0 0 6px var(--apple-red)' }} />
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-negative)', display: 'inline-block' }} />
             LIVE FEED
           </span>
-          <span style={{ fontSize: '0.84rem', color: '#f5f5f7', fontWeight: 500 }}>
+          <span style={{ fontSize: '0.84rem', color: 'var(--text-primary)', fontWeight: 500 }}>
             {metrics?.recent_alerts?.[0]?.headline || "AI Risk Engine actively parsing live News & Social signals across 16 Index Assets."}
           </span>
         </div>
@@ -177,7 +173,6 @@ export default function Overview({
 
       {/* Top Gainers & Losers Market Strip */}
       <div className="glass-panel" style={{
-        borderRadius: '14px',
         padding: '10px 16px',
         marginBottom: '24px',
         display: 'flex',
@@ -188,7 +183,7 @@ export default function Overview({
       }}>
         {/* Gainers */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--apple-green)', letterSpacing: '0.06em' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--accent-positive)', letterSpacing: '0.06em' }}>
             MARKET GAINERS:
           </span>
           {(gainersLosers.gainers || []).slice(0, 3).map((g) => (
@@ -199,11 +194,11 @@ export default function Overview({
               style={{
                 fontSize: '0.76rem',
                 fontWeight: 600,
-                background: 'var(--apple-green-surface)',
-                border: '1px solid rgba(48, 209, 88, 0.32)',
+                background: 'rgba(50, 213, 131, 0.12)',
+                border: '1px solid rgba(50, 213, 131, 0.25)',
                 padding: '2px 8px',
                 borderRadius: '6px',
-                color: 'var(--apple-green)',
+                color: 'var(--accent-positive)',
                 cursor: 'pointer'
               }}
               title="Click to inspect Monte Carlo forecast"
@@ -215,7 +210,7 @@ export default function Overview({
 
         {/* Losers */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--apple-red)', letterSpacing: '0.06em' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--accent-negative)', letterSpacing: '0.06em' }}>
             MARKET LOSERS:
           </span>
           {(gainersLosers.losers || []).slice(0, 3).map((l) => (
@@ -226,11 +221,11 @@ export default function Overview({
               style={{
                 fontSize: '0.76rem',
                 fontWeight: 600,
-                background: 'var(--apple-red-surface)',
-                border: '1px solid rgba(255, 69, 58, 0.32)',
+                background: 'rgba(255, 105, 97, 0.12)',
+                border: '1px solid rgba(255, 105, 97, 0.25)',
                 padding: '2px 8px',
                 borderRadius: '6px',
-                color: 'var(--apple-red)',
+                color: 'var(--accent-negative)',
                 cursor: 'pointer'
               }}
               title="Click to inspect Monte Carlo forecast"
@@ -294,25 +289,25 @@ export default function Overview({
           <div style={{ height: '280px', width: '100%' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={historyData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-                <XAxis dataKey="time" stroke="#64748b" fontSize={11} tickLine={false} />
+                <XAxis dataKey="time" stroke="#9699A2" fontSize={11} tickLine={false} />
                 <YAxis
                   domain={['auto', 'auto']}
-                  stroke="#64748b"
+                  stroke="#9699A2"
                   fontSize={11}
                   tickLine={false}
                   tickFormatter={(val) => `$${(val / 1000000).toFixed(2)}M`}
                 />
                 <Tooltip
-                  contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
+                  contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.94)', border: '1px solid rgba(255, 255, 255, 0.16)', borderRadius: '12px', color: '#F5F5F7' }}
                   formatter={(val) => [`$${Number(val).toLocaleString()}`, 'Portfolio Value']}
                 />
                 <Line
                   type="monotone"
                   dataKey="value"
-                  stroke="#f5f5f7"
-                  strokeWidth={2.5}
-                  dot={{ r: 3, fill: '#f5f5f7' }}
-                  activeDot={{ r: 6, fill: '#ffffff' }}
+                  stroke="var(--text-primary)"
+                  strokeWidth={2}
+                  dot={{ r: 3, fill: 'var(--text-primary)' }}
+                  activeDot={{ r: 5, fill: '#ffffff' }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -459,20 +454,20 @@ export default function Overview({
                   <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.05}/>
                 </linearGradient>
               </defs>
-              <XAxis dataKey="date" stroke="#64748b" fontSize={11} />
+              <XAxis dataKey="date" stroke="#9699A2" fontSize={11} />
               <YAxis
                 domain={['auto', 'auto']}
-                stroke="#64748b"
+                stroke="#9699A2"
                 fontSize={11}
                 tickFormatter={(val) => `$${val}`}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
+                contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.94)', border: '1px solid rgba(255, 255, 255, 0.16)', borderRadius: '12px', color: '#F5F5F7' }}
                 formatter={(val, name) => [`$${val}`, name === 'upper' ? '95th Percentile' : (name === 'median' ? 'Median (50th)' : '5th Percentile')]}
               />
               <Area type="monotone" dataKey="upper" stroke="#dce0e6" fillOpacity={1} fill="url(#overviewConeGrad)" name="upper" />
               <Area type="monotone" dataKey="lower" stroke="#dce0e6" fillOpacity={0} name="lower" />
-              <Line type="monotone" dataKey="median" stroke="#f5f5f7" strokeWidth={2.5} dot={false} name="median" />
+              <Line type="monotone" dataKey="median" stroke="var(--text-primary)" strokeWidth={2} dot={false} name="median" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -489,7 +484,7 @@ export default function Overview({
               Inbound financial news & social media text transformed into structured risk intelligence
             </p>
           </div>
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
             Showing 5 most recent signals
           </span>
         </div>
@@ -511,19 +506,19 @@ export default function Overview({
             <tbody>
               {(metrics?.recent_alerts || []).map((ev) => (
                 <tr key={ev.id || ev.event_id} style={{ cursor: 'pointer' }} onClick={() => setSelectedEvent(ev)}>
-                  <td className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                  <td className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
                     {ev.event_id}
                   </td>
                   <td>
                     <EventCategoryBadge category={ev.category} />
                   </td>
-                  <td style={{ maxWidth: '380px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 500 }}>
+                  <td style={{ maxWidth: '380px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 500, color: 'var(--text-primary)' }}>
                     {ev.headline}
                   </td>
                   <td>
                     <div style={{ display: 'flex', gap: '4px' }}>
                       {(ev.tickers || "").split(',').slice(0, 2).map((t) => (
-                        <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.16)', padding: '2px 6px', borderRadius: '4px', color: '#f5f5f7' }}>
+                        <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'var(--glass-control)', border: '1px solid var(--glass-border)', padding: '2px 6px', borderRadius: '4px', color: 'var(--text-primary)' }}>
                           ${t.trim()}
                         </span>
                       ))}
@@ -535,7 +530,7 @@ export default function Overview({
                   <td>
                     <SeverityBadge score={ev.impact_score} />
                   </td>
-                  <td className="mono-text" style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                  <td className="mono-text" style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                     {((ev.confidence || 0.9) * 100).toFixed(0)}%
                   </td>
                   <td>

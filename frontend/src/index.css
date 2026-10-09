@@ -1,73 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* ==========================================================================
-   Apple visionOS / macOS Frosted Silver-White Liquid Glass Design System
-   Smoky grey, frosted silver, translucent pearl-white glass aesthetic
+   Apple visionOS Neutral Smoky Silver-White Liquid Glass Design System
+   Graphite, charcoal, frosted silver-white surfaces with restrained highlights
    ========================================================================== */
 
 :root {
-  /* ------------------------------------------------------------------------
-     Apple Liquid Glass Material System (visionOS & iOS Reference)
-     ------------------------------------------------------------------------ */
-  --glass-white: rgba(255, 255, 255, 0.16);
-  --glass-white-soft: rgba(255, 255, 255, 0.08);
-  --glass-silver: rgba(230, 238, 250, 0.14);
-  --glass-pearl: rgba(245, 248, 255, 0.12);
+  /* Neutral atmospheric background */
+  --canvas: #202124;
+  --canvas-secondary: #292A2E;
+  --canvas-highlight: #34353A;
 
-  --glass-border: rgba(255, 255, 255, 0.35);
-  --glass-border-strong: rgba(255, 255, 255, 0.55);
-  --glass-border-subtle: rgba(255, 255, 255, 0.20);
+  /* Translucent silver glass */
+  --glass-base: rgba(225, 228, 233, 0.075);
+  --glass-secondary: rgba(235, 237, 241, 0.045);
+  --glass-elevated: rgba(240, 242, 246, 0.105);
+  --glass-control: rgba(225, 228, 233, 0.09);
 
-  --glass-specular: inset 0 1.5px 0.5px rgba(255, 255, 255, 0.65), inset 0 -1px 0.5px rgba(255, 255, 255, 0.18), inset 0 0 24px rgba(255, 255, 255, 0.06);
-  --glass-specular-soft: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  /* Delicate glass edges */
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-hover: rgba(255, 255, 255, 0.22);
+  --glass-highlight: rgba(255, 255, 255, 0.12);
 
-  --glass-shadow: 0 20px 48px rgba(0, 0, 0, 0.25);
-  --glass-shadow-hover: 0 28px 60px rgba(0, 0, 0, 0.32);
-  --glass-shadow-modal: 0 32px 80px rgba(0, 0, 0, 0.50);
+  /* Shadows */
+  --glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
 
-  /* Atmospheric visionOS Backgrounds */
-  --background-base: #0b111e;
-  --background-secondary: #101a2e;
-  --background-card: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.10) 100%);
-  --background-card-hover: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.14) 100%);
-  --background-input: rgba(255, 255, 255, 0.09);
+  /* Readable neutral typography */
+  --text-primary: #F5F5F7;
+  --text-secondary: #C2C4CA;
+  --text-muted: #9699A2;
+  --text-subtle: #7A7D86;
 
-  /* Crisp Legible Typography */
-  --text-primary: #FFFFFF;
-  --text-secondary: rgba(245, 248, 255, 0.80);
-  --text-muted: rgba(215, 228, 245, 0.60);
-  --text-subtle: rgba(185, 205, 230, 0.45);
-
-  /* Semantic Accents */
+  /* Semantic colours */
   --accent-blue: #0A84FF;
   --accent-cyan: #64D8E8;
   --accent-positive: #32D583;
   --accent-warning: #FFB547;
-  --accent-danger: #FF6961;
+  --accent-negative: #FF6961;
+  --accent-danger: var(--accent-negative);
+
+  /* Material properties */
+  --glass-blur: 24px;
+  --glass-radius: 20px;
 
   /* Backward Compatibility Variables */
-  --bg-primary: var(--background-base);
-  --bg-secondary: var(--background-secondary);
-  --bg-card: var(--background-card);
-  --bg-card-hover: var(--background-card-hover);
-  --bg-input: var(--background-input);
+  --bg-primary: var(--canvas);
+  --bg-secondary: var(--canvas-secondary);
+  --bg-card: var(--glass-base);
+  --bg-card-hover: var(--glass-elevated);
+  --bg-input: var(--glass-control);
   --border-color: var(--glass-border);
-  --border-focus: rgba(255, 255, 255, 0.60);
-  --border-subtle: var(--glass-border-subtle);
+  --border-focus: var(--glass-border-hover);
+  --border-subtle: rgba(255, 255, 255, 0.08);
   --accent-gold: var(--accent-warning);
-  --accent-red: var(--accent-danger);
+  --accent-red: var(--accent-negative);
   --accent-emerald: var(--accent-positive);
 
   /* Font Stacks */
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, sans-serif;
   --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, Monaco, monospace;
-
-  /* Apple Liquid Glass Refraction (Deep Blur + Color Boost) */
-  --glass-blur-sm: blur(20px) saturate(140%);
-  --glass-blur-md: blur(36px) saturate(180%);
-  --glass-blur-lg: blur(48px) saturate(190%);
-  --glass-blur: var(--glass-blur-md);
-  --glass-blur-heavy: var(--glass-blur-lg);
 
   /* Apple Spring Transitions */
   --apple-ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -77,7 +69,7 @@
 }
 
 /* ==========================================================================
-   Global Reset & visionOS Liquid Wallpaper Environment
+   Global Reset & Neutral visionOS Atmosphere
    ========================================================================== */
 * {
   box-sizing: border-box;
@@ -87,18 +79,23 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: #0b111e;
-  background-image:
-    /* Top-left luminous pearl-cyan aurora glow */
-    radial-gradient(ellipse 1100px 750px at 10% 0%, rgba(140, 195, 255, 0.24) 0%, rgba(90, 160, 240, 0.12) 40%, transparent 70%),
-    /* Center-right vibrant sapphire-azure atmospheric wave */
-    radial-gradient(ellipse 1200px 850px at 90% 25%, rgba(65, 140, 230, 0.22) 0%, rgba(35, 90, 180, 0.10) 45%, transparent 75%),
-    /* Mid-left fluid cerulean stream */
-    radial-gradient(ellipse 950px 650px at 25% 65%, rgba(100, 180, 255, 0.16) 0%, rgba(50, 120, 220, 0.08) 50%, transparent 70%),
-    /* Bottom-right luminous silver-pearl light pool */
-    radial-gradient(ellipse 1000px 750px at 75% 90%, rgba(180, 220, 255, 0.18) 0%, rgba(90, 160, 240, 0.08) 45%, transparent 70%),
-    /* Underlying deep visionOS midnight base */
-    linear-gradient(155deg, #101c30 0%, #0c1526 40%, #080d18 100%);
+  background:
+    radial-gradient(
+      ellipse at 18% 12%,
+      rgba(255, 255, 255, 0.055),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 82% 70%,
+      rgba(185, 188, 194, 0.035),
+      transparent 46%
+    ),
+    linear-gradient(
+      145deg,
+      #292A2E 0%,
+      #202124 55%,
+      #17181B 100%
+    );
   background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.5;
@@ -126,16 +123,16 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.16);
   border-radius: 999px;
   backdrop-filter: blur(8px);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.28);
 }
 
 /* ==========================================================================
-   Liquid Glass Ambient Light Engine (Vibrant Refractive Background Waves)
+   Liquid Glass Ambient Light Engine (Restrained Neutral Charcoal / Pearl Depth)
    ========================================================================== */
 .glass-ambient-bg {
   position: fixed;
@@ -148,9 +145,9 @@ body {
 .ambient-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
+  filter: blur(120px);
   pointer-events: none;
-  opacity: 0.85;
+  opacity: 0.35;
   will-change: transform;
 }
 
@@ -159,8 +156,8 @@ body {
   height: 750px;
   top: -100px;
   left: -50px;
-  background: radial-gradient(circle, rgba(160, 215, 255, 0.28) 0%, rgba(100, 175, 250, 0.14) 40%, transparent 70%);
-  animation: liquidDrift1 22s var(--apple-ease) infinite alternate;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.035) 0%, transparent 60%);
+  animation: liquidDrift1 26s var(--apple-ease) infinite alternate;
 }
 
 .orb-2 {
@@ -168,8 +165,8 @@ body {
   height: 850px;
   top: 15%;
   right: -100px;
-  background: radial-gradient(circle, rgba(110, 190, 255, 0.24) 0%, rgba(60, 130, 230, 0.12) 45%, transparent 70%);
-  animation: liquidDrift2 26s var(--apple-ease) infinite alternate;
+  background: radial-gradient(circle, rgba(220, 223, 230, 0.03) 0%, transparent 65%);
+  animation: liquidDrift2 30s var(--apple-ease) infinite alternate;
 }
 
 .orb-3 {
@@ -177,8 +174,8 @@ body {
   height: 700px;
   bottom: -40px;
   left: 20%;
-  background: radial-gradient(circle, rgba(180, 225, 255, 0.22) 0%, rgba(120, 185, 250, 0.10) 45%, transparent 70%);
-  animation: liquidDrift3 24s var(--apple-ease) infinite alternate;
+  background: radial-gradient(circle, rgba(200, 203, 210, 0.025) 0%, transparent 65%);
+  animation: liquidDrift3 28s var(--apple-ease) infinite alternate;
 }
 
 .orb-4 {
@@ -186,41 +183,41 @@ body {
   height: 620px;
   top: 48%;
   left: 12%;
-  background: radial-gradient(circle, rgba(130, 205, 255, 0.20) 0%, rgba(70, 150, 240, 0.08) 50%, transparent 70%);
-  animation: liquidDrift4 28s var(--apple-ease) infinite alternate;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%);
+  animation: liquidDrift4 32s var(--apple-ease) infinite alternate;
 }
 
 .ambient-grid {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size: 32px 32px;
-  opacity: 0.55;
+  opacity: 0.30;
   pointer-events: none;
 }
 
 @keyframes liquidDrift1 {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(60px, 40px) scale(1.08); }
-  100% { transform: translate(-30px, 60px) scale(0.95); }
+  50% { transform: translate(40px, 30px) scale(1.04); }
+  100% { transform: translate(-20px, 40px) scale(0.97); }
 }
 
 @keyframes liquidDrift2 {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-55px, 45px) scale(1.06); }
-  100% { transform: translate(35px, -35px) scale(0.94); }
+  50% { transform: translate(-35px, 30px) scale(1.03); }
+  100% { transform: translate(25px, -25px) scale(0.97); }
 }
 
 @keyframes liquidDrift3 {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(45px, -50px) scale(1.07); }
-  100% { transform: translate(-35px, -20px) scale(0.95); }
+  50% { transform: translate(30px, -35px) scale(1.04); }
+  100% { transform: translate(-25px, -15px) scale(0.96); }
 }
 
 @keyframes liquidDrift4 {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-45px, -35px) scale(1.06); }
-  100% { transform: translate(30px, 45px) scale(0.97); }
+  50% { transform: translate(-30px, -25px) scale(1.03); }
+  100% { transform: translate(20px, 30px) scale(0.98); }
 }
 
 /* ==========================================================================
@@ -251,7 +248,7 @@ body {
 }
 
 /* ==========================================================================
-   Frosted Silver Sidebar Panel (Flush Top, Zero-Margin, True Translucent Glass)
+   Translucent Graphite Sidebar Panel (Neutral Glass, Subtle Right Border)
    ========================================================================== */
 .glass-sidebar {
   width: 260px;
@@ -264,17 +261,17 @@ body {
   isolation: isolate;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.14) 0%,
-    rgba(255, 255, 255, 0.04) 60%,
-    rgba(255, 255, 255, 0.08) 100%
-  ), rgba(12, 18, 30, 0.40);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
+    rgba(235, 237, 241, 0.06) 0%,
+    rgba(220, 223, 229, 0.025) 60%,
+    rgba(240, 242, 246, 0.045) 100%
+  ), rgba(32, 33, 36, 0.75);
+  backdrop-filter: blur(var(--glass-blur)) saturate(110%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(110%);
   border-top: none;
   border-left: none;
   border-bottom: none;
-  border-right: 1px solid rgba(255, 255, 255, 0.28);
-  box-shadow: 6px 0 32px rgba(0, 0, 0, 0.22), inset -1px 0 0 rgba(255, 255, 255, 0.25);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: 6px 0 24px rgba(0, 0, 0, 0.16);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -290,7 +287,7 @@ body {
   z-index: 0;
   background: linear-gradient(
     160deg,
-    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.04) 0%,
     transparent 30%
   );
 }
@@ -301,7 +298,7 @@ body {
 }
 
 /* ==========================================================================
-   Frosted Silver Header Bar (Fixed from Top with Zero Margin, True Translucent)
+   Neutral Dark Header Bar (Delicate Lower Separator, No Blue Gradient)
    ========================================================================== */
 .glass-header {
   margin: 0;
@@ -311,17 +308,17 @@ body {
   isolation: isolate;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.14) 0%,
-    rgba(255, 255, 255, 0.04) 50%,
-    rgba(255, 255, 255, 0.09) 100%
-  ), rgba(12, 18, 30, 0.40);
-  backdrop-filter: blur(36px) saturate(180%);
-  -webkit-backdrop-filter: blur(36px) saturate(180%);
+    rgba(235, 237, 241, 0.065) 0%,
+    rgba(220, 223, 229, 0.025) 50%,
+    rgba(240, 242, 246, 0.05) 100%
+  ), rgba(32, 33, 36, 0.75);
+  backdrop-filter: blur(var(--glass-blur)) saturate(110%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(110%);
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
-  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18), inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -339,7 +336,7 @@ body {
   z-index: 0;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.04) 0%,
     transparent 45%
   );
 }
@@ -350,7 +347,7 @@ body {
 }
 
 /* ==========================================================================
-   Apple visionOS / iOS Liquid Glass Surfaces & Cards (Reference Matching)
+   Apple visionOS Smoky Silver Liquid Glass Surfaces & Cards (Neutral System)
    ========================================================================== */
 .glass-surface,
 .glass-card {
@@ -360,23 +357,21 @@ body {
 
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0.04) 50%,
-    rgba(255, 255, 255, 0.10) 100%
+    rgba(235, 237, 241, 0.085) 0%,
+    rgba(220, 223, 229, 0.035) 55%,
+    rgba(245, 246, 248, 0.065) 100%
   );
 
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(110%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(110%);
 
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid var(--glass-border);
 
   box-shadow:
-    inset 0 1.5px 0.5px rgba(255, 255, 255, 0.65),
-    inset 0 -1px 0.5px rgba(255, 255, 255, 0.18),
-    inset 0 0 24px rgba(255, 255, 255, 0.06),
-    0 20px 48px rgba(0, 0, 0, 0.25);
+    var(--glass-inner-shadow),
+    var(--glass-shadow);
 
-  border-radius: 22px;
+  border-radius: var(--glass-radius);
   padding: 22px;
   transition: all var(--transition-normal);
 }
@@ -392,10 +387,8 @@ body {
 
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.22) 0%,
-    rgba(255, 255, 255, 0.04) 35%,
-    transparent 65%,
-    rgba(255, 255, 255, 0.08) 100%
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 35%
   );
 }
 
@@ -407,19 +400,17 @@ body {
 
 .glass-surface:hover,
 .glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.55);
+  border-color: var(--glass-border-hover);
   transform: translateY(-2px);
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.20) 0%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.14) 100%
+    rgba(240, 242, 246, 0.105) 0%,
+    rgba(225, 228, 233, 0.05) 55%,
+    rgba(245, 246, 248, 0.085) 100%
   );
   box-shadow:
-    inset 0 2px 1px rgba(255, 255, 255, 0.80),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.25),
-    inset 0 0 28px rgba(255, 255, 255, 0.10),
-    0 28px 60px rgba(0, 0, 0, 0.32);
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 16px 40px rgba(0, 0, 0, 0.22);
 }
 
 /* Inner Liquid Glass Panel (Sub-cards, search pills, ticker rows) */
@@ -430,18 +421,17 @@ body {
 
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.12) 0%,
-    rgba(255, 255, 255, 0.03) 50%,
-    rgba(255, 255, 255, 0.08) 100%
+    rgba(235, 237, 241, 0.065) 0%,
+    rgba(220, 223, 229, 0.025) 55%,
+    rgba(245, 246, 248, 0.05) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 16px;
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  backdrop-filter: blur(20px) saturate(110%);
+  -webkit-backdrop-filter: blur(20px) saturate(110%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 0 16px rgba(255, 255, 255, 0.04),
-    0 8px 24px rgba(0, 0, 0, 0.14);
+    var(--glass-inner-shadow),
+    0 6px 20px rgba(0, 0, 0, 0.10);
   transition: all var(--transition-fast);
 }
 
@@ -454,8 +444,8 @@ body {
   z-index: 0;
   background: linear-gradient(
     140deg,
-    rgba(255, 255, 255, 0.14) 0%,
-    transparent 40%
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 35%
   );
 }
 
@@ -465,17 +455,13 @@ body {
 }
 
 .glass-panel:hover {
-  border-color: rgba(255, 255, 255, 0.42);
+  border-color: var(--glass-border-hover);
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.11) 100%
+    rgba(240, 242, 246, 0.085) 0%,
+    rgba(225, 228, 233, 0.04) 55%,
+    rgba(245, 246, 248, 0.065) 100%
   );
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 0 0 20px rgba(255, 255, 255, 0.06),
-    0 12px 28px rgba(0, 0, 0, 0.18);
 }
 
 /* Apple Squircle Icon Containers in Silver Glass */
@@ -486,11 +472,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: var(--glass-control);
+  border: 1px solid var(--glass-border);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  box-shadow: var(--glass-inner-shadow);
   transition: transform var(--transition-fast);
 }
 
@@ -593,46 +579,45 @@ body {
   box-shadow: none !important;
 }
 
-/* Primary Button (Refined Apple Blue Accent or Frosted White) */
+/* Primary Button (Restrained Apple Blue Accent for Primary Execution) */
 .btn-primary {
-  background: linear-gradient(135deg, rgba(10, 132, 255, 0.85) 0%, rgba(0, 113, 227, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(10, 132, 255, 0.90) 0%, rgba(0, 113, 227, 0.95) 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, rgba(0, 113, 227, 0.95) 0%, rgba(0, 90, 190, 1) 100%);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.45);
+  border-color: rgba(255, 255, 255, 0.30);
 }
 
-/* Secondary Button (Frosted Silver Glass) */
+/* Secondary Button (Neutral Smoky Silver Glass) */
 .btn-secondary {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
+  background: var(--glass-control);
   color: var(--text-primary);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow: var(--glass-inner-shadow), 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 .btn-secondary:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
-  border-color: var(--glass-border-strong);
-  transform: translateY(-1px);
+  background: var(--glass-elevated);
+  border-color: var(--glass-border-hover);
   color: #ffffff;
+  transform: translateY(-1px);
 }
 
-/* Outline Button (Translucent Silver Outline) */
+/* Outline Button (Subtle Neutral Glass Outline) */
 .btn-outline {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   color: var(--text-secondary);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: none;
 }
 .btn-outline:hover:not(:disabled) {
-  color: #ffffff;
-  border-color: var(--glass-border-strong);
-  background: rgba(255, 255, 255, 0.10);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.20);
+  color: var(--text-primary);
+  border-color: var(--glass-border-hover);
+  background: var(--glass-control);
   transform: translateY(-1px);
 }
 
@@ -640,8 +625,8 @@ body {
 .btn-success {
   background: linear-gradient(135deg, rgba(50, 213, 131, 0.85) 0%, rgba(36, 175, 72, 0.95) 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .btn-success:hover:not(:disabled) {
   transform: translateY(-1px);
@@ -651,8 +636,8 @@ body {
 .btn-danger {
   background: linear-gradient(135deg, rgba(255, 105, 97, 0.85) 0%, rgba(220, 48, 38, 0.95) 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .btn-danger:hover:not(:disabled) {
   transform: translateY(-1px);
@@ -670,7 +655,7 @@ body {
 }
 
 /* ==========================================================================
-   Frosted Silver / White Badges
+   Restrained Neutral / Semantic Badges
    ========================================================================== */
 .badge {
   display: inline-flex;
@@ -683,64 +668,59 @@ body {
   white-space: nowrap;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  box-shadow: var(--glass-inner-shadow);
   letter-spacing: 0.01em;
 }
 
 .badge-bullish {
-  background: rgba(50, 213, 131, 0.16);
+  background: rgba(50, 213, 131, 0.14);
   color: var(--accent-positive);
-  border: 1px solid rgba(50, 213, 131, 0.38);
+  border: 1px solid rgba(50, 213, 131, 0.28);
 }
 .badge-bearish {
-  background: rgba(255, 105, 97, 0.16);
-  color: var(--accent-danger);
-  border: 1px solid rgba(255, 105, 97, 0.38);
+  background: rgba(255, 105, 97, 0.14);
+  color: var(--accent-negative);
+  border: 1px solid rgba(255, 105, 97, 0.28);
 }
 .badge-neutral {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-control);
   color: var(--text-secondary);
   border: 1px solid var(--glass-border);
 }
 
 .badge-severity-high {
-  background: rgba(255, 105, 97, 0.18);
+  background: rgba(255, 105, 97, 0.15);
   color: #ff857f;
-  border: 1px solid rgba(255, 105, 97, 0.5);
-  box-shadow: 0 0 10px rgba(255, 105, 97, 0.2);
+  border: 1px solid rgba(255, 105, 97, 0.35);
 }
 .badge-severity-med {
-  background: rgba(255, 181, 71, 0.18);
+  background: rgba(255, 181, 71, 0.15);
   color: var(--accent-warning);
-  border: 1px solid rgba(255, 181, 71, 0.45);
-  box-shadow: 0 0 10px rgba(255, 181, 71, 0.16);
+  border: 1px solid rgba(255, 181, 71, 0.32);
 }
 .badge-severity-low {
-  background: rgba(50, 213, 131, 0.16);
+  background: rgba(50, 213, 131, 0.14);
   color: var(--accent-positive);
-  border: 1px solid rgba(50, 213, 131, 0.38);
-  box-shadow: 0 0 10px rgba(50, 213, 131, 0.12);
+  border: 1px solid rgba(50, 213, 131, 0.28);
 }
 
 /* ==========================================================================
-   Frosted Silver Table System (True Translucent Liquid Glass)
+   Neutral Smoky Table System (Translucent Graphite Glass)
    ========================================================================== */
 .table-wrapper {
   overflow-x: auto;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.30);
+  border-radius: var(--glass-radius);
+  border: 1px solid var(--glass-border);
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.12) 0%,
-    rgba(255, 255, 255, 0.03) 50%,
-    rgba(255, 255, 255, 0.07) 100%
-  );
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
+    rgba(235, 237, 241, 0.06) 0%,
+    rgba(220, 223, 229, 0.02) 100%
+  ), rgba(32, 33, 36, 0.50);
+  backdrop-filter: blur(var(--glass-blur)) saturate(110%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(110%);
   box-shadow:
-    inset 0 1.5px 0.5px rgba(255, 255, 255, 0.55),
-    inset 0 -1px 0.5px rgba(255, 255, 255, 0.15),
-    0 16px 40px rgba(0, 0, 0, 0.22);
+    var(--glass-inner-shadow),
+    var(--glass-shadow);
 }
 .custom-table {
   width: 100%;
@@ -749,81 +729,81 @@ body {
   font-size: 0.86rem;
 }
 .custom-table th {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-muted);
   font-weight: 600;
   padding: 13px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  border-bottom: 1px solid var(--glass-border);
   text-transform: uppercase;
   font-size: 0.70rem;
   letter-spacing: 0.06em;
 }
 .custom-table td {
   padding: 12px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   color: var(--text-primary);
   transition: background var(--transition-fast);
 }
 .custom-table tr:hover td {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 /* ==========================================================================
-   Frosted Silver Form Inputs (Translucent Liquid Glass)
+   Neutral Smoky Form Inputs (Translucent Silver Glass)
    ========================================================================== */
 .form-input, .form-select, .form-textarea {
   width: 100%;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px) saturate(170%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: var(--glass-control);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
   color: var(--text-primary);
   padding: 10px 14px;
   border-radius: 12px;
   font-family: var(--font-sans);
   font-size: 0.86rem;
   outline: none;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition: all var(--transition-fast);
 }
 .form-input:focus, .form-select:focus, .form-textarea:focus {
-  border-color: rgba(255, 255, 255, 0.55);
-  background: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.40);
+  border-color: var(--glass-border-hover);
+  background: var(--glass-elevated);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 .form-select option {
-  background: #0f1624;
-  color: #F5F5F7;
+  background: var(--canvas-secondary);
+  color: var(--text-primary);
 }
 
 input[type="range"] {
-  accent-color: #e2e4e9;
+  accent-color: var(--text-secondary);
 }
 
 /* ==========================================================================
-   Global Liquid Glass Tooltip for Recharts
+   Global Neutral Liquid Glass Tooltip for Recharts
    ========================================================================== */
 .recharts-default-tooltip {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.22) 0%,
-    rgba(255, 255, 255, 0.08) 100%
+    rgba(41, 42, 46, 0.94) 0%,
+    rgba(32, 33, 36, 0.96) 100%
   ) !important;
-  backdrop-filter: blur(36px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(36px) saturate(190%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.42) !important;
-  border-radius: 14px !important;
+  backdrop-filter: blur(24px) saturate(110%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(110%) !important;
+  border: 1px solid var(--glass-border-hover) !important;
+  border-radius: 12px !important;
   box-shadow:
-    inset 0 1.5px 0.5px rgba(255, 255, 255, 0.70),
-    0 16px 40px rgba(0, 0, 0, 0.35) !important;
-  color: #ffffff !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 16px 36px rgba(0, 0, 0, 0.35) !important;
+  color: var(--text-primary) !important;
   padding: 10px 14px !important;
 }
 
 /* ==========================================================================
-   Frosted Silver Toast Notification
+   Neutral Smoky Toast Notification
    ========================================================================== */
 .toast-banner {
   position: fixed;
@@ -831,17 +811,16 @@ input[type="range"] {
   right: 24px;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.20) 0%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.14) 100%
-  );
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+    rgba(235, 237, 241, 0.10) 0%,
+    rgba(220, 223, 229, 0.04) 100%
+  ), rgba(32, 33, 36, 0.88);
+  backdrop-filter: blur(28px) saturate(110%);
+  -webkit-backdrop-filter: blur(28px) saturate(110%);
+  border: 1px solid var(--glass-border-hover);
   padding: 14px 22px;
   border-radius: 16px;
   box-shadow:
-    inset 0 1.5px 0.5px rgba(255, 255, 255, 0.70),
+    var(--glass-inner-shadow),
     0 20px 48px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
@@ -855,14 +834,14 @@ input[type="range"] {
 }
 
 /* ==========================================================================
-   Frosted Silver visionOS Modal Dialog
+   Neutral visionOS Modal Dialog
    ========================================================================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(8, 14, 24, 0.55);
-  backdrop-filter: blur(28px) saturate(150%);
-  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  background: rgba(18, 19, 22, 0.70);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -880,20 +859,19 @@ input[type="range"] {
   isolation: isolate;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.20) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.12) 100%
-  );
-  backdrop-filter: blur(48px) saturate(190%);
-  -webkit-backdrop-filter: blur(48px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+    rgba(235, 237, 241, 0.10) 0%,
+    rgba(220, 223, 229, 0.04) 50%,
+    rgba(240, 242, 246, 0.08) 100%
+  ), rgba(32, 33, 36, 0.90);
+  backdrop-filter: blur(36px) saturate(110%);
+  -webkit-backdrop-filter: blur(36px) saturate(110%);
+  border: 1px solid var(--glass-border-hover);
   border-radius: 24px;
   max-width: 650px;
   width: 100%;
   padding: 26px;
   box-shadow:
-    inset 0 1.5px 0.5px rgba(255, 255, 255, 0.75),
-    inset 0 -1px 0.5px rgba(255, 255, 255, 0.20),
+    var(--glass-inner-shadow),
     0 32px 80px rgba(0, 0, 0, 0.45);
   max-height: 90vh;
   overflow-y: auto;
@@ -909,7 +887,7 @@ input[type="range"] {
   z-index: 0;
   background: linear-gradient(
     145deg,
-    rgba(255, 255, 255, 0.24) 0%,
+    rgba(255, 255, 255, 0.06) 0%,
     transparent 35%
   );
 }

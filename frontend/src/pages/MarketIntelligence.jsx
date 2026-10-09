@@ -195,7 +195,7 @@ export default function MarketIntelligence({ showToast }) {
               value={`$${summary.current_price?.toFixed(2)}`}
               subtitle={`Avg: $${summary.avg_close?.toFixed(2)}`}
               icon={DollarSign}
-              color="#3b82f6"
+              color="var(--accent-blue)"
             />
             <StatCard
               title="52-Week Range"
@@ -250,7 +250,7 @@ export default function MarketIntelligence({ showToast }) {
             </label>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Horizon:</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Horizon:</span>
               <select
                 className="form-select"
                 value={forecastDays}
@@ -296,10 +296,10 @@ export default function MarketIntelligence({ showToast }) {
                   <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.05}/>
                 </linearGradient>
               </defs>
-              <XAxis dataKey="date" stroke="#64748b" fontSize={11} />
+              <XAxis dataKey="date" stroke="#9699A2" fontSize={11} />
               <YAxis
                 domain={['auto', 'auto']}
-                stroke="#64748b"
+                stroke="#9699A2"
                 fontSize={11}
                 tickFormatter={(val) => `$${val}`}
               />
@@ -343,7 +343,7 @@ export default function MarketIntelligence({ showToast }) {
               ))}
             </select>
 
-            <span style={{ color: '#64748b', fontWeight: 700 }}>VS</span>
+            <span style={{ color: 'var(--text-muted)', fontWeight: 700 }}>VS</span>
 
             <select
               className="form-select"
@@ -372,7 +372,7 @@ export default function MarketIntelligence({ showToast }) {
         {/* Correlation & Return Summary Bar */}
         {comparisonResult && (
           <div style={{
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'var(--glass-secondary)',
             border: '1px solid var(--glass-border)',
             borderRadius: '12px',
             padding: '12px 18px',
@@ -384,7 +384,7 @@ export default function MarketIntelligence({ showToast }) {
             gap: '12px'
           }}>
             <div>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                 Pearson Correlation (r)
               </span>
               <div className="mono-text" style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>
@@ -393,7 +393,7 @@ export default function MarketIntelligence({ showToast }) {
             </div>
 
             <div>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                 ${comparisonResult.symbol1} {compareDays}D Return
               </span>
               <div className="mono-text" style={{ fontSize: '1.25rem', fontWeight: 800, color: comparisonResult.return1_pct >= 0 ? '#10b981' : '#ef4444' }}>
@@ -402,7 +402,7 @@ export default function MarketIntelligence({ showToast }) {
             </div>
 
             <div>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                 ${comparisonResult.symbol2} {compareDays}D Return
               </span>
               <div className="mono-text" style={{ fontSize: '1.25rem', fontWeight: 800, color: comparisonResult.return2_pct >= 0 ? '#10b981' : '#ef4444' }}>
@@ -416,8 +416,8 @@ export default function MarketIntelligence({ showToast }) {
         <div style={{ height: '280px', width: '100%' }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={comparisonResult?.series || []} margin={{ top: 10, right: 15, left: -10, bottom: 5 }}>
-              <XAxis dataKey="date" stroke="#64748b" fontSize={11} />
-              <YAxis stroke="#64748b" fontSize={11} domain={['auto', 'auto']} tickFormatter={(v) => `${v}`} />
+              <XAxis dataKey="date" stroke="#9699A2" fontSize={11} />
+              <YAxis stroke="#9699A2" fontSize={11} domain={['auto', 'auto']} tickFormatter={(v) => `${v}`} />
               <Tooltip
                 contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
                 formatter={(val, name) => [`${val}`, name.replace('_norm', ' (Base 100)')]}

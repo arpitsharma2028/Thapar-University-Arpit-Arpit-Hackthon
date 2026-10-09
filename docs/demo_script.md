@@ -21,7 +21,22 @@
 
 ---
 
-## 2. Minute-by-Minute Live Demo Walkthrough (7–10 Minutes)
+## 2. Official Competition 5-Minute Live Demo Track (Strict &le; 5:00)
+
+*Required by official DoSelect Case Study Guidelines: "A functional live demonstration of the application, not to exceed 5 minutes."*
+
+| Timestamp | Screen / Action | Key Judge Talking Points |
+| :--- | :--- | :--- |
+| **0:00 – 0:45** | **Executive Overview** (`/`) | • Institutional Liquid Glass command center<br/>• Real-time KPI row: \$10M book value, VaR (95%), sentiment score<br/>• Live market gainers/losers ticker & NLP Risk Signal Feed |
+| **0:45 – 1:45** | **NLP Risk Engine** (`/nlp`) | • Ingests news & social media feeds<br/>• Click demo prompt: *"Geopolitical Strait Tension"*<br/>• Sub-20ms inference: **Sentiment (-0.72)**, **Category (Geopolitical)**, **Impact (8.5/10)**, tickers extracted |
+| **1:45 – 2:45** | **Module A: Tactical Rebalancing** (`/module-a`) | • Subscribes to sentiment scores<br/>• Adjust sensitivity slider ($\lambda = 0.035$)<br/>• Click **Simulate Next Event**: shows before/after weights bar chart, zero-negative weights clamp, 100% normalization |
+| **2:45 – 3:45** | **Module B: Wholesale Stress Test** (`/module-b`) | • Subscribes to Category & Impact Score ($\ge 7.0$)<br/>• Select *"Global Geopolitical Escalation"* (Severity 9.2)<br/>• Click **Execute Stress Test**: simulates loss across \$50M wholesale book (Equities, Bonds flight-to-safety, Derivatives, Cash) |
+| **3:45 – 4:30** | **Market Intelligence & Stochastic MC** (`/market`) | • Live Yahoo Finance feed integration<br/>• 100-path Monte Carlo Geometric Brownian Motion cone conditioned on NLP drift boost<br/>• Pearson cross-asset correlation |
+| **4:30 – 5:00** | **Audit Trail & Wrap-up** (`/history`) | • Immutable audit log for regulatory compliance<br/>• 26/26 unit tests passing, runs 100% locally on standard CPU without GPUs |
+
+---
+
+## 3. Extended Minute-by-Minute Live Demo Walkthrough (7–10 Minutes Deep-Dive)
 
 ### Minute 0:00 – 1:30 | Screen 1: Executive Overview Dashboard
 * **What screen to open:** Open `http://localhost:5173/` (Nav: **Overview**).

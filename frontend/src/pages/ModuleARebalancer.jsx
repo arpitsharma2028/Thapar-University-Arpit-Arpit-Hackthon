@@ -137,10 +137,10 @@ export default function ModuleARebalancer({
           {/* Sensitivity Slider Control */}
           <div style={{ gridColumn: 'span 4', borderLeft: '1px solid var(--border-color)', paddingLeft: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
                 Sensitivity Parameter (&lambda;)
               </span>
-              <span className="mono-text" style={{ fontSize: '0.85rem', fontWeight: 700, color: '#3b82f6' }}>
+              <span className="mono-text" style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {sensitivity.toFixed(3)}
               </span>
             </div>
@@ -151,9 +151,9 @@ export default function ModuleARebalancer({
               step="0.005"
               value={sensitivity}
               onChange={(e) => setSensitivity(parseFloat(e.target.value))}
-              style={{ width: '100%', accentColor: '#3b82f6', cursor: 'pointer' }}
+              style={{ width: '100%', accentColor: 'var(--accent-blue)', cursor: 'pointer' }}
             />
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#64748b', marginTop: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '4px' }}>
               <span>Conservative (0.010)</span>
               <span>Aggressive (0.060)</span>
             </div>
@@ -164,30 +164,26 @@ export default function ModuleARebalancer({
       {/* Last Trigger Event Banner (If available) */}
       {lastRebalanceResult?.trigger_event && (
         <div className="glass-panel" style={{
-          background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%)',
-          border: '1px solid rgba(255, 255, 255, 0.20)',
-          borderRadius: '14px',
           padding: '14px 20px',
           marginBottom: '24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '12px',
-          boxShadow: 'var(--shadow-sm), inset 0 1px 1px rgba(255, 255, 255, 0.12)'
+          gap: '12px'
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <CheckCircle2 size={16} color="#10b981" />
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#f5f5f7', textTransform: 'uppercase' }}>
+              <CheckCircle2 size={16} color="var(--accent-positive)" />
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)', textTransform: 'uppercase' }}>
                 Latest Rebalance Trigger Event
               </span>
               <EventCategoryBadge category={lastRebalanceResult.trigger_event.category} />
-              <span className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+              <span className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                 {lastRebalanceResult.trigger_event.event_id}
               </span>
             </div>
-            <div style={{ fontSize: '0.9rem', color: '#f1f5f9', fontWeight: 500 }}>
+            <div style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 500 }}>
               {lastRebalanceResult.trigger_event.headline}
             </div>
           </div>
@@ -196,11 +192,11 @@ export default function ModuleARebalancer({
             <SentimentBadge score={lastRebalanceResult.trigger_event.sentiment_score} />
             <SeverityBadge score={lastRebalanceResult.trigger_event.impact_score} />
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Portfolio Value Shift</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Portfolio Value Shift</div>
               <div className="mono-text" style={{
                 fontSize: '0.9rem',
                 fontWeight: 700,
-                color: (lastRebalanceResult.value_change || 0) >= 0 ? '#10b981' : '#ef4444'
+                color: (lastRebalanceResult.value_change || 0) >= 0 ? 'var(--accent-positive)' : 'var(--accent-negative)'
               }}>
                 {(lastRebalanceResult.value_change || 0) >= 0 ? '+' : ''}${Number(lastRebalanceResult.value_change || 0).toLocaleString()} ({lastRebalanceResult.value_change_pct}%)
               </div>
@@ -222,11 +218,11 @@ export default function ModuleARebalancer({
           </div>
           <div style={{ display: 'flex', gap: '16px', fontSize: '0.8rem' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: '10px', height: '10px', background: '#475569', borderRadius: '2px' }}></span>
+              <span style={{ width: '10px', height: '10px', background: 'rgba(255, 255, 255, 0.20)', borderRadius: '2px' }}></span>
               Before Rebalance
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: '10px', height: '10px', background: '#3b82f6', borderRadius: '2px' }}></span>
+              <span style={{ width: '10px', height: '10px', background: 'var(--accent-blue)', borderRadius: '2px' }}></span>
               After Rebalance
             </span>
           </div>
@@ -235,18 +231,18 @@ export default function ModuleARebalancer({
         <div style={{ height: '300px', width: '100%' }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={comparisonData} margin={{ top: 10, right: 10, left: -15, bottom: 5 }}>
-              <XAxis dataKey="ticker" stroke="#64748b" fontSize={11} />
-              <YAxis stroke="#64748b" fontSize={11} tickFormatter={(val) => `${val}%`} />
+              <XAxis dataKey="ticker" stroke="#9699A2" fontSize={11} />
+              <YAxis stroke="#9699A2" fontSize={11} tickFormatter={(val) => `${val}%`} />
               <Tooltip
-                contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
+                contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.94)', border: '1px solid rgba(255, 255, 255, 0.16)', borderRadius: '12px', color: '#F5F5F7' }}
                 formatter={(val, name) => [`${val}%`, name === 'oldWeight' ? 'Before Rebalance' : 'After Rebalance']}
               />
-              <Bar dataKey="oldWeight" fill="#475569" radius={[3, 3, 0, 0]} />
-              <Bar dataKey="newWeight" fill="#3b82f6" radius={[3, 3, 0, 0]}>
+              <Bar dataKey="oldWeight" fill="rgba(255, 255, 255, 0.20)" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="newWeight" fill="var(--accent-blue)" radius={[3, 3, 0, 0]}>
                 {comparisonData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={entry.delta > 0.1 ? '#10b981' : (entry.delta < -0.1 ? '#ef4444' : '#3b82f6')}
+                    fill={entry.delta > 0.1 ? 'var(--accent-positive)' : (entry.delta < -0.1 ? 'var(--accent-negative)' : 'var(--accent-blue)')}
                   />
                 ))}
               </Bar>

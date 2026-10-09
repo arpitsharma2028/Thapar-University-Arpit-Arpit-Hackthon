@@ -181,11 +181,11 @@ export default function RiskIntelligence({
         {analyzedSignal && (
           <div className="glass-panel" style={{
             marginTop: '20px',
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.22)',
+            background: 'var(--glass-elevated)',
+            border: '1px solid var(--glass-border-hover)',
             borderRadius: '14px',
             padding: '18px',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.18)',
+            boxShadow: 'var(--glass-shadow)',
             animation: 'fadeIn 0.3s ease'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
@@ -193,19 +193,19 @@ export default function RiskIntelligence({
                 <span style={{ fontSize: '0.78rem', color: 'var(--text-primary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Extracted Risk Signal Output
                 </span>
-                <span className="mono-text" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                <span className="mono-text" style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
                   ID: {analyzedSignal.event_id}
                 </span>
               </div>
-              <span className="badge" style={{ background: 'var(--apple-green-surface)', color: 'var(--apple-green)', border: '1px solid rgba(48, 209, 88, 0.35)' }}>
+              <span className="badge badge-bullish">
                 Model Confidence: {((analyzedSignal.confidence || 0.9) * 100).toFixed(0)}%
               </span>
             </div>
 
             {/* Grid of Extracted Features */}
             <div className="grid-cols-4" style={{ gap: '12px', marginBottom: '16px' }}>
-              <div className="glass-panel" style={{ padding: '12px', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.06)' }}>
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+              <div className="glass-panel" style={{ padding: '12px' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   Sentiment Score
                 </div>
                 <div style={{ marginTop: '4px' }}>
@@ -213,8 +213,8 @@ export default function RiskIntelligence({
                 </div>
               </div>
 
-              <div className="glass-panel" style={{ padding: '12px', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.06)' }}>
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+              <div className="glass-panel" style={{ padding: '12px' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   Event Taxonomy
                 </div>
                 <div style={{ marginTop: '4px' }}>
@@ -222,8 +222,8 @@ export default function RiskIntelligence({
                 </div>
               </div>
 
-              <div className="glass-panel" style={{ padding: '12px', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.06)' }}>
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+              <div className="glass-panel" style={{ padding: '12px' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   Predicted Severity
                 </div>
                 <div style={{ marginTop: '4px' }}>
@@ -231,11 +231,11 @@ export default function RiskIntelligence({
                 </div>
               </div>
 
-              <div className="glass-panel" style={{ padding: '12px', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.06)' }}>
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+              <div className="glass-panel" style={{ padding: '12px' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   Identified Entity & Sector
                 </div>
-                <div style={{ marginTop: '4px', fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc' }}>
+                <div style={{ marginTop: '4px', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
                   {analyzedSignal.tickers?.join(', ') || 'SPY'} ({analyzedSignal.sector})
                 </div>
               </div>
@@ -281,14 +281,14 @@ export default function RiskIntelligence({
         <div style={{ height: '240px', width: '100%' }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={categoryChartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
-              <XAxis dataKey="name" stroke="#64748b" fontSize={10} angle={-25} textAnchor="end" />
-              <YAxis stroke="#64748b" fontSize={11} />
-              <Tooltip contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }} />
-              <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]}>
+              <XAxis dataKey="name" stroke="#9699A2" fontSize={10} angle={-25} textAnchor="end" />
+              <YAxis stroke="#9699A2" fontSize={11} />
+              <Tooltip contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.94)', border: '1px solid rgba(255, 255, 255, 0.16)', borderRadius: '12px', color: '#F5F5F7' }} />
+              <Bar dataKey="count" fill="var(--text-secondary)" radius={[4, 4, 0, 0]}>
                 {categoryChartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={entry.name === 'Geopolitical' ? '#ef4444' : (entry.name === 'Earnings' ? '#10b981' : '#3b82f6')}
+                    fill={entry.name === 'Geopolitical' ? 'var(--accent-negative)' : (entry.name === 'Earnings' ? 'var(--accent-positive)' : 'rgba(235, 237, 241, 0.35)')}
                   />
                 ))}
               </Bar>

@@ -32,20 +32,20 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             width: '38px',
             height: '38px',
             borderRadius: '11px',
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(200, 205, 215, 0.10) 100%)',
+            background: 'var(--glass-control)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '1px solid rgba(255, 255, 255, 0.32)',
-            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.35)'
+            border: '1px solid var(--glass-border)',
+            boxShadow: 'var(--glass-inner-shadow), 0 4px 14px rgba(0, 0, 0, 0.15)'
           }}>
-            <Activity size={20} color="#f5f5f7" />
+            <Activity size={18} color="var(--text-primary)" />
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: '1.12rem', letterSpacing: '-0.03em', color: '#f5f5f7' }}>
+            <div style={{ fontWeight: 700, fontSize: '1.12rem', letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
               FinSight <span style={{ color: '#ffffff', fontWeight: 800 }}>AI</span>
             </div>
-            <div style={{ fontSize: '0.66rem', color: '#b9bbc1', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600 }}>
+            <div style={{ fontSize: '0.66rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600 }}>
               Liquid Glass Desk
             </div>
           </div>
@@ -54,8 +54,8 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         {/* Institutional Desk Status Badge in Silver Glass */}
         <div style={{
           marginTop: '16px',
-          background: 'rgba(255, 255, 255, 0.06)',
-          border: '1px solid var(--glass-border-subtle)',
+          background: 'var(--glass-secondary)',
+          border: '1px solid var(--glass-border)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           borderRadius: '9px',
@@ -63,10 +63,10 @@ export default function Sidebar({ activeTab, setActiveTab }) {
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.10)'
+          boxShadow: 'var(--glass-inner-shadow)'
         }}>
-          <ShieldCheck size={14} color="#e2e4e9" />
-          <div style={{ fontSize: '0.68rem', color: '#d1d3d8', fontWeight: 600, letterSpacing: '0.02em' }}>
+          <ShieldCheck size={14} color="var(--text-secondary)" />
+          <div style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.02em' }}>
             Multi-Asset Risk Desk • visionOS
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
 
       {/* Navigation List */}
       <nav style={{ padding: '16px 12px', flex: 1, overflowY: 'auto' }}>
-        <div style={{ fontSize: '0.66rem', color: '#858890', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0 8px 10px', fontWeight: 600 }}>
+        <div style={{ fontSize: '0.66rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0 8px 10px', fontWeight: 600 }}>
           Workstation Modules
         </div>
         {menuItems.map((item) => {
@@ -94,13 +94,13 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 marginBottom: '4px',
                 fontSize: '0.83rem',
                 fontWeight: isActive ? 600 : 500,
-                color: isActive ? '#ffffff' : '#9ca3af',
+                color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
                 background: isActive
-                  ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                  ? 'var(--glass-elevated)'
                   : 'transparent',
-                border: isActive ? '1px solid rgba(255, 255, 255, 0.42)' : '1px solid transparent',
+                border: isActive ? '1px solid var(--glass-border-hover)' : '1px solid transparent',
                 boxShadow: isActive
-                  ? '0 6px 20px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.55)'
+                  ? 'var(--glass-inner-shadow), 0 4px 14px rgba(0, 0, 0, 0.14)'
                   : 'none',
                 cursor: 'pointer',
                 textAlign: 'left',
@@ -110,9 +110,9 @@ export default function Sidebar({ activeTab, setActiveTab }) {
               }}
               onMouseEnter={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.10)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-                  e.currentTarget.style.color = '#ffffff';
+                  e.currentTarget.style.background = 'var(--glass-base)';
+                  e.currentTarget.style.borderColor = 'var(--glass-border)';
+                  e.currentTarget.style.color = 'var(--text-primary)';
                   e.currentTarget.style.transform = 'translateX(2px)';
                 }
               }}
@@ -120,12 +120,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 if (!isActive) {
                   e.currentTarget.style.background = 'transparent';
                   e.currentTarget.style.borderColor = 'transparent';
-                  e.currentTarget.style.color = '#9ca3af';
+                  e.currentTarget.style.color = 'var(--text-secondary)';
                   e.currentTarget.style.transform = 'translateX(0)';
                 }
               }}
             >
-              <Icon size={16} color={isActive ? '#ffffff' : '#8e8e93'} />
+              <Icon size={16} color={isActive ? 'var(--text-primary)' : 'var(--text-muted)'} />
               <span>{item.label}</span>
             </button>
           );

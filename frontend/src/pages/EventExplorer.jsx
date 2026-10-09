@@ -80,7 +80,7 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
               placeholder="Search headline, text body, or ticker (e.g., NVDA, rate, tariff)..."
               style={{ paddingLeft: '36px' }}
             />
-            <Search size={16} color="#64748b" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
           </div>
 
           {/* Source Type Filter */}
@@ -134,7 +134,7 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
       {/* Events Table Card */}
       <div className="glass-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-          <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             Showing <strong>{events.length}</strong> of <strong>{total}</strong> filtered events
           </span>
           <button onClick={loadEvents} className="btn btn-sm btn-outline">
@@ -162,11 +162,11 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
             <tbody>
               {events.map((ev) => (
                 <tr key={ev.id || ev.event_id} style={{ cursor: 'pointer' }} onClick={() => setSelectedEvent(ev)}>
-                  <td className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                  <td className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                     {ev.event_id}
                   </td>
                   <td>
-                    <span className="badge" style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#cbd5e1', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                    <span className="badge" style={{ background: 'var(--glass-control)', color: 'var(--text-secondary)', border: '1px solid var(--glass-border)' }}>
                       {ev.source_type}
                     </span>
                   </td>
@@ -179,7 +179,7 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
                   <td>
                     <div style={{ display: 'flex', gap: '4px' }}>
                       {(ev.tickers || "").split(',').slice(0, 2).map((t) => (
-                        <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'rgba(255, 255, 255, 0.08)', color: '#f5f5f7', border: '1px solid rgba(255, 255, 255, 0.20)', padding: '2px 6px', borderRadius: '5px', fontWeight: 600 }}>
+                        <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'var(--glass-control)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)', padding: '2px 6px', borderRadius: '5px', fontWeight: 600 }}>
                           ${t.trim()}
                         </span>
                       ))}
@@ -191,10 +191,10 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
                   <td>
                     <SeverityBadge score={ev.impact_score} />
                   </td>
-                  <td className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                  <td className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                     {((ev.confidence || 0.9) * 100).toFixed(0)}%
                   </td>
-                  <td style={{ fontSize: '0.75rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                  <td style={{ fontSize: '0.75rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
                     {ev.timestamp?.split(' ')[0]}
                   </td>
                   <td>
@@ -216,7 +216,7 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
         </div>
 
         {/* Pagination Controls */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--glass-border)' }}>
           <button
             onClick={() => setOffset(Math.max(0, offset - limit))}
             disabled={offset === 0}
@@ -225,7 +225,7 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
             <ChevronLeft size={14} />
             <span>Previous</span>
           </button>
-          <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+          <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
             Page {Math.floor(offset / limit) + 1} of {Math.ceil(total / limit) || 1}
           </span>
           <button

@@ -71,7 +71,7 @@ export default function SimulationHistory() {
             <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               Tactical Index Rebalance Log
             </h3>
-            <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
               Formula-driven executions
             </span>
           </div>
@@ -92,7 +92,7 @@ export default function SimulationHistory() {
               <tbody>
                 {rebalanceHistory.length === 0 ? (
                   <tr>
-                    <td colSpan={7} style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                       No rebalance decisions recorded yet. Simulate an event from the top bar to record history.
                     </td>
                   </tr>
@@ -104,11 +104,11 @@ export default function SimulationHistory() {
                     const deltaPct = ((delta / valBefore) * 100).toFixed(2);
                     return (
                       <tr key={row.id}>
-                        <td className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8', whiteSpace: 'nowrap' }}>
+                        <td className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
                           {row.timestamp}
                         </td>
                         <td style={{ maxWidth: '320px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          <span className="mono-text" style={{ fontSize: '0.72rem', color: '#f5f5f7', marginRight: '6px' }}>
+                          <span className="mono-text" style={{ fontSize: '0.72rem', color: 'var(--text-primary)', marginRight: '6px' }}>
                             [{row.trigger_event_id}]
                           </span>
                           <span style={{ fontWeight: 500 }}>{row.trigger_headline}</span>
@@ -122,7 +122,7 @@ export default function SimulationHistory() {
                         <td>
                           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                             {(row.affected_tickers || "").split(',').map((t) => (
-                              <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.18)', padding: '2px 6px', borderRadius: '5px', color: '#f5f5f7', fontWeight: 600 }}>
+                              <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'var(--glass-control)', border: '1px solid var(--glass-border)', padding: '2px 6px', borderRadius: '5px', color: 'var(--text-primary)', fontWeight: 600 }}>
                                 ${t.trim()}
                               </span>
                             ))}
@@ -134,7 +134,7 @@ export default function SimulationHistory() {
                         }}>
                           {delta >= 0 ? '+' : ''}${Math.round(delta).toLocaleString()} ({deltaPct}%)
                         </td>
-                        <td className="mono-text" style={{ fontWeight: 600, color: '#f8fafc' }}>
+                        <td className="mono-text" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                           ${(valAfter / 1000000).toFixed(2)}M
                         </td>
                       </tr>
@@ -154,7 +154,7 @@ export default function SimulationHistory() {
             <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               Wholesale Portfolio Stress Test Audit Trail
             </h3>
-            <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
               Simulated Catastrophic Events
             </span>
           </div>
@@ -176,20 +176,20 @@ export default function SimulationHistory() {
               <tbody>
                 {stressHistory.length === 0 ? (
                   <tr>
-                    <td colSpan={8} style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>
+                    <td colSpan={8} style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                       No wholesale stress tests recorded yet. Execute a scenario from Module B to populate the audit trail.
                     </td>
                   </tr>
                 ) : (
                   stressHistory.map((row) => (
                     <tr key={row.id || row.test_id}>
-                      <td className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                      <td className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                         {row.test_id}
                       </td>
-                      <td className="mono-text" style={{ fontSize: '0.75rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                      <td className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
                         {row.timestamp}
                       </td>
-                      <td style={{ fontWeight: 600, color: '#f8fafc' }}>
+                      <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                         {row.scenario_name}
                       </td>
                       <td>
@@ -204,7 +204,7 @@ export default function SimulationHistory() {
                       <td className="mono-text" style={{ fontWeight: 700, color: '#f87171' }}>
                         -{row.loss_pct}%
                       </td>
-                      <td className="mono-text" style={{ fontWeight: 600, color: '#f5f5f7' }}>
+                      <td className="mono-text" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                         ${(row.value_after / 1000000).toFixed(2)}M
                       </td>
                     </tr>
