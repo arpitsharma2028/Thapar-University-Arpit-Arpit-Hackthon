@@ -95,7 +95,7 @@ export default function ModuleBStressTesting({ showToast }) {
       {/* Title Header */}
       <div style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span className="badge" style={{ background: '#ef444420', color: '#f87171', border: '1px solid #ef444440' }}>
+          <span className="badge" style={{ background: 'var(--apple-red-surface)', color: 'var(--apple-red)', border: '1px solid rgba(255, 69, 58, 0.4)' }}>
             MODULE B
           </span>
           <h2 className="title-lg">Strategic Wholesale Portfolio Stress Testing</h2>
@@ -106,10 +106,12 @@ export default function ModuleBStressTesting({ showToast }) {
       </div>
 
       {/* Scenario Selection & Controls Card */}
-      <div className="glass-card" style={{ marginBottom: '24px', border: '1px solid rgba(239, 68, 68, 0.35)' }}>
+      <div className="glass-card" style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Flame size={20} color="#ef4444" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="apple-squircle">
+              <Flame size={18} color="#ef4444" />
+            </div>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               Stress Scenario Selector & Parameter Calibration
             </h3>
@@ -128,12 +130,19 @@ export default function ModuleBStressTesting({ showToast }) {
                 key={scen.id}
                 onClick={() => setSelectedScenarioId(scen.id)}
                 style={{
-                  background: isSelected ? 'rgba(239, 68, 68, 0.15)' : 'var(--bg-card)',
-                  border: isSelected ? '1px solid #ef4444' : '1px solid var(--border-color)',
-                  borderRadius: '10px',
+                  background: isSelected
+                    ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.12) 100%)'
+                    : 'rgba(255, 255, 255, 0.035)',
+                  border: isSelected ? '1px solid rgba(239, 68, 68, 0.65)' : '1px solid var(--glass-border)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  boxShadow: isSelected
+                    ? '0 4px 18px rgba(239, 68, 68, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2)'
+                    : 'inset 0 1px 1px rgba(255, 255, 255, 0.05)',
+                  borderRadius: '11px',
                   padding: '14px',
                   cursor: 'pointer',
-                  transition: 'all 0.15s ease'
+                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
@@ -202,11 +211,11 @@ export default function ModuleBStressTesting({ showToast }) {
               </div>
             </div>
 
-            <div className="glass-card" style={{ borderColor: 'rgba(239, 68, 68, 0.6)', background: 'rgba(239, 68, 68, 0.08)' }}>
+            <div className="glass-card" style={{ borderColor: 'rgba(255, 69, 58, 0.45)', background: 'linear-gradient(135deg, rgba(255, 69, 58, 0.12) 0%, rgba(235, 238, 242, 0.04) 100%)' }}>
               <div style={{ fontSize: '0.75rem', color: '#fca5a5', textTransform: 'uppercase', fontWeight: 600 }}>
                 Total Simulated Capital Loss
               </div>
-              <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ef4444', marginTop: '4px' }}>
+              <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--apple-red)', marginTop: '4px' }}>
                 -${(stressResult.total_dollar_loss / 1000000).toFixed(2)}M
               </div>
               <div style={{ fontSize: '0.78rem', color: '#f87171', marginTop: '4px', fontWeight: 700 }}>
@@ -218,7 +227,7 @@ export default function ModuleBStressTesting({ showToast }) {
               <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>
                 Post-Stress Book Value
               </div>
-              <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: '#38bdf8', marginTop: '4px' }}>
+              <div className="mono-text" style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
                 ${(stressResult.total_value_after / 1000000).toFixed(2)}M
               </div>
               <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>
@@ -255,7 +264,7 @@ export default function ModuleBStressTesting({ showToast }) {
                     <XAxis dataKey="asset" stroke="#64748b" fontSize={11} />
                     <YAxis stroke="#64748b" fontSize={11} tickFormatter={(val) => `$${val}M`} />
                     <Tooltip
-                      contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }}
+                      contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
                       formatter={(val, name) => [`$${val}M`, name === 'dollarLoss' ? 'Loss Amount' : name]}
                     />
                     <Bar dataKey="dollarLoss" fill="#ef4444" radius={[4, 4, 0, 0]} />
@@ -277,9 +286,9 @@ export default function ModuleBStressTesting({ showToast }) {
                   <div
                     key={pos.sector}
                     style={{
-                      background: 'rgba(15, 23, 42, 0.7)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: '8px',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid var(--glass-border)',
+                      borderRadius: '10px',
                       padding: '12px 16px',
                       display: 'flex',
                       alignItems: 'center',

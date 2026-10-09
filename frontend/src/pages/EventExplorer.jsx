@@ -166,7 +166,7 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
                     {ev.event_id}
                   </td>
                   <td>
-                    <span className="badge" style={{ background: '#1e293b', color: '#cbd5e1' }}>
+                    <span className="badge" style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#cbd5e1', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
                       {ev.source_type}
                     </span>
                   </td>
@@ -179,7 +179,7 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
                   <td>
                     <div style={{ display: 'flex', gap: '4px' }}>
                       {(ev.tickers || "").split(',').slice(0, 2).map((t) => (
-                        <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: '#2563eb20', color: '#60a5fa', padding: '2px 6px', borderRadius: '4px' }}>
+                        <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'rgba(255, 255, 255, 0.08)', color: '#f5f5f7', border: '1px solid rgba(255, 255, 255, 0.20)', padding: '2px 6px', borderRadius: '5px', fontWeight: 600 }}>
                           ${t.trim()}
                         </span>
                       ))}

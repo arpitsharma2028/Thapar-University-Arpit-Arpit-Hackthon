@@ -177,6 +177,15 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* Ambient Glassmorphism Lighting System */}
+      <div className="glass-ambient-bg" aria-hidden="true">
+        <div className="ambient-orb orb-1" />
+        <div className="ambient-orb orb-2" />
+        <div className="ambient-orb orb-3" />
+        <div className="ambient-orb orb-4" />
+        <div className="ambient-grid" />
+      </div>
+
       {/* Sidebar Navigation */}
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -255,11 +264,11 @@ export default function App() {
       {/* Toast Notification Banner */}
       {toast && (
         <div className="toast-banner">
-          {toast.type === 'success' && <CheckCircle2 size={18} color="#10b981" />}
-          {toast.type === 'warning' && <AlertTriangle size={18} color="#f59e0b" />}
-          {toast.type === 'error' && <AlertTriangle size={18} color="#ef4444" />}
-          {toast.type === 'info' && <Info size={18} color="#3b82f6" />}
-          <span style={{ fontSize: '0.86rem', color: '#f8fafc', fontWeight: 500 }}>
+          {toast.type === 'success' && <CheckCircle2 size={18} color="var(--apple-green)" />}
+          {toast.type === 'warning' && <AlertTriangle size={18} color="var(--apple-amber)" />}
+          {toast.type === 'error' && <AlertTriangle size={18} color="var(--apple-red)" />}
+          {toast.type === 'info' && <Info size={18} color="var(--apple-blue)" />}
+          <span style={{ fontSize: '0.85rem', color: '#f5f5f7', fontWeight: 500 }}>
             {toast.message}
           </span>
         </div>

@@ -113,10 +113,8 @@ export default function MarketIntelligence({ showToast }) {
   return (
     <div className="page-wrapper">
       {/* Gainers / Losers Market Ticker */}
-      <div style={{
-        background: 'linear-gradient(90deg, rgba(15, 23, 42, 0.9), rgba(21, 30, 50, 0.95))',
-        border: '1px solid var(--border-color)',
-        borderRadius: '10px',
+      <div className="glass-panel" style={{
+        borderRadius: '14px',
         padding: '12px 18px',
         marginBottom: '24px',
         display: 'flex',
@@ -170,11 +168,11 @@ export default function MarketIntelligence({ showToast }) {
               ))}
             </select>
 
-            <span className="badge" style={{ background: '#1e293b', color: '#38bdf8' }}>
+            <span className="badge badge-neutral">
               {summary?.sector || "Technology"}
             </span>
 
-            <span className="badge" style={{ background: '#10b98120', color: '#6ee7b7' }}>
+            <span className="badge" style={{ background: 'var(--apple-green-surface)', color: 'var(--apple-green)', border: '1px solid rgba(48, 209, 88, 0.35)' }}>
               Source: {summary?.data_source || "yfinance"}
             </span>
           </div>
@@ -229,7 +227,7 @@ export default function MarketIntelligence({ showToast }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Activity size={18} color="#38bdf8" />
+              <Activity size={18} color="var(--text-primary)" />
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 Monte Carlo Probabilistic Price Forecasting (Geometric Brownian Motion)
               </h3>
@@ -306,12 +304,12 @@ export default function MarketIntelligence({ showToast }) {
                 tickFormatter={(val) => `$${val}`}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }}
+                contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
                 formatter={(val, name) => [`$${val}`, name === 'upper' ? '95th Percentile' : (name === 'median' ? 'Median (50th)' : '5th Percentile')]}
               />
-              <Area type="monotone" dataKey="upper" stroke="#a855f7" fillOpacity={1} fill="url(#coneGrad)" name="upper" />
-              <Area type="monotone" dataKey="lower" stroke="#a855f7" fillOpacity={0} name="lower" />
-              <Line type="monotone" dataKey="median" stroke="#38bdf8" strokeWidth={2.5} dot={false} name="median" />
+              <Area type="monotone" dataKey="upper" stroke="#dce0e6" fillOpacity={1} fill="url(#coneGrad)" name="upper" />
+              <Area type="monotone" dataKey="lower" stroke="#dce0e6" fillOpacity={0} name="lower" />
+              <Line type="monotone" dataKey="median" stroke="#f5f5f7" strokeWidth={2.5} dot={false} name="median" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -322,7 +320,7 @@ export default function MarketIntelligence({ showToast }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <GitCompare size={18} color="#3b82f6" />
+              <GitCompare size={18} color="var(--text-primary)" />
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 Multi-Stock Pairwise Comparative Analytics & Pearson Correlation
               </h3>
@@ -374,9 +372,9 @@ export default function MarketIntelligence({ showToast }) {
         {/* Correlation & Return Summary Bar */}
         {comparisonResult && (
           <div style={{
-            background: 'rgba(15, 23, 42, 0.8)',
-            border: '1px solid var(--border-color)',
-            borderRadius: '8px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid var(--glass-border)',
+            borderRadius: '12px',
             padding: '12px 18px',
             marginBottom: '16px',
             display: 'flex',
@@ -389,7 +387,7 @@ export default function MarketIntelligence({ showToast }) {
               <span style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase' }}>
                 Pearson Correlation (r)
               </span>
-              <div className="mono-text" style={{ fontSize: '1.25rem', fontWeight: 800, color: '#38bdf8' }}>
+              <div className="mono-text" style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                 {comparisonResult.correlation}
               </div>
             </div>
@@ -421,7 +419,7 @@ export default function MarketIntelligence({ showToast }) {
               <XAxis dataKey="date" stroke="#64748b" fontSize={11} />
               <YAxis stroke="#64748b" fontSize={11} domain={['auto', 'auto']} tickFormatter={(v) => `${v}`} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }}
+                contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
                 formatter={(val, name) => [`${val}`, name.replace('_norm', ' (Base 100)')]}
               />
               <Legend wrapperStyle={{ fontSize: '0.78rem' }} />

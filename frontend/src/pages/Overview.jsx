@@ -7,8 +7,7 @@ import {
   ArrowUpRight,
   Layers,
   BarChart2,
-  ArrowRight,
-  RefreshCw
+  ArrowRight
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -36,7 +35,7 @@ import {
 } from '../api/client';
 
 const SECTOR_COLORS = [
-  '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#64748b', '#ef4444'
+  '#0a84ff', '#30d158', '#ffd60a', '#ff375f', '#bf5af2', '#64d2ff', '#8e8e93', '#ff453a'
 ];
 
 const PREVIEW_TICKERS = ["NVDA", "AAPL", "MSFT", "TSLA", "JPM", "XOM"];
@@ -129,32 +128,38 @@ export default function Overview({
   return (
     <div className="page-wrapper">
       {/* Live Alert Ticker */}
-      <div style={{
-        background: 'linear-gradient(90deg, rgba(37, 99, 235, 0.15), rgba(15, 23, 42, 0.8))',
-        border: '1px solid rgba(59, 130, 246, 0.3)',
-        borderRadius: '10px',
+      <div className="glass-panel" style={{
+        background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%)',
+        border: '1px solid rgba(255, 255, 255, 0.20)',
+        borderRadius: '14px',
         padding: '12px 18px',
         marginBottom: '16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '12px'
+        gap: '12px',
+        boxShadow: 'var(--shadow-sm), inset 0 1px 1px rgba(255, 255, 255, 0.15)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{
-            background: '#ef4444',
-            color: '#fff',
+            background: 'var(--apple-red-surface)',
+            color: 'var(--apple-red)',
+            border: '1px solid rgba(255, 69, 58, 0.4)',
             fontSize: '0.68rem',
-            fontWeight: 800,
+            fontWeight: 700,
             padding: '3px 8px',
-            borderRadius: '4px',
+            borderRadius: '6px',
             textTransform: 'uppercase',
-            letterSpacing: '0.06em'
+            letterSpacing: '0.06em',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '5px'
           }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--apple-red)', boxShadow: '0 0 6px var(--apple-red)' }} />
             LIVE FEED
           </span>
-          <span style={{ fontSize: '0.85rem', color: '#e2e8f0', fontWeight: 500 }}>
+          <span style={{ fontSize: '0.84rem', color: '#f5f5f7', fontWeight: 500 }}>
             {metrics?.recent_alerts?.[0]?.headline || "AI Risk Engine actively parsing live News & Social signals across 16 Index Assets."}
           </span>
         </div>
@@ -164,17 +169,15 @@ export default function Overview({
             disabled={loading}
             className="btn btn-sm btn-secondary"
           >
-            <Activity size={14} color="#38bdf8" />
+            <Activity size={13} color="var(--text-primary)" />
             <span>Process Next Signal</span>
           </button>
         </div>
       </div>
 
       {/* Top Gainers & Losers Market Strip */}
-      <div style={{
-        background: 'var(--bg-secondary)',
-        border: '1px solid var(--border-color)',
-        borderRadius: '8px',
+      <div className="glass-panel" style={{
+        borderRadius: '14px',
         padding: '10px 16px',
         marginBottom: '24px',
         display: 'flex',
@@ -185,7 +188,7 @@ export default function Overview({
       }}>
         {/* Gainers */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.70rem', fontWeight: 800, color: '#10b981', letterSpacing: '0.05em' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--apple-green)', letterSpacing: '0.06em' }}>
             MARKET GAINERS:
           </span>
           {(gainersLosers.gainers || []).slice(0, 3).map((g) => (
@@ -194,12 +197,13 @@ export default function Overview({
               onClick={() => setMarketSymbol(g.symbol)}
               className="mono-text"
               style={{
-                fontSize: '0.78rem',
-                background: 'rgba(16, 185, 129, 0.12)',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
+                fontSize: '0.76rem',
+                fontWeight: 600,
+                background: 'var(--apple-green-surface)',
+                border: '1px solid rgba(48, 209, 88, 0.32)',
                 padding: '2px 8px',
-                borderRadius: '4px',
-                color: '#34d399',
+                borderRadius: '6px',
+                color: 'var(--apple-green)',
                 cursor: 'pointer'
               }}
               title="Click to inspect Monte Carlo forecast"
@@ -211,7 +215,7 @@ export default function Overview({
 
         {/* Losers */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.70rem', fontWeight: 800, color: '#ef4444', letterSpacing: '0.05em' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--apple-red)', letterSpacing: '0.06em' }}>
             MARKET LOSERS:
           </span>
           {(gainersLosers.losers || []).slice(0, 3).map((l) => (
@@ -220,12 +224,13 @@ export default function Overview({
               onClick={() => setMarketSymbol(l.symbol)}
               className="mono-text"
               style={{
-                fontSize: '0.78rem',
-                background: 'rgba(239, 68, 68, 0.12)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
+                fontSize: '0.76rem',
+                fontWeight: 600,
+                background: 'var(--apple-red-surface)',
+                border: '1px solid rgba(255, 69, 58, 0.32)',
                 padding: '2px 8px',
-                borderRadius: '4px',
-                color: '#f87171',
+                borderRadius: '6px',
+                color: 'var(--apple-red)',
                 cursor: 'pointer'
               }}
               title="Click to inspect Monte Carlo forecast"
@@ -243,7 +248,7 @@ export default function Overview({
           value={`$${(totalValue / 1000000).toFixed(2)}M`}
           subtitle={`Baseline $10.00M`}
           icon={DollarSign}
-          color="#10b981"
+          color="var(--apple-green)"
           trend={+(((totalValue - 10000000) / 10000000) * 100).toFixed(2)}
         />
         <StatCard
@@ -251,21 +256,21 @@ export default function Overview({
           value={portfolioSentiment > 0 ? `+${portfolioSentiment.toFixed(2)}` : portfolioSentiment.toFixed(2)}
           subtitle={`Risk Level: ${riskLevel}`}
           icon={TrendingUp}
-          color={portfolioSentiment >= 0 ? "#10b981" : "#ef4444"}
+          color={portfolioSentiment >= 0 ? "var(--apple-green)" : "var(--apple-red)"}
         />
         <StatCard
           title="1-Day VaR (95%)"
           value={`$${(var95 / 1000).toFixed(1)}K`}
           subtitle="Simulated Parametric Value-at-Risk"
           icon={ShieldAlert}
-          color="#f59e0b"
+          color="var(--apple-amber)"
         />
         <StatCard
           title="Engine Decisions"
           value={`${rebalanceCount} / ${stressCount}`}
           subtitle="Rebalances / Stress Tests Logged"
           icon={Activity}
-          color="#3b82f6"
+          color="var(--glass-border-strong)"
         />
       </div>
 
@@ -298,16 +303,16 @@ export default function Overview({
                   tickFormatter={(val) => `$${(val / 1000000).toFixed(2)}M`}
                 />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }}
+                  contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
                   formatter={(val) => [`$${Number(val).toLocaleString()}`, 'Portfolio Value']}
                 />
                 <Line
                   type="monotone"
                   dataKey="value"
-                  stroke="#3b82f6"
-                  strokeWidth={3}
-                  dot={{ r: 4, fill: '#3b82f6' }}
-                  activeDot={{ r: 7, fill: '#60a5fa' }}
+                  stroke="#f5f5f7"
+                  strokeWidth={2.5}
+                  dot={{ r: 3, fill: '#f5f5f7' }}
+                  activeDot={{ r: 6, fill: '#ffffff' }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -344,7 +349,7 @@ export default function Overview({
                   ))}
                 </Pie>
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }}
+                  contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
                   formatter={(val, name) => [`${val}%`, name]}
                 />
                 <Legend
@@ -364,11 +369,11 @@ export default function Overview({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <BarChart2 size={18} color="#38bdf8" />
+              <BarChart2 size={18} color="var(--text-primary)" />
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 Stochastic Price Forecasting (Geometric Brownian Motion)
               </h3>
-              <span className="badge" style={{ background: '#1e293b', color: '#38bdf8' }}>
+              <span className="badge badge-neutral">
                 100 Paths • P5 to P95 Cone
               </span>
             </div>
@@ -395,7 +400,7 @@ export default function Overview({
               <button
                 onClick={() => onNavigateTab('market-intel')}
                 className="btn btn-sm btn-outline"
-                style={{ borderColor: '#38bdf8', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '4px' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
                 title="Open full interactive market analytics and correlation matrix"
               >
                 <span>Full Analytics</span>
@@ -412,10 +417,10 @@ export default function Overview({
             gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
             gap: '10px',
             marginBottom: '16px',
-            background: 'rgba(15, 23, 42, 0.6)',
+            background: 'rgba(255, 255, 255, 0.05)',
             padding: '12px',
-            borderRadius: '8px',
-            border: '1px solid var(--border-color)'
+            borderRadius: '12px',
+            border: '1px solid var(--glass-border)'
           }}>
             <div>
               <span style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase' }}>Current Price</span>
@@ -462,12 +467,12 @@ export default function Overview({
                 tickFormatter={(val) => `$${val}`}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }}
+                contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
                 formatter={(val, name) => [`$${val}`, name === 'upper' ? '95th Percentile' : (name === 'median' ? 'Median (50th)' : '5th Percentile')]}
               />
-              <Area type="monotone" dataKey="upper" stroke="#a855f7" fillOpacity={1} fill="url(#overviewConeGrad)" name="upper" />
-              <Area type="monotone" dataKey="lower" stroke="#a855f7" fillOpacity={0} name="lower" />
-              <Line type="monotone" dataKey="median" stroke="#38bdf8" strokeWidth={2.5} dot={false} name="median" />
+              <Area type="monotone" dataKey="upper" stroke="#dce0e6" fillOpacity={1} fill="url(#overviewConeGrad)" name="upper" />
+              <Area type="monotone" dataKey="lower" stroke="#dce0e6" fillOpacity={0} name="lower" />
+              <Line type="monotone" dataKey="median" stroke="#f5f5f7" strokeWidth={2.5} dot={false} name="median" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -518,7 +523,7 @@ export default function Overview({
                   <td>
                     <div style={{ display: 'flex', gap: '4px' }}>
                       {(ev.tickers || "").split(',').slice(0, 2).map((t) => (
-                        <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: '#1e293b', padding: '2px 6px', borderRadius: '4px', color: '#38bdf8' }}>
+                        <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.16)', padding: '2px 6px', borderRadius: '4px', color: '#f5f5f7' }}>
                           ${t.trim()}
                         </span>
                       ))}

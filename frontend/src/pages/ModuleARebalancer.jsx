@@ -67,7 +67,7 @@ export default function ModuleARebalancer({
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span className="badge" style={{ background: '#2563eb20', color: '#60a5fa', border: '1px solid #3b82f640' }}>
+            <span className="badge badge-neutral">
               MODULE A
             </span>
             <h2 className="title-lg">Tactical High-Frequency Index Rebalancer</h2>
@@ -109,26 +109,26 @@ export default function ModuleARebalancer({
       </div>
 
       {/* Rebalance Algorithm & Sensitivity Control Banner */}
-      <div className="glass-card" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(21, 30, 50, 0.95), rgba(15, 23, 42, 0.95))' }}>
+      <div className="glass-card" style={{ marginBottom: '24px' }}>
         <div className="grid-cols-12" style={{ alignItems: 'center' }}>
           {/* Formula Explanation */}
           <div style={{ gridColumn: 'span 8' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <Info size={16} color="#38bdf8" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <Info size={16} color="var(--text-primary)" />
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Algorithmic Weight Rebalance Formula
               </span>
             </div>
-            <div className="mono-text" style={{
-              background: '#0a0f1d',
+            <div className="mono-text glass-panel" style={{
               padding: '10px 14px',
-              borderRadius: '8px',
-              border: '1px solid #223048',
               fontSize: '0.84rem',
-              color: '#38bdf8'
+              color: 'var(--text-primary)',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid var(--glass-border)',
+              boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1)'
             }}>
               new_weight<sub>i</sub> = clamp(old_weight<sub>i</sub> + &lambda; &times; sentiment &times; (impact / 10), min=1.0%, max=25.0%)<br />
-              <span style={{ color: '#94a3b8', fontSize: '0.78rem' }}>
+              <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
                 &rarr; Normalized: weight<sub>i</sub> = new_weight<sub>i</sub> / &sum; new_weight &nbsp;|&nbsp; Guarantees &sum; w<sub>i</sub> &equiv; 100.0%, w<sub>i</sub> &ge; 1.0%
               </span>
             </div>
@@ -163,22 +163,23 @@ export default function ModuleARebalancer({
 
       {/* Last Trigger Event Banner (If available) */}
       {lastRebalanceResult?.trigger_event && (
-        <div style={{
-          background: 'rgba(37, 99, 235, 0.12)',
-          border: '1px solid rgba(59, 130, 246, 0.35)',
-          borderRadius: '10px',
+        <div className="glass-panel" style={{
+          background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.20)',
+          borderRadius: '14px',
           padding: '14px 20px',
           marginBottom: '24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '12px'
+          gap: '12px',
+          boxShadow: 'var(--shadow-sm), inset 0 1px 1px rgba(255, 255, 255, 0.12)'
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <CheckCircle2 size={16} color="#10b981" />
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#f5f5f7', textTransform: 'uppercase' }}>
                 Latest Rebalance Trigger Event
               </span>
               <EventCategoryBadge category={lastRebalanceResult.trigger_event.category} />
@@ -237,7 +238,7 @@ export default function ModuleARebalancer({
               <XAxis dataKey="ticker" stroke="#64748b" fontSize={11} />
               <YAxis stroke="#64748b" fontSize={11} tickFormatter={(val) => `${val}%`} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }}
+                contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }}
                 formatter={(val, name) => [`${val}%`, name === 'oldWeight' ? 'Before Rebalance' : 'After Rebalance']}
               />
               <Bar dataKey="oldWeight" fill="#475569" radius={[3, 3, 0, 0]} />

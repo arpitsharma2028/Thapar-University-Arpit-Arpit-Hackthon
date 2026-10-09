@@ -25,6 +25,9 @@ export default function EventCategoryBadge({ category }) {
       background: style.bg,
       color: style.text,
       border: `1px solid ${style.border}`,
+      backdropFilter: 'blur(8px)',
+      WebkitBackdropFilter: 'blur(8px)',
+      boxShadow: '0 2px 6px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
       whiteSpace: 'nowrap'
     }}>
       {category}

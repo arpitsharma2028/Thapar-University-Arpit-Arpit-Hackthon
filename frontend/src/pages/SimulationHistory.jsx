@@ -108,7 +108,7 @@ export default function SimulationHistory() {
                           {row.timestamp}
                         </td>
                         <td style={{ maxWidth: '320px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          <span className="mono-text" style={{ fontSize: '0.72rem', color: '#60a5fa', marginRight: '6px' }}>
+                          <span className="mono-text" style={{ fontSize: '0.72rem', color: '#f5f5f7', marginRight: '6px' }}>
                             [{row.trigger_event_id}]
                           </span>
                           <span style={{ fontWeight: 500 }}>{row.trigger_headline}</span>
@@ -122,7 +122,7 @@ export default function SimulationHistory() {
                         <td>
                           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                             {(row.affected_tickers || "").split(',').map((t) => (
-                              <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: '#1e293b', padding: '2px 5px', borderRadius: '4px', color: '#38bdf8' }}>
+                              <span key={t} className="mono-text" style={{ fontSize: '0.72rem', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.18)', padding: '2px 6px', borderRadius: '5px', color: '#f5f5f7', fontWeight: 600 }}>
                                 ${t.trim()}
                               </span>
                             ))}
@@ -204,7 +204,7 @@ export default function SimulationHistory() {
                       <td className="mono-text" style={{ fontWeight: 700, color: '#f87171' }}>
                         -{row.loss_pct}%
                       </td>
-                      <td className="mono-text" style={{ fontWeight: 600, color: '#38bdf8' }}>
+                      <td className="mono-text" style={{ fontWeight: 600, color: '#f5f5f7' }}>
                         ${(row.value_after / 1000000).toFixed(2)}M
                       </td>
                     </tr>

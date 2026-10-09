@@ -10,43 +10,42 @@ export default function Header({
   loading
 }) {
   return (
-    <header style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '18px 32px',
-      borderBottom: '1px solid var(--border-color)',
-      background: 'rgba(15, 23, 42, 0.85)',
-      backdropFilter: 'blur(8px)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 50
-    }}>
+    <header className="glass-header">
       <div>
-        <h1 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '-0.02em' }}>
+        <h1 style={{
+          fontSize: '1.28rem',
+          fontWeight: 700,
+          color: 'var(--text-primary)',
+          letterSpacing: '-0.028em',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
           {title}
         </h1>
         {subtitle && (
-          <p style={{ fontSize: '0.80rem', color: '#94a3b8', marginTop: '2px' }}>
+          <p style={{
+            fontSize: '0.80rem',
+            color: 'var(--text-secondary)',
+            marginTop: '2px',
+            letterSpacing: '-0.01em',
+            maxWidth: '750px',
+            lineHeight: 1.4
+          }}>
             {subtitle}
           </p>
         )}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '9px', flexShrink: 0 }}>
         {/* Coordinated Systemic Stress Pipeline Execution */}
         <button
           onClick={onRunDemo}
           disabled={loading}
           className="btn btn-primary"
-          style={{
-            background: '#2563eb',
-            borderColor: '#3b82f6',
-            color: '#ffffff'
-          }}
           title="Executes an end-to-end systemic stress test pipeline across all engines"
         >
-          <Play size={15} />
+          <Play size={14} fill="currentColor" />
           <span>Execute Stress Pipeline</span>
         </button>
 
@@ -55,13 +54,9 @@ export default function Header({
           onClick={onSimulateEvent}
           disabled={loading}
           className="btn btn-outline"
-          style={{
-            borderColor: 'rgba(56, 189, 248, 0.4)',
-            color: '#38bdf8'
-          }}
           title="Ingest and process next sequential risk event signal"
         >
-          <Activity size={15} />
+          <Activity size={14} />
           <span>Ingest Next Signal</span>
         </button>
 
@@ -69,10 +64,10 @@ export default function Header({
         <button
           onClick={onResetPortfolio}
           disabled={loading}
-          className="btn btn-outline"
+          className="btn btn-secondary"
           title="Reset portfolio positions to baseline target weights"
         >
-          <RotateCcw size={14} />
+          <RotateCcw size={13} />
           <span>Reset Weights</span>
         </button>
       </div>

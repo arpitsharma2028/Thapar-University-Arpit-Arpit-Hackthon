@@ -90,11 +90,11 @@ export default function RiskIntelligence({
       </div>
 
       {/* Main Interactive Analyzer Sandbox */}
-      <div className="glass-card" style={{ marginBottom: '28px', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
+      <div className="glass-card" style={{ marginBottom: '28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: '#3b82f620', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Cpu size={16} color="#3b82f6" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="apple-squircle">
+              <Cpu size={16} color="#ffffff" />
             </div>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               Interactive NLP Risk Signal Sandbox
@@ -179,31 +179,32 @@ export default function RiskIntelligence({
 
         {/* Visualized Output Card */}
         {analyzedSignal && (
-          <div style={{
+          <div className="glass-panel" style={{
             marginTop: '20px',
-            background: 'rgba(15, 23, 42, 0.9)',
-            border: '1px solid #3b82f6',
-            borderRadius: '10px',
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.22)',
+            borderRadius: '14px',
             padding: '18px',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.18)',
             animation: 'fadeIn 0.3s ease'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-primary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Extracted Risk Signal Output
                 </span>
-                <span className="mono-text" style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                <span className="mono-text" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                   ID: {analyzedSignal.event_id}
                 </span>
               </div>
-              <span className="badge" style={{ background: '#10b98125', color: '#34d399', border: '1px solid #10b98150' }}>
+              <span className="badge" style={{ background: 'var(--apple-green-surface)', color: 'var(--apple-green)', border: '1px solid rgba(48, 209, 88, 0.35)' }}>
                 Model Confidence: {((analyzedSignal.confidence || 0.9) * 100).toFixed(0)}%
               </span>
             </div>
 
             {/* Grid of Extracted Features */}
             <div className="grid-cols-4" style={{ gap: '12px', marginBottom: '16px' }}>
-              <div style={{ background: 'var(--bg-card)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div className="glass-panel" style={{ padding: '12px', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.06)' }}>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
                   Sentiment Score
                 </div>
@@ -212,7 +213,7 @@ export default function RiskIntelligence({
                 </div>
               </div>
 
-              <div style={{ background: 'var(--bg-card)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div className="glass-panel" style={{ padding: '12px', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.06)' }}>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
                   Event Taxonomy
                 </div>
@@ -221,7 +222,7 @@ export default function RiskIntelligence({
                 </div>
               </div>
 
-              <div style={{ background: 'var(--bg-card)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div className="glass-panel" style={{ padding: '12px', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.06)' }}>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
                   Predicted Severity
                 </div>
@@ -230,7 +231,7 @@ export default function RiskIntelligence({
                 </div>
               </div>
 
-              <div style={{ background: 'var(--bg-card)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div className="glass-panel" style={{ padding: '12px', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.06)' }}>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
                   Identified Entity & Sector
                 </div>
@@ -282,7 +283,7 @@ export default function RiskIntelligence({
             <BarChart data={categoryChartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
               <XAxis dataKey="name" stroke="#64748b" fontSize={10} angle={-25} textAnchor="end" />
               <YAxis stroke="#64748b" fontSize={11} />
-              <Tooltip contentStyle={{ backgroundColor: '#151e32', borderColor: '#223048', borderRadius: '8px', color: '#f8fafc' }} />
+              <Tooltip contentStyle={{ backgroundColor: 'rgba(32, 33, 36, 0.90)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.22)', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)', color: '#f5f5f7' }} />
               <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]}>
                 {categoryChartData.map((entry, index) => (
                   <Cell
