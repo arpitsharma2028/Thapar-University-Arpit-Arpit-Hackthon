@@ -53,15 +53,15 @@ def create_diagram():
 
     # Layer 1: Data Sources
     ax.text(1.2, 8.8, "1. INGESTION SOURCES", color='#94a3b8', fontsize=9, fontweight='bold')
-    draw_box(0.5, 7.3, 3.2, 1.2, '#151e32', '#3b82f6', "Financial News Articles", "Reuters, Bloomberg, Dow Jones (CSV)", '#60a5fa')
-    draw_box(0.5, 5.8, 3.2, 1.2, '#151e32', '#8b5cf6', "Social Media & Slang Feeds", "X, StockTwits, Forums (CSV)", '#c084fc')
+    draw_box(0.5, 7.3, 3.2, 1.2, '#151e32', '#3b82f6', "Public Market News Wire", "WSJ Markets RSS (Live) & News (CSV)", '#60a5fa')
+    draw_box(0.5, 5.8, 3.2, 1.2, '#151e32', '#8b5cf6', "Social Momentum Feeds", "Public Forum & Cashtag Stream (CSV)", '#c084fc')
 
     # Ingestion & Preprocessing
     draw_arrow(3.7, 7.9, 4.6, 7.3)
     draw_arrow(3.7, 6.4, 4.6, 6.9)
 
-    ax.text(5.9, 8.8, "2. PREPROCESSING & CLEANING", color='#94a3b8', fontsize=9, fontweight='bold')
-    draw_box(4.6, 6.2, 2.6, 1.8, '#0f172a', '#223048', "NLP Preprocessing", "Regex Cleaner • Cashtag Parser\nFinancial Stopwords • Tokenizer")
+    ax.text(5.9, 8.8, "2. PREPROCESSING & NORMALIZATION", color='#94a3b8', fontsize=9, fontweight='bold')
+    draw_box(4.6, 6.2, 2.6, 1.8, '#0f172a', '#223048', "NLP Ingestion Layer", "Regex Cleaner • Cashtag Parser\nFinancial Stopwords • XML Normalizer")
 
     # Layer 2: Unified NLP Risk Engine
     draw_arrow(7.2, 7.1, 8.2, 7.1)
@@ -73,10 +73,10 @@ def create_diagram():
     ax.add_patch(engine_rect)
 
     # 4 sub-modules inside engine
-    draw_box(8.5, 6.8, 3.2, 1.3, '#1e293b', '#10b981', "Sentiment Polarity Engine", "Continuous [-1.0 to +1.0]\nLoughran-McDonald + Ridge", '#34d399')
-    draw_box(12.0, 6.8, 3.1, 1.3, '#1e293b', '#f59e0b', "Event Classifier (9 Classes)", "Geopolitical, Macro, Credit, etc.\nTF-IDF + Logistic Regression", '#fcd34d')
-    draw_box(8.5, 5.2, 3.2, 1.3, '#1e293b', '#ef4444', "Impact Severity Scorer", "Calibrated [1.0 to 10.0]\nSystemic Keyword & % Regressor", '#f87171')
-    draw_box(12.0, 5.2, 3.1, 1.3, '#1e293b', '#06b6d4', "Entity & Sector Extractor", "16 Index Tickers + Sector Mapping\nRegex Cashtags & Fuzzy Match", '#67e8f9')
+    draw_box(8.5, 6.8, 3.2, 1.3, '#1e293b', '#10b981', "Sentiment Polarity Engine", "Continuous [-1.0 to +1.0]\nProsusAI/FinBERT + Loughran", '#34d399')
+    draw_box(12.0, 6.8, 3.1, 1.3, '#1e293b', '#f59e0b', "Event Classifier (9 Classes)", "Evidence-Gated Taxonomy\nNo Arbitrary SPY Defaults", '#fcd34d')
+    draw_box(8.5, 5.2, 3.2, 1.3, '#1e293b', '#ef4444', "Impact Severity Scorer", "Calibrated [1.0 to 10.0]\nActive Ridge Regressor Pipeline", '#f87171')
+    draw_box(12.0, 5.2, 3.1, 1.3, '#1e293b', '#06b6d4', "Entity & Sector Extractor", "16 Index Tickers + Sector Mapping\nEvidence-Based Cashtag Matching", '#67e8f9')
 
     # Layer 3: Persistence & API
     draw_arrow(11.8, 4.8, 11.8, 3.9)

@@ -77,7 +77,7 @@ class NumberedCanvas(canvas.Canvas):
 
         self.setFont("Helvetica", 8)
         self.setFillColor(colors.HexColor('#64748b'))
-        self.drawString(40, 22, "CONFIDENTIAL & PROPRIETARY • HACKATHON SUBMISSION DECK")
+        self.drawString(40, 22, "FINSIGHT AI • S&P GLOBAL & CRISIL CAMPUS HACKATHON 2026 SUBMISSION")
         self.drawRightString(PAGE_WIDTH - 40, 22, f"Slide {self._pageNumber} of {total_pages}")
         self.restoreState()
 
@@ -251,18 +251,17 @@ def build_pdf():
         ],
         [
             Paragraph(
-                "• <b>Sentiment Polarity:</b> Hybrid Loughran-McDonald financial lexicon blended with TF-IDF Ridge classifier in [-1.0, +1.0].<br/>"
-                "• <b>Event Classification:</b> 9 mandatory classes (Geopolitical, Macro, Credit, Earnings, Regulatory, etc.) via balanced Logistic Regression.<br/>"
-                "• <b>Impact Severity Scorer:</b> Calibrated 1.0–10.0 severity regressor modeling systemic keywords, numerical percentages, and category weights.<br/>"
-                "• <b>Entity Extraction:</b> High-precision cashtag & keyword regex mapping 16 index stocks and sectors.",
+                "• <b>Sentiment Polarity:</b> Pretrained FinBERT (ProsusAI) + Loughran-McDonald financial lexicon with 3-token negation window in [-1.0, +1.0].<br/>"
+                "• <b>Event Classification:</b> 9 classes (Geopolitical, Macro, Credit, Earnings, Regulatory, etc.) with evidence gating (no false Earnings labels).<br/>"
+                "• <b>Impact Severity Scorer:</b> Active Ridge regression pipeline blended with structured category importance, strictly bounded in [1.0, 10.0].<br/>"
+                "• <b>Entity Extraction:</b> Evidence-based cashtag and company extraction (never assigns SPY to arbitrary text).",
                 body_text
             ),
             Paragraph(
-                "• <b>Rebalancing Formula:</b><br/>"
-                "  <i>new_weight<sub>i</sub> = clamp(old_weight<sub>i</sub> + &lambda; &times; sentiment &times; (impact/10), min=1.0%, max=25.0%)</i><br/>"
-                "• <b>Weight Normalization:</b> Strictly guarantees &sum; w<sub>i</sub> &equiv; 100.0%.<br/>"
-                "• <b>Spillover Dynamics:</b> Direct impact on target company + 45% sector co-movement.<br/>"
-                "• <b>Mark-to-Market Sim:</b> Price returns reflect sentiment shock and stock beta.",
+                "• <b>Mark-to-Market Accounting:</b> Portfolio value evolves via realistic asset price returns rather than artificial multipliers.<br/>"
+                "• <b>Bounded Simplex Projection:</b> Strictly guarantees &sum; w<sub>i</sub> &equiv; 100.0% with [1.0%, 25.0%] floors and ceilings.<br/>"
+                "• <b>Quantitative Controls:</b> 15% turnover limit, 5 bps transaction costs, and equal-weight benchmark alpha comparison.<br/>"
+                "• <b>Audit Trail:</b> Full regulatory transaction log with old weights, new weights, and deltas.",
                 body_text
             )
         ],
@@ -273,16 +272,16 @@ def build_pdf():
         [
             Paragraph(
                 "• <b>Multi-Asset Portfolio:</b> $50.0M wholesale banking book across Equities ($22.5M), Bonds ($15.0M), Derivatives ($7.5M), Cash ($5.0M).<br/>"
-                "• <b>Trigger Logic:</b> Automatic trigger when NLP impact score &ge; 7.0.<br/>"
-                "• <b>Scenario Library:</b> Geopolitical Crisis, 150 bps Stagflation Shock, CRE Default Contagion, Tech Monopoly Antitrust, Energy Embargo.<br/>"
-                "• <b>Granular Breakdown:</b> Asset-class losses, sector waterfall, worst positions.",
+                "• <b>Explicit Trigger Logic:</b> Automatic scenario execution when NLP impact score &ge; 7.0 with deduplication protection.<br/>"
+                "• <b>Asset-Specific Shocks:</b> Equity price shocks, duration-based bond yield shifts, derivative volatility skew, zero shock on cash.<br/>"
+                "• <b>Granular Breakdown:</b> Asset-class losses, sector waterfall, and per-asset contribution percentages.",
                 body_text
             ),
             Paragraph(
-                "• <b>FastAPI Backend:</b> Validated Pydantic models, OpenAPI /docs, CORS support.<br/>"
-                "• <b>Zero-Config SQLite WAL:</b> Multi-threaded read/write with 30s busy timeout.<br/>"
-                "• <b>React + Vite Frontend:</b> Institutional dark UI with Recharts, custom tooltips, live feeds, and 1-Click Demo walk-through scenario.<br/>"
-                "• <b>100% Automated Testing:</b> 20 pytest test suites passing in 1.6s.",
+                "• <b>FastAPI Backend:</b> Clean architecture, OpenAPI /docs, strict CORS, rate limiting, and request correlation IDs.<br/>"
+                "• <b>Public RSS Ingestion:</b> Live unauthenticated WSJ Markets RSS feed with offline synthetic replay fallback.<br/>"
+                "• <b>React + Vite Frontend:</b> Liquid Glass dark UI with Recharts, interactive text analysis sandbox, and Monte Carlo forecasts.<br/>"
+                "• <b>37 Pytest Tests:</b> 37 unit and integration tests passing cleanly with isolated temporary SQLite fixtures.",
                 body_text
             )
         ]
@@ -317,37 +316,37 @@ def build_pdf():
         [
             Paragraph("NLP Pipeline Latency", body_text),
             Paragraph("< 200 ms on Windows laptop CPU", body_text),
-            Paragraph("<b>18 ms average inference time</b> (scikit-learn + Loughran)", body_text),
+            Paragraph("<b>30.5 ms median warm inference</b> (FinBERT + Loughran-McDonald)", body_text),
             Paragraph("<font color='#34d399'>EXCEEDED</font>", body_text)
         ],
         [
-            Paragraph("Classification Classes", body_text),
-            Paragraph("9 mandatory financial classes", body_text),
-            Paragraph("<b>All 9 categories mapped</b> with balanced confidence > 85%", body_text),
+            Paragraph("Sentiment Benchmark", body_text),
+            Paragraph("Financial PhraseBank (AllAgree)", body_text),
+            Paragraph("<b>92.7% Accuracy / 92.6% Macro-F1</b> (vs 50.3% naive baseline)", body_text),
             Paragraph("<font color='#34d399'>VERIFIED</font>", body_text)
         ],
         [
             Paragraph("Index Rebalancing (Module A)", body_text),
             Paragraph("10–20 stock portfolio rebalance", body_text),
-            Paragraph("<b>16 Public tickers</b>, bounded [1%, 25%], normalized &sum;w=100%", body_text),
+            Paragraph("<b>16 Public tickers</b>, mark-to-market, simplex bounded [1%, 25%]", body_text),
             Paragraph("<font color='#34d399'>VERIFIED</font>", body_text)
         ],
         [
             Paragraph("Stress Testing (Module B)", body_text),
             Paragraph("Wholesale portfolio shock &ge; 7", body_text),
-            Paragraph("<b>$50M wholesale book</b>: -$8.25M loss (-16.5%) on Geopolitical", body_text),
+            Paragraph("<b>$50M book</b>: -$4.69M net loss (-9.38%) on Geopolitical (Bonds +$0.68M)", body_text),
             Paragraph("<font color='#34d399'>VERIFIED</font>", body_text)
         ],
         [
             Paragraph("Automated Test Suite", body_text),
             Paragraph("Unit and integration tests", body_text),
-            Paragraph("<b>20 / 20 Pytest suites passing</b> (NLP, Rebalance, Stress, API)", body_text),
+            Paragraph("<b>37 / 37 Pytest test cases passing</b> cleanly with isolated DB fixtures", body_text),
             Paragraph("<font color='#34d399'>100% PASS</font>", body_text)
         ],
         [
-            Paragraph("Zero-Config Installation", body_text),
-            Paragraph("Runs out of the box locally", body_text),
-            Paragraph("<b>Single SQLite file</b>, seeded CSV data, standard npm + pip", body_text),
+            Paragraph("Live Ingestion & Offline Core", body_text),
+            Paragraph("Public data + offline reliability", body_text),
+            Paragraph("<b>WSJ Markets RSS live ingestion</b> + deterministic offline fallback", body_text),
             Paragraph("<font color='#34d399'>VERIFIED</font>", body_text)
         ]
     ]
