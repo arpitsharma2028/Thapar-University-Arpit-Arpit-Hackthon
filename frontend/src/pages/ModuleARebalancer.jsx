@@ -188,9 +188,33 @@ export default function ModuleARebalancer({
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
             <SentimentBadge score={lastRebalanceResult.trigger_event.sentiment_score} />
             <SeverityBadge score={lastRebalanceResult.trigger_event.impact_score} />
+            {lastRebalanceResult.turnover_pct !== undefined && (
+              <div style={{ textAlign: 'right', borderLeft: '1px solid var(--border-color)', paddingLeft: '12px' }}>
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Turnover (Cap 15%)</div>
+                <div className="mono-text" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                  {lastRebalanceResult.turnover_pct}%
+                </div>
+              </div>
+            )}
+            {lastRebalanceResult.transaction_cost_usd !== undefined && (
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Tx Cost (5 bps)</div>
+                <div className="mono-text" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--accent-negative)' }}>
+                  -${Number(lastRebalanceResult.transaction_cost_usd).toLocaleString()}
+                </div>
+              </div>
+            )}
+            {lastRebalanceResult.strategy_cum_return_pct !== undefined && (
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Strat vs Equal-Weight</div>
+                <div className="mono-text" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                  {lastRebalanceResult.strategy_cum_return_pct}% / {lastRebalanceResult.benchmark_cum_return_pct}%
+                </div>
+              </div>
+            )}
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Portfolio Value Shift</div>
               <div className="mono-text" style={{

@@ -6,18 +6,20 @@ import {
   Eye,
   SlidersHorizontal,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Globe
 } from 'lucide-react';
 import SentimentBadge from '../components/SentimentBadge';
 import SeverityBadge from '../components/SeverityBadge';
 import EventCategoryBadge from '../components/EventCategoryBadge';
 import EventModal from '../components/EventModal';
-import { fetchEvents } from '../api/client';
+import { fetchEvents, ingestRssFeed } from '../api/client';
 
 export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
   const [events, setEvents] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [ingestingRss, setIngestingRss] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   // Filters
@@ -56,6 +58,21 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
     e.preventDefault();
     setOffset(0);
     loadEvents();
+  };
+
+  const handleIngestRss = async () => {
+    setIngestingRss(true);
+    try {
+      const res = await ingestRssFeed();
+      if (res && res.ingested_count > 0) {
+        setOffset(0);
+        await loadEvents();
+      }
+    } catch (err) {
+      console.error("Failed to ingest RSS:", err);
+    } finally {
+      setIngestingRss(false);
+    }
   };
 
   return (
@@ -137,10 +154,21 @@ export default function EventExplorer({ onRebalanceTrigger, onStressTrigger }) {
           <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             Showing <strong>{events.length}</strong> of <strong>{total}</strong> filtered events
           </span>
-          <button onClick={loadEvents} className="btn btn-sm btn-outline">
-            <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
-            <span>Refresh</span>
-          </button>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <button
+              onClick={handleIngestRss}
+              disabled={ingestingRss}
+              className="btn btn-sm btn-primary"
+              title="Fetch live public financial headlines from WSJ Markets RSS Feed"
+            >
+              <Globe size={13} className={ingestingRss ? "animate-spin" : ""} />
+              <span>{ingestingRss ? "Ingesting RSS..." : "Ingest Live RSS"}</span>
+            </button>
+            <button onClick={loadEvents} className="btn btn-sm btn-outline">
+              <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+              <span>Refresh</span>
+            </button>
+          </div>
         </div>
 
         <div className="table-wrapper">

@@ -101,7 +101,7 @@ export default function RiskIntelligence({
             </h3>
           </div>
           <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-            scikit-learn Pipeline + Financial Lexicon Calibrated
+            FinBERT Financial Language Model + Active Ridge Regressor
           </span>
         </div>
 
@@ -236,7 +236,9 @@ export default function RiskIntelligence({
                   Identified Entity & Sector
                 </div>
                 <div style={{ marginTop: '4px', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                  {analyzedSignal.tickers?.join(', ') || 'SPY'} ({analyzedSignal.sector})
+                  {analyzedSignal.tickers && analyzedSignal.tickers.length > 0
+                    ? analyzedSignal.tickers.map(t => `$${t}`).join(', ')
+                    : (analyzedSignal.company || 'Broad Market / None')} {analyzedSignal.sector ? `(${analyzedSignal.sector})` : ''}
                 </div>
               </div>
             </div>

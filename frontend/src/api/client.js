@@ -88,6 +88,14 @@ export async function fetchEvents(params = {}) {
   return safeFetch(`${API_BASE}/api/events?${query.toString()}`, {}, { total: 0, events: [] });
 }
 
+export async function ingestRssFeed(feedUrl = null, maxItems = 15) {
+  return safeFetch(`${API_BASE}/api/events/ingest/rss`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ feed_url: feedUrl, max_items: maxItems }),
+  }, { status: "error", ingested_count: 0, items: [] });
+}
+
 export async function analyzeCustomText(text, headline = "", source = "Manual Input", sourceType = "News") {
   return safeFetch(`${API_BASE}/api/events/analyze`, {
     method: "POST",
