@@ -43,3 +43,21 @@ frontend/node_modules/
 Thumbs.db
 .vscode/
 .idea/
+
+# Video, Presentation & Demo Artifacts
+demo_automation/
+demo_output/
+*.mp4
+*.webm
+*.avi
+*.mov
+*.wav
+*.mp3
+*.srt
+*.pptx
+*.ppt
+presentation.pdf
+docs/presentation.pdf
+docs/demo_script.md
+SUBMISSION_CHECKLIST.md
+

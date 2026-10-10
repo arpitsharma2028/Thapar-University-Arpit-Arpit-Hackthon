@@ -7,8 +7,8 @@
 **GitHub Profile:** [arpitsharma2028](https://github.com/arpitsharma2028)  
 **College / Campus:** Thapar Institute of Engineering and Technology (TIET)  
 
-**Demo Video Link:** [TO BE ADDED]  
-**Slide Deck Link:** [TO BE ADDED] (Presentation deck available locally in `docs/presentation.pdf`)  
+**Demo Video Link:** [FinSight AI Demonstration Video (YouTube)](https://youtu.be/5Oz4tZ-phwo)  
+**Slide Deck Link:** [FinSight AI Presentation Deck (Google Slides)](https://docs.google.com/presentation/d/1MfY5WYjfj4uUubKmW_YZOqm4KXUJ1Nfc/edit?usp=sharing&ouid=115230347381016892346&rtpof=true&sd=true)  
 
 **Runtime:** Python 3.11 / Node.js 20 on Windows 11  
 *Tested Platform: Python 3.11.9, Node.js v20.18.0 / v22 on Windows 11 (x64). Target compatible with Ubuntu Linux 22.04+ and macOS Sonoma using Python 3.10+ and Node 18+.*
@@ -99,7 +99,7 @@ flowchart TD
 - **Quantitative Analytics:** NumPy, SciPy, Pandas, yfinance (optional live quotes with offline fallback).
 - **Data Persistence:** SQLite with Write-Ahead Logging (`WAL` mode), foreign keys, and isolated session fixtures for testing.
 - **Frontend Dashboard:** React 19, Vite 8.3+, Recharts 2.12+, Lucide Icons, Vanilla CSS design system (dark glassmorphism, institutional styling).
-- **Quality Assurance & Evaluation:** Pytest 8.1+, HTTPX TestClient, ReportLab (presentation PDF generation), Matplotlib & Pillow (diagrams).
+- **Quality Assurance & Evaluation:** Pytest 8.1+, HTTPX TestClient, Matplotlib & Pillow (diagrams).
 
 ---
 
@@ -313,11 +313,10 @@ Evaluates both Benchmark A (PhraseBank in-domain) and Benchmark B (Independent f
 ## 9. Submission Deliverables & Documentation Index
 
 - **Source Code Repository:** [GitHub Repo](https://github.com/arpitsharma2028/Thapar-University-Arpit-Arpit-Hackthon)
-- **Presentation Deck (7 Slides, No Proprietary Marks):** `docs/presentation.pdf`
+- **Demonstration Video (YouTube):** [FinSight AI Platform Walkthrough](https://youtu.be/5Oz4tZ-phwo)
+- **Presentation Deck (Google Slides):** [FinSight AI Presentation Deck](https://docs.google.com/presentation/d/1MfY5WYjfj4uUubKmW_YZOqm4KXUJ1Nfc/edit?usp=sharing&ouid=115230347381016892346&rtpof=true&sd=true)
 - **System Architecture Diagram:** `docs/architecture.png`
 - **NLP Model Evaluation Report:** `docs/model_evaluation_report.md`
-- **Submission Verification Checklist:** `SUBMISSION_CHECKLIST.md`
-- **Step-by-Step Demo Script (&le; 5 Minutes):** `docs/demo_script.md`
 - **License (MIT):** `LICENSE` (Copyright 2026 Arpit Sharma)
 
 ---

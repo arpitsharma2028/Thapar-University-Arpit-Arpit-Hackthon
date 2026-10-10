@@ -205,7 +205,7 @@ class SentimentAnalyzer:
             for word in words:
                 # Check for negation word
                 if word in NEGATION_WORDS:
-                    negation_window = 3 # covers next 3 tokens
+                    negation_window = 4 # covers next 4 tokens (e.g. 'not facing a credit crisis')
                     continue
 
                 is_negated = negation_window > 0
