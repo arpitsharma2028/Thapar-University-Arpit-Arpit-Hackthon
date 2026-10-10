@@ -41,26 +41,26 @@ Common industry challenges include:
 
 ```mermaid
 flowchart TD
-    subgraph Data Sources
-        DS1[Synthetic Demo Datasets\n50 News • 40 Social • 16 Stocks]
-        DS2[Live Public News RSS Feed\nWSJ Markets / MarketWatch]
-        DS3[External Market Data\nYahoo Finance / Calibrated Cache]
+    subgraph S_DATA ["Data Sources"]
+        DS1["Synthetic Demo Datasets<br/>50 News • 40 Social • 16 Stocks"]
+        DS2["Live Public News RSS Feed<br/>WSJ Markets / MarketWatch"]
+        DS3["External Market Data<br/>Yahoo Finance / Calibrated Cache"]
     end
 
-    subgraph Ingestion & Preprocessing
-        IL[Ingestion Layer\nCSV Loader • RSS Parser • Deduplicator]
-        PP[Preprocessing Pipeline\nRegex Cleaner • Cashtag Extractor • Clause Splitter]
+    subgraph S_INGEST ["Ingestion & Preprocessing"]
+        IL["Ingestion Layer<br/>CSV Loader • RSS Parser • Deduplicator"]
+        PP["Preprocessing Pipeline<br/>Regex Cleaner • Cashtag Extractor • Clause Splitter"]
         DS1 --> IL
         DS2 --> IL
         IL --> PP
     end
 
-    subgraph Unified NLP Risk Engine
-        RE[Unified Risk Engine Manager]
-        SA[Financial Sentiment Analyzer\nFinBERT Transformer • Loughran-McDonald Fallback\nPolarity: -1.0 to +1.0]
-        EC[Evidence-Gated Event Classifier\n9 Financial Categories • Confidence Gating\nPrevents Noise False Positives]
-        EE[Evidence Entity Extractor\n16 Blue-Chip Tickers • Cashtags • No Arbitrary Fallback]
-        IS[Active Impact Severity Scorer\nActive Ridge Regressor Pipeline • Scores: 1.0 to 10.0]
+    subgraph S_NLP ["Unified NLP Risk Engine"]
+        RE["Unified Risk Engine Manager"]
+        SA["Financial Sentiment Analyzer<br/>FinBERT Transformer • Loughran-McDonald Fallback<br/>Polarity: -1.0 to +1.0"]
+        EC["Evidence-Gated Event Classifier<br/>9 Financial Categories • Confidence Gating<br/>Prevents Noise False Positives"]
+        EE["Evidence Entity Extractor<br/>16 Blue-Chip Tickers • Cashtags • No Arbitrary Fallback"]
+        IS["Active Impact Severity Scorer<br/>Active Ridge Regressor Pipeline • Scores: 1.0 to 10.0"]
         
         PP --> RE
         RE --> SA
@@ -69,9 +69,9 @@ flowchart TD
         RE --> IS
     end
 
-    subgraph Persistence & API Layer
-        DB[(SQLite WAL Store\nevents • portfolio • history • stress • quotes)]
-        API[FastAPI Backend REST Service\nPydantic v2 • OpenAPI /docs • Port 8000]
+    subgraph S_STORE ["Persistence & API Layer"]
+        DB[("SQLite WAL Store<br/>events • portfolio • history • stress • quotes")]
+        API["FastAPI Backend REST Service<br/>Pydantic v2 • OpenAPI /docs • Port 8000"]
         SA --> DB
         EC --> DB
         EE --> DB
@@ -80,14 +80,14 @@ flowchart TD
         DS3 <--> API
     end
 
-    subgraph Institutional Frontend
-        UI[React 19 + Vite Dashboard\nRecharts • Dark Institutional Theme • Port 5173]
+    subgraph S_FRONT ["Institutional Frontend"]
+        UI["React 19 + Vite Dashboard<br/>Recharts • Dark Institutional Theme • Port 5173"]
         API <--> UI
     end
 
-    subgraph Downstream Risk Engines
-        MOD_A[Module A: Tactical Index Rebalancer\nMark-to-Market Accounting • Bounded Simplex [1%, 25%]\nTurnover Cap 15% • Tx Cost 5 bps • Benchmark Compare]
-        MOD_B[Module B: Wholesale Stress Testing\n$50M Book • Equities/Bonds/Derivatives/Cash\nImpact > 7.0 Trigger • Loss: -$4.69M (1.0x) / -$7.50M (1.6x)]
+    subgraph S_DOWN ["Downstream Risk Engines"]
+        MOD_A["Module A: Tactical Index Rebalancer<br/>Mark-to-Market Accounting • Bounded Simplex (1% to 25%)<br/>Turnover Cap 15% • Tx Cost 5 bps • Benchmark Compare"]
+        MOD_B["Module B: Wholesale Stress Testing<br/>$50M Book • Equities/Bonds/Derivatives/Cash<br/>Impact &gt; 7.0 Trigger • Loss: -$4.69M (1.0x) / -$7.50M (1.6x)"]
         API --> MOD_A
         API --> MOD_B
     end
