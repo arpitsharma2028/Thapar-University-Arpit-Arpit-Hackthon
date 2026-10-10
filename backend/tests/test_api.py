@@ -76,3 +76,25 @@ def test_api_metrics_endpoint(client):
     assert "portfolio" in data
     assert "risk_engine" in data
     assert "sector_allocation" in data
+
+def test_api_rss_ingestion_endpoint(client):
+    response = client.post("/api/events/ingest/rss?limit=2")
+    assert response.status_code == 200
+    data = response.json()
+    assert "status" in data
+    assert data["status"] in ("success", "offline", "empty")
+
+def test_api_stress_test_boundary_below_threshold(client):
+    # Event with impact < 7.0 should NOT trigger wholesale stress test
+    low_event = {
+        "event_id": "EVT-LOW-IMPACT",
+        "headline": "Minor retail store renovations announced",
+        "impact_score": 4.5,
+        "sentiment_score": 0.1,
+        "category": "Other"
+    }
+    # Direct run with trigger event
+    from backend.services.stress_test_service import StressTestService
+    service = StressTestService()
+    mapped = service.map_event_to_scenario(low_event)
+    assert mapped is None  # Below 7.0 threshold, must not trigger

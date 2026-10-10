@@ -18,6 +18,37 @@ def test_sentiment_negative_crisis(engine):
     assert -1.0 <= signal["sentiment_score"] <= 1.0
     assert signal["sentiment_score"] < -0.2
 
+# --- Negation & Contrast Regression Test Suite ---
+
+def test_negation_strong_growth(engine):
+    text = "The company reported strong revenue growth."
+    signal = engine.process_text(text)
+    assert signal["sentiment_score"] > 0.3
+
+def test_negation_did_not_achieve(engine):
+    text = "The company did not achieve its revenue target."
+    signal = engine.process_text(text)
+    assert signal["sentiment_score"] < 0.0
+
+def test_negation_not_facing_crisis(engine):
+    text = "The company is not facing a credit crisis."
+    signal = engine.process_text(text)
+    # Negated crisis should mitigate negative severity to neutral/mild
+    assert signal["sentiment_score"] >= -0.15
+
+def test_negation_contrast_clause(engine):
+    text = "Revenue increased, but the future outlook weakened."
+    signal = engine.process_text(text)
+    # The post-contrast clause dominates
+    assert signal["sentiment_score"] < 0.0
+
+def test_negation_no_improvement(engine):
+    text = "The company reported no improvement in demand."
+    signal = engine.process_text(text)
+    assert signal["sentiment_score"] < 0.0
+
+# --- Event Classification & Evidence Gating ---
+
 def test_event_classification_geopolitical(engine):
     text = "Middle East shipping tensions escalate as naval patrols reroute tankers away from key straits."
     signal = engine.process_text(text)
@@ -28,11 +59,29 @@ def test_event_classification_regulatory(engine):
     signal = engine.process_text(text)
     assert signal["category"] == "Regulatory"
 
+def test_event_classification_macro_fed(engine):
+    text = "Fed holds rates steady, signals cuts in upcoming FOMC policy meeting."
+    signal = engine.process_text(text)
+    assert signal["category"] == "Macroeconomic"
+
+def test_event_classification_croissant_bakery_gating(engine):
+    text = "Local bakery wins award for best croissant."
+    signal = engine.process_text(text)
+    # Must NOT be classified as Earnings or assign ticker SPY
+    assert signal["category"] == "Other"
+    assert signal["tickers"] == []
+    assert signal["companies"] == []
+
+def test_event_classification_tesla_recall_not_earnings(engine):
+    text = "Tesla recalls 2M vehicles over defect."
+    signal = engine.process_text(text)
+    assert signal["category"] != "Earnings"
+    assert "TSLA" in signal["tickers"]
+
 def test_impact_score_range(engine):
     text = "Catastrophic global supply chain embargo declared amid unprecedented maritime blockade."
     signal = engine.process_text(text)
     assert 1.0 <= signal["impact_score"] <= 10.0
-    # High impact should exceed 7.0
     assert signal["impact_score"] >= 7.0
 
 def test_entity_extraction(engine):
@@ -40,3 +89,9 @@ def test_entity_extraction(engine):
     signal = engine.process_text(text)
     assert "MSFT" in signal["tickers"] or "AAPL" in signal["tickers"]
     assert signal["sector"] == "Technology"
+
+def test_empty_and_malformed_text(engine):
+    signal_empty = engine.process_text("")
+    assert signal_empty["sentiment_score"] == 0.0
+    assert signal_empty["category"] == "Other"
+    assert signal_empty["tickers"] == []
