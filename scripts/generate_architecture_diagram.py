@@ -95,11 +95,11 @@ def create_diagram():
     ax.text(8.0, 2.1, "4. DOWNSTREAM EXECUTION MODULES", color='#f59e0b', fontsize=10, fontweight='bold')
     draw_box(1.5, 0.4, 6.2, 1.4, '#151e32', '#3b82f6', 
              "Module A: Tactical High-Frequency Rebalancer", 
-             "16-Asset Index • new_w = clamp(old_w + λ*sent*(imp/10))\nNormalized Σw=100% • Min/Max Floor & Cap • Audit History", '#60a5fa')
+             "16-Asset Index • Bounded Simplex [1%, 25%], Σw=100%\nTurnover Cap 15% • Tx Cost 5 bps • Benchmark Compare", '#60a5fa')
     
     draw_box(8.3, 0.4, 6.5, 1.4, '#151e32', '#ef4444', 
              "Module B: Strategic Wholesale Stress Testing", 
-             "$50M Wholesale Multi-Asset Book (Equities, Bonds, Derivs, Cash)\nShocks >= 7.0 • Scenario Simulations • Asset & Sector Breakdown", '#f87171')
+             "$50M Wholesale Book (Equities, Bonds, Derivs, Cash)\nImpact > 7.0 Trigger • Loss: -$4.69M (1.0x) / -$7.50M (1.6x)", '#f87171')
 
     # Draw connection lines from API to modules
     draw_arrow(4.6, 1.8, 4.6, 1.8)

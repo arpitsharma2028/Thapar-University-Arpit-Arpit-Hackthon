@@ -272,16 +272,16 @@ def build_pdf():
         [
             Paragraph(
                 "• <b>Multi-Asset Portfolio:</b> $50.0M wholesale banking book across Equities ($22.5M), Bonds ($15.0M), Derivatives ($7.5M), Cash ($5.0M).<br/>"
-                "• <b>Explicit Trigger Logic:</b> Automatic scenario execution when NLP impact score &ge; 7.0 with deduplication protection.<br/>"
+                "• <b>Explicit Trigger Logic:</b> Automatic scenario execution when NLP impact score &gt; 7.0 with deduplication protection.<br/>"
                 "• <b>Asset-Specific Shocks:</b> Equity price shocks, duration-based bond yield shifts, derivative volatility skew, zero shock on cash.<br/>"
-                "• <b>Granular Breakdown:</b> Asset-class losses, sector waterfall, and per-asset contribution percentages.",
+                "• <b>Reconciled Loss Settings:</b> -$4.69M (-9.38%) at 1.0x baseline, -$7.50M (-15.0%) at 1.6x amplified shock.",
                 body_text
             ),
             Paragraph(
                 "• <b>FastAPI Backend:</b> Clean architecture, OpenAPI /docs, strict CORS, rate limiting, and request correlation IDs.<br/>"
                 "• <b>Public RSS Ingestion:</b> Live unauthenticated WSJ Markets RSS feed with offline synthetic replay fallback.<br/>"
                 "• <b>React + Vite Frontend:</b> Liquid Glass dark UI with Recharts, interactive text analysis sandbox, and Monte Carlo forecasts.<br/>"
-                "• <b>37 Pytest Tests:</b> 37 unit and integration tests passing cleanly with isolated temporary SQLite fixtures.",
+                "• <b>40 Pytest Tests:</b> 40 unit and integration tests passing cleanly with isolated temporary SQLite fixtures.",
                 body_text
             )
         ]
@@ -316,31 +316,31 @@ def build_pdf():
         [
             Paragraph("NLP Pipeline Latency", body_text),
             Paragraph("< 200 ms on Windows laptop CPU", body_text),
-            Paragraph("<b>30.5 ms median warm inference</b> (FinBERT + Loughran-McDonald)", body_text),
+            Paragraph("<b>29.0 ms median warm inference</b> (FinBERT + Loughran-McDonald, P95 46.2 ms)", body_text),
             Paragraph("<font color='#34d399'>EXCEEDED</font>", body_text)
         ],
         [
-            Paragraph("Sentiment Benchmark", body_text),
-            Paragraph("Financial PhraseBank (AllAgree)", body_text),
-            Paragraph("<b>92.7% Accuracy / 92.6% Macro-F1</b> (vs 50.3% naive baseline)", body_text),
+            Paragraph("Sentiment Benchmarks", body_text),
+            Paragraph("Dual evaluation (In-domain + Generalization)", body_text),
+            Paragraph("<b>PhraseBank: 89.0% Acc / 88.7% F1</b> • <b>Unseen News: 69.3% Acc / 68.6% F1</b> (vs 42.7% baseline)", body_text),
             Paragraph("<font color='#34d399'>VERIFIED</font>", body_text)
         ],
         [
             Paragraph("Index Rebalancing (Module A)", body_text),
             Paragraph("10–20 stock portfolio rebalance", body_text),
-            Paragraph("<b>16 Public tickers</b>, mark-to-market, simplex bounded [1%, 25%]", body_text),
+            Paragraph("<b>16 Public tickers</b>, mark-to-market, simplex bounded [1%, 25%], 15% turnover cap", body_text),
             Paragraph("<font color='#34d399'>VERIFIED</font>", body_text)
         ],
         [
             Paragraph("Stress Testing (Module B)", body_text),
-            Paragraph("Wholesale portfolio shock &ge; 7", body_text),
-            Paragraph("<b>$50M book</b>: -$4.69M net loss (-9.38%) on Geopolitical (Bonds +$0.68M)", body_text),
+            Paragraph("Wholesale portfolio shock &gt; 7.0", body_text),
+            Paragraph("<b>$50M book</b>: -$4.69M (-9.38%) at 1.0x baseline, -$7.50M (-15.0%) at 1.6x shock", body_text),
             Paragraph("<font color='#34d399'>VERIFIED</font>", body_text)
         ],
         [
             Paragraph("Automated Test Suite", body_text),
             Paragraph("Unit and integration tests", body_text),
-            Paragraph("<b>37 / 37 Pytest test cases passing</b> cleanly with isolated DB fixtures", body_text),
+            Paragraph("<b>40 / 40 Pytest test cases passing</b> cleanly with isolated DB fixtures", body_text),
             Paragraph("<font color='#34d399'>100% PASS</font>", body_text)
         ],
         [

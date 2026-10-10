@@ -1,175 +1,81 @@
-# FinSight AI — Demo Script & Hackathon Presentation Walkthrough
-**Platform:** Market & Portfolio Risk Intelligence Platform  
+# FinSight AI — Official 5-Minute Demo Video Walkthrough Script
+
+**Platform:** FinSight AI — Market & Portfolio Risk Intelligence  
 **Hackathon:** S&P Global & CRISIL Campus Hackathon 2026  
 **Candidate Name:** Arpit Sharma  
 **College / Campus:** Thapar Institute of Engineering and Technology (TIET)  
-**Total Target Walkthrough Duration:** 7–10 Minutes  
+**Strict Video Duration Target:** **Under 5:00 Minutes** *(Mandated by DoSelect Case Study Guidelines: "A functional live demonstration of the application, not to exceed 5 minutes")*
 
 ---
 
-## 1. The 60-Second Elevator Pitch
+## 1. The 45-Second Elevator Pitch (0:00 – 0:45)
 
-> *"Respected Judges, in quantitative asset management and wholesale banking, information latency is the single greatest catalyst for severe portfolio drawdowns. Traditional risk systems look at backward-looking historical volatility matrices, missing the critical window when catastrophic news, regulatory enforcement, or social momentum first breaks.
+> *"Respected Judges, in quantitative asset management and institutional credit surveillance, information latency is the single greatest driver of portfolio drawdowns. Traditional risk architectures rely heavily on lagging covariance matrices and end-of-day VaR, missing the critical window when catastrophic news, regulatory enforcement, or supply chain shocks first break in textual wire feeds.
 >
-> We built **FinSight AI** — a high-speed, lightweight, unified NLP Risk Intelligence platform that bridges unstructured market text directly into programmatic portfolio decisions. Running entirely on a standard CPU without requiring GPUs, FinSight AI parses news articles and social media feeds in under 20 milliseconds, extracts sentiment polarity, assigns structured risk categories, calculates predictive impact severity, and drives three coordinated engines:
+> We built **FinSight AI** — a lightweight, institutional-grade financial NLP risk intelligence platform that bridges unstructured market text directly into programmatic portfolio decisions. Running 100% locally on CPU without remote cloud LLMs, FinSight AI parses news and social streams in under 35 milliseconds, extracts sentiment, classifies financial taxonomy across 9 categories, scores predictive impact severity, and drives two coordinated downstream execution engines:
+> - **Module A (Tactical Index Rebalancer):** Continuously reallocates a 16-asset blue-chip index using bounded simplex projection ($w_i \in [1\%, 25\%]$, $\sum w_i \equiv 100\%$), 15% turnover cap, and equal-weight benchmark tracking.
+> - **Module B (Strategic Wholesale Stress Testing):** Detects systemic shock breaches ($\text{impact} > 7.0$) and simulates multi-asset capital loss on a $50M wholesale banking book.
 >
-> 1. **Module A (Tactical Index Rebalancer):** Dynamically rebalances stock index weights using a bounded sensitivity formula with strict 100% normalization.
-> 2. **Module B (Strategic Stress Testing):** Automatically detects high-impact shocks (severity &ge; 7.0) and simulates catastrophic capital loss across a $50M wholesale banking book of Equities, Bonds, Derivatives, and Cash.
-> 3. **Market Intelligence & Stochastic Forecasting:** Integrates live market feeds, Pearson cross-asset correlation, and a 14-day Monte Carlo Geometric Brownian Motion engine conditioned directly on FinSight NLP risk sentiment.
->
-> Let us now walk you through the live, interactive system."*
+> Let us walk through the live application."*
 
 ---
 
-## 2. Official Competition 5-Minute Live Demo Track (Strict &le; 5:00)
+## 2. Minute-by-Minute Screen Walkthrough (0:45 – 5:00)
 
-*Required by official DoSelect Case Study Guidelines: "A functional live demonstration of the application, not to exceed 5 minutes."*
+### Segment 1: NLP Risk Intelligence & Custom Signal Sandbox (0:45 – 1:45)
+- **Screen to open:** Navigate to `Risk Intelligence` tab (`/nlp`).
+- **Actions to perform:**
+  1. Show the **Interactive NLP Sandbox**. Click the preset button: *"Geopolitical Strait Tension"*.
+  2. Notice that the publisher source is accurately displayed as *"Curated Maritime News Demo"* (not misattributed).
+  3. Click **"Analyze & Extract Risk Signal"**.
+  4. Point out the extracted output ribbon:
+     - **Sentiment Score:** Negative (-0.72) via `ProsusAI/finbert`.
+     - **Event Taxonomy:** Geopolitical.
+     - **Predicted Severity:** 8.5 / 10 via the active Ridge regression pipeline.
+     - **Softmax Decision Margin:** Displayed transparently from model logits.
+     - **Traceability:** Persisted in SQLite event log.
+  5. Show the downstream action buttons enabled: *"Apply Signal to Tactical Rebalancer"* and *"Stress Test Wholesale Portfolio (Impact > 7.0)"*.
+  6. *(Optional quick check):* Enter *"Local bakery wins award for best croissant"* $\to$ Show it correctly classifies as `Other` with empty tickers `[]`, proving the engine never forces noise into `Earnings` or defaults to `SPY`.
 
-| Timestamp | Screen / Action | Key Judge Talking Points |
-| :--- | :--- | :--- |
-| **0:00 – 0:45** | **Executive Overview** (`/`) | • Institutional Liquid Glass command center<br/>• Real-time KPI row: \$10M book value, VaR (95%), sentiment score<br/>• Live market gainers/losers ticker & NLP Risk Signal Feed |
-| **0:45 – 1:45** | **NLP Risk Engine** (`/nlp`) | • Ingests news & social media feeds<br/>• Click demo prompt: *"Geopolitical Strait Tension"*<br/>• Sub-20ms inference: **Sentiment (-0.72)**, **Category (Geopolitical)**, **Impact (8.5/10)**, tickers extracted |
-| **1:45 – 2:45** | **Module A: Tactical Rebalancing** (`/module-a`) | • Subscribes to sentiment scores<br/>• Adjust sensitivity slider ($\lambda = 0.035$)<br/>• Click **Simulate Next Event**: shows before/after weights bar chart, zero-negative weights clamp, 100% normalization |
-| **2:45 – 3:45** | **Module B: Wholesale Stress Test** (`/module-b`) | • Subscribes to Category & Impact Score ($\ge 7.0$)<br/>• Select *"Global Geopolitical Escalation"* (Severity 9.2)<br/>• Click **Execute Stress Test**: simulates loss across \$50M wholesale book (Equities, Bonds flight-to-safety, Derivatives, Cash) |
-| **3:45 – 4:30** | **Market Intelligence & Stochastic MC** (`/market`) | • Live Yahoo Finance feed integration<br/>• 100-path Monte Carlo Geometric Brownian Motion cone conditioned on NLP drift boost<br/>• Pearson cross-asset correlation |
-| **4:30 – 5:00** | **Audit Trail & Wrap-up** (`/history`) | • Immutable audit log for regulatory compliance<br/>• 26/26 unit tests passing, runs 100% locally on standard CPU without GPUs |
+### Segment 2: Module A — Tactical Index Rebalancer (1:45 – 2:45)
+- **Screen to open:** Navigate to `Module A: Tactical Rebalancer` tab (`/module-a`).
+- **Actions to perform:**
+  1. Show the **Algorithmic Weight Rebalance Formula** card explaining the 3-step bounded simplex redistribution ($w_i \in [1\%, 25\%]$, $\sum w_i = 100\%$).
+  2. Show the **Active Safeguards Ribbon**: Max Turnover Cap (15.0%), Transaction Fee (5 bps), Benchmark Reference (Equal-Weight 16-Stock Index).
+  3. Adjust the Sensitivity slider ($\lambda = 0.035$) and click **"Simulate Next Event"**.
+  4. Point out the results:
+     - **Stock Allocation Bar Chart:** Clear Before vs After comparison across 16 blue chips.
+     - **Safeguard Enforcement:** NVDA/Tech weights adjust dynamically while respecting the 25% upper ceiling and 1% floor.
+     - **Turnover & Fee Accounting:** Shows turnover percentage within the 15% cap and realistic transaction fees deducted mark-to-market.
+     - **Strategy vs Equal-Weight Benchmark:** Dynamic tracking of cumulative returns against the benchmark.
 
----
+### Segment 3: Module B — Wholesale Portfolio Stress Testing (2:45 – 3:45)
+- **Screen to open:** Navigate to `Module B: Wholesale Stress Testing` tab (`/module-b`).
+- **Actions to perform:**
+  1. Point out the baseline wholesale balance sheet: **$50.0 Million** book across Equities ($22.5M, 45%), Bonds ($15.0M, 30%), Derivatives ($7.5M, 15%), and Cash ($5.0M, 10%).
+  2. Point out the systemic threshold badge: **High-Impact Trigger Threshold > 7.0**.
+  3. Select **"Global Geopolitical Escalation"** (Severity 9.2) with **Severity Multiplier = 1.0x (Baseline)**. Click **"Execute Stress Test"**:
+     - **Total Capital Loss:** -$4.69M (-9.38%), Post-stress value: $45.31M.
+     - **Asset-Level Shock Transmission:** Equities loses -$3.71M (-16.5%), Bonds gains +$0.68M (+4.5% flight-to-safety), Derivatives loses -$1.65M (-22.0%), Cash has $0.00 loss.
+  4. Now move the Severity Multiplier slider to **1.6x (Amplified Shock)** and click **"Execute Stress Test"**:
+     - **Amplified Capital Loss:** Exactly -$7.50M (-15.00%), Post-stress value: $42.50M.
+     - Highlight that both baseline (1.0x) and amplified (1.6x) shock settings are deterministically traceable and verified in code.
 
-## 3. Extended Minute-by-Minute Live Demo Walkthrough (7–10 Minutes Deep-Dive)
+### Segment 4: Live Public Data Ingestion & Market Analytics (3:45 – 4:30)
+- **Screen to open:** Navigate to `Event Explorer` tab (`/events`).
+- **Actions to perform:**
+  1. Show the event table populated from the local SQLite store.
+  2. Click the blue **"Ingest Live RSS"** button:
+     - Shows live HTTP polling of the Wall Street Journal / MarketWatch RSS feed.
+     - Live market headlines are normalized into structured risk signals and appended to the table with source badge *"WSJ Markets RSS"*.
+  3. Jump to `Market Intelligence` tab (`/market-intel`):
+     - Show the **100-path Monte Carlo Geometric Brownian Motion (GBM)** price projection cone (P5 to P95) conditioned on NLP sentiment drift.
+     - Show the Base-100 normalized cross-asset correlation matrix.
 
-### Minute 0:00 – 1:30 | Screen 1: Executive Overview Dashboard
-* **What screen to open:** Open `http://localhost:5173/` (Nav: **Overview**).
-* **What to point out:**
-  1. **Top Bar Live Ticker:** Shows continuous risk feed ingestion from the SQLite store.
-  2. **Top KPI Cards:**
-     - Portfolio Valuation: `$10.00M` baseline.
-     - Portfolio Sentiment: `+0.05` (Neutral to Moderately Bullish).
-     - 1-Day VaR (95%): `$245K` parametric loss estimate.
-     - Engine Decisions: Rebalances & Stress tests logged.
-  3. **Interactive Visualizations:**
-     - Point to the **Valuation Dynamic Trajectory** line chart (mark-to-market performance).
-     - Point to the **Index Sector Diversification** donut chart (Technology, Financials, Energy, etc.).
-  4. **Latest NLP Risk Signals Table:** Point out the color-coded **Category Badges** (Geopolitical, Macro, Credit, Earnings), **Sentiment Badges**, and **Severity Badges** (1.0 to 10.0 scale).
-
-* **What to explain to judges:**
-  > *"Notice how cleanly our design integrates high-density institutional metrics without clutter. Every number here is computed dynamically from real database records, not hardcoded mockups."*
-
----
-
-### Minute 1:30 – 3:15 | Screen 2: Unified NLP Risk Engine Explorer
-* **What screen to open:** Click on **Risk Intelligence** in the left sidebar.
-* **What to explain:**
-  > *"Here is our core NLP engine. Instead of calling expensive third-party APIs that can fail during a demo or require confidential data, we implemented a CPU-optimized, scikit-learn pipeline combined with Loughran-McDonald financial sentiment lexicons."*
-* **What action to take (Live Demo Step):**
-  1. Under **"Load Demo Prompt"**, click the button: **`Geopolitical Strait Tension`**.
-  2. Show that the textarea populates with:
-     > *"Naval escort operations initiated in Red Sea after commercial tanker attacks; oil insurance premiums spike 45% and container rerouting adds 14 days transit."*
-  3. Click the blue button: **`Analyze & Extract Risk Signal`**.
-* **What output appears:**
-  - Instantly (< 25 ms), the **Extracted Risk Signal Output** box renders:
-    - **Sentiment Polarity:** `Negative / Bearish (-0.68 to -0.75)`
-    - **Event Taxonomy:** `Geopolitical`
-    - **Predicted Severity:** `8.5 / 10 (High Risk)`
-    - **Identified Entities & Sector:** `Energy (XOM, CVX)`
-    - **Model Confidence:** `91%`
-* **What to explain to judges:**
-  > *"Notice how the model caught the numerical intensity (+45% insurance spike) and severity terms ('tanker attacks', 'rerouting') to assign an 8.5 impact score, classifying it as Geopolitical. We can immediately route this structured signal downstream."*
-
----
-
-### Minute 3:15 – 5:00 | Screen 3: Module A — Tactical Index Rebalancer
-* **What screen to open:** Click on **Module A — Rebalancer** in the left sidebar.
-* **What to explain:**
-  > *"Module A addresses tactical high-frequency rebalancing for a 16-asset blue-chip index. Every stock starts with an initial target allocation summing exactly to 100%."*
-* **What action to take (Live Demo Step):**
-  1. Highlight the **Algorithmic Weight Rebalance Formula** card:
-     $$\text{new\_weight}_i = \text{clamp}(\text{old\_weight}_i + \lambda \times \text{sentiment} \times (\text{impact}/10), 1.0\%, 25.0\%)$$
-     followed by strict normalization $\sum w_i = 100.0\%$.
-  2. Adjust the **Sensitivity Slider ($\lambda$)** to `0.035`.
-  3. Click **`Simulate Next Event`** (or click **`Batch Simulate (5 Events)`**).
-* **What output appears:**
-  1. The **Latest Rebalance Trigger Event** banner updates with the triggering headline, sentiment, and portfolio value delta.
-  2. The **Stock Allocation Weight Changes (Before vs After)** grouped bar chart animates:
-     - Positive sentiment stocks (e.g., $NVDA on earnings beat) visibly grow in green.
-     - Negative sentiment stocks (e.g., $TSLA on margin contraction) visibly shrink in red.
-  3. The **16-Asset Portfolio Table** shows updated current weights, share counts, mark-to-market prices, and basis-point deltas.
-* **What to explain to judges:**
-  > *"Notice how the algorithm strictly prevents negative weights and enforces the 1% floor and 25% concentration ceiling, while total portfolio weight always normalizes to exactly 100.00%."*
-
----
-
-### Minute 5:00 – 6:45 | Screen 4: Module B — Wholesale Portfolio Stress Testing
-* **What screen to open:** Click on **Module B — Stress Testing** in the left sidebar.
-* **What to explain:**
-  > *"While Module A manages tactical single-stock weights, Module B evaluates strategic solvency for a wholesale banking institution managing a $50 Million multi-asset portfolio (Equities, Bonds, Derivatives, and Cash)."*
-* **What action to take (Live Demo Step):**
-  1. Select the scenario card: **`Global Geopolitical Escalation & Supply Chain Severance`** (Severity `9.2/10`).
-  2. Point out the Severity Multiplier slider (`1.0x`).
-  3. Click the red button: **`Execute Stress Test`**.
-* **What output appears:**
-  1. **Pre-Stress Wholesale Value:** `$50.00M`.
-  2. **Total Simulated Capital Loss:** `-$8.25M (-16.50%)`.
-  3. **Post-Stress Book Value:** `$41.75M`.
-  4. **Asset Class Loss Distribution Chart:**
-     - Equities: `-$3.71M (-16.5%)`
-     - Derivatives: `-$1.65M (-22.0%)`
-     - Bonds: `+$0.68M (+4.5% safe haven flight)`
-     - Cash: `$0.00M (Capital preserved)`
-  5. **Worst Affected Positions:** Technology (`-$1.77M`), Industrials, and Financials.
-* **What to explain to judges:**
-  > *"Notice how our stress engine doesn't just apply a blanket shock. Bonds act as a flight-to-safety buffer, derivatives face amplified non-linear volatility losses, and energy rallies while tech suffers from semiconductor embargoes."*
-
----
-
-### Minute 6:45 – 8:00 | Screen 5: Market Intelligence & Stochastic Monte Carlo Forecasting
-* **What screen to open:** Click on **Market Intelligence** in the left sidebar.
-* **What to explain:**
-  > *"To provide asset managers with forward-looking risk visibility, we integrated market intelligence feeds and stochastic Monte Carlo forecasting inspired by quantitative research."*
-* **What action to take (Live Demo Step):**
-  1. Select a ticker such as **NVDA** or **AAPL**.
-  2. Point to the **14-Day Monte Carlo Forecast Cone**:
-     - Explain the 100 simulation paths generated using **Geometric Brownian Motion (GBM)**:
-       $$S_{t+\Delta t} = S_t \exp\left(\left(\mu - \frac{1}{2}\sigma^2\right)\Delta t + \sigma\sqrt{\Delta t}Z\right)$$
-     - Highlight that the drift parameter $\mu$ is **sentiment-conditioned**: positive FinSight sentiment nudges drift upward, while negative news pulls it downward.
-     - Show the **P5 (Bearish / 5th percentile)**, **P50 (Median expectation)**, and **P95 (Bullish / 95th percentile)** confidence bands.
-  3. Scroll to the **Base-100 Normalized Multi-Stock Comparison**:
-     - Toggle tickers (e.g., NVDA, AAPL, MSFT, JPM) to compare relative performance from a common baseline.
-  4. Show the **Pearson Correlation Matrix Heatmap**:
-     - Point out the pairwise correlation coefficients between tech, banking, and energy assets.
-  5. Point out the **Top Gainers & Losers** real-time snapshot table.
-* **What to explain to judges:**
-  > *"By coupling historical volatility $\sigma$ with sentiment-derived drift $\mu$, portfolio managers can stress-test expected price paths before taking rebalance actions."*
-
----
-
-### Minute 8:00 – 9:00 | Screen 6 & 7: Event Explorer, Audit Trail & 1-Click Master Scenario
-* **What screen to open:**
-  1. Click on **Event Explorer**: Show judges the multi-dimensional filters (Filter by News vs Social, Category, Severity &ge; 7.0, Search). Click on any event to view the raw structured payload.
-  2. Click on **Simulation History**: Show the immutable audit trail of all rebalance decisions and stress test runs with exact timestamps and dollar shifts.
-* **What action to take (Master Demo Scenario):**
-  - From anywhere in the application, click the purple button in the top header: **`Run Demo Scenario`**.
-* **What happens:**
-  - In one unified execution, the platform:
-    1. Injects a high-severity geopolitical event into the NLP engine.
-    2. Runs Module A tactical rebalancing.
-    3. Detects severity &ge; 7.0 and triggers Module B wholesale stress testing.
-    4. Displays a confirmation toast with loss figures and redirects to the refreshed Overview.
-* **Closing Remarks to Judges:**
-  > *"FinSight AI represents a comprehensive, fully functional, mathematically sound implementation of market text risk intelligence. The entire system is running right here locally on this laptop, backed by automated tests, clean REST APIs, and an institutional dashboard. Thank you, and we welcome your questions."*
-
----
-
-## 3. Potential Judge Questions & Suggested Answers
-
-**Q1: Is this using real LLMs like GPT-4 or OpenAI?**  
-*Answer:* *"We deliberately designed this system using a lightweight, CPU-optimized scikit-learn pipeline combined with Loughran-McDonald financial lexicons and calibrated regressors. This guarantees deterministic sub-20ms inference, runs entirely offline on standard hardware without GPU or API key dependencies, and eliminates prompt injection vulnerabilities in automated rebalancing."*
-
-**Q2: How do you prevent negative weights or runaway concentration in Module A?**  
-*Answer:* *"Our formula applies a three-stage mathematical safeguard: first, weight deltas are proportional to sentiment and impact severity; second, we clamp every stock to a configured floor (min 1.0%) and ceiling (max 25.0%); third, we apply a vector normalization step dividing each weight by the sum of weights, ensuring the portfolio always sums strictly to 100.00%."*
-
-**Q3: How do you prevent API rate limits or network failures during live market analysis?**  
-*Answer:* *"Our Market Intelligence service employs a resilient offline-first caching architecture. It attempts live fetching via `yfinance`, but if the network is unavailable or rate-limited, it falls back seamlessly to pre-seeded 180-day OHLCV datasets and calculates exact historical volatility without throwing runtime errors."*
-
-**Q4: How would you connect this to real S&P Global and CRISIL data in production?**  
-*Answer:* *"Our ingestion layer is fully decoupled behind the `EventService` interface. Connecting to the S&P Capital IQ API, S&P Global Market Intelligence News Wire, or CRISIL credit rating bulletins simply requires implementing a lightweight WebSocket/REST adapter that serializes inbound JSON into our existing Pydantic schema."*
+### Segment 5: QA Verification & Closing Summary (4:30 – 5:00)
+- **Screen to open:** Show terminal or summarize key technical metrics.
+- **Talking points:**
+  - **Automated Testing:** 40 / 40 passing unit and integration tests executing on isolated temporary database fixtures.
+  - **Empirical NLP Evaluation:** Evaluated on both in-domain PhraseBank (89.0% Acc, 88.7% F1) and an independent unseen dataset (69.3% Acc, 68.6% F1) without data contamination.
+  - **CPU Latency:** Median warm inference of ~29 ms without requiring cloud GPUs or paid APIs.
+  - **Closing Statement:** *"FinSight AI delivers a completely transparent, reproducible, and production-ready financial risk intelligence prototype. Thank you."*

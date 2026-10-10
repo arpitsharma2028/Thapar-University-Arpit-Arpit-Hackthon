@@ -27,9 +27,9 @@ Common industry challenges include:
 
 ### The FinSight AI Solution
 **FinSight AI** is an institutional-grade, CPU-optimized Market & Portfolio Risk Intelligence platform designed to run locally without paid credentials or remote LLMs. It ingests both synthetic baseline event streams and live public RSS feeds, parses textual risk signals through a unified financial NLP engine, and directly drives downstream portfolio allocation and stress-testing engines:
-- **Unified NLP Risk Engine:** Pretrained financial language model (ProsusAI/FinBERT) with calibrated Loughran-McDonald fallback, negation window reset, evidence-gated taxonomy (9 financial categories), evidence-based entity extraction, and active Ridge regression impact scoring.
+- **Unified NLP Risk Engine:** Pretrained financial language model (`ProsusAI/finbert`) with calibrated Loughran-McDonald fallback, negation window reset, evidence-gated taxonomy (9 financial categories), evidence-based entity extraction, and active Ridge regression impact scoring.
 - **Module A (Tactical Index Rebalancer):** Mark-to-market dynamic weight rebalancing across a 16-asset blue-chip index with bounded simplex redistribution ($w_i \in [1\%, 25\%]$, $\sum w_i = 100\%$), 15% turnover cap, 5 bps transaction costs, and equal-weight benchmark comparison.
-- **Module B (Strategic Wholesale Stress Testing):** Event-driven stress testing on a $50M wholesale banking book (Equities, Bonds, Derivatives, Cash) triggered by high-impact signals ($\ge 7.0$) with asset-level transmission models and deterministic scenario tracking.
+- **Module B (Strategic Wholesale Stress Testing):** Event-driven stress testing on a $50M wholesale banking book (Equities, Bonds, Derivatives, Cash) triggered by systemic shock breaches ($\text{impact} > 7.0$) with asset-level transmission models and deterministic scenario tracking.
 - **Market Intelligence & Stochastic Forecasting:** 100-path Geometric Brownian Motion (GBM) Monte Carlo forecasting conditioned on NLP sentiment drift, 52-week tail risk analytics, Base-100 normalized cross-stock correlation, and live Yahoo Finance integration with calibrated offline fallback.
 
 ---
@@ -87,7 +87,7 @@ flowchart TD
 
     subgraph Downstream Risk Engines
         MOD_A[Module A: Tactical Index Rebalancer\nMark-to-Market Accounting • Bounded Simplex [1%, 25%]\nTurnover Cap 15% • Tx Cost 5 bps • Benchmark Compare]
-        MOD_B[Module B: Wholesale Stress Testing\n$50M Book • Equities/Bonds/Derivatives/Cash\nImpact >= 7.0 Trigger • Geopolitical Loss: -$4.69M (-9.38%)]
+        MOD_B[Module B: Wholesale Stress Testing\n$50M Book • Equities/Bonds/Derivatives/Cash\nImpact > 7.0 Trigger • Loss: -$4.69M (1.0x) / -$7.50M (1.6x)]
         API --> MOD_A
         API --> MOD_B
     end
@@ -121,7 +121,7 @@ FinSight AI explicitly distinguishes between demonstration data, live public fee
 
 ---
 
-## 4. NLP Risk Engine: Methodology & Empirical Evaluation
+## 4. NLP Risk Engine: Methodology & Dual Benchmark Empirical Evaluation
 
 ### Financial Sentiment Analysis (FinBERT + Calibrated Fallback)
 Financial language differs fundamentally from generic consumer sentiment. Words like *"liability"*, *"debt"*, or *"shares"* carry specific risk meanings.
@@ -138,24 +138,32 @@ Financial language differs fundamentally from generic consumer sentiment. Words 
 ### Active Impact Scorer
 - Calls an active scikit-learn Ridge regression pipeline (`impact_regressor.joblib`) in the live inference path, blended with category base severity and systemic shock cues to produce bounded impact scores in $[1.0, 10.0]$.
 
-### Empirical Evaluation on Financial PhraseBank
-The NLP engine was evaluated against a stratified test set of 300 human-annotated sentences from the gold-standard **Malo et al. Financial PhraseBank** (`Sentences_AllAgree`), comparing FinSight AI against a naive financial keyword baseline:
+### Empirical Evaluation Across Dual Benchmarks (Zero Contamination)
+To ensure transparent, defensible machine learning evaluation without data leakage, FinSight AI was evaluated across two distinct benchmarks:
 
-| Metric | Naive Keyword Baseline | FinSight AI (FinBERT) | Improvement |
-| :--- | :---: | :---: | :---: |
-| **Accuracy** | 50.33% | **92.67%** | **+42.34%** |
-| **Macro Precision** | 59.84% | **93.73%** | +33.89% |
-| **Macro Recall** | 50.33% | **92.67%** | +42.34% |
-| **Macro-F1 Score** | 43.54% | **92.59%** | **+49.05%** |
-| **Positive F1** | 60.10% | **93.00%** | +32.90% |
-| **Negative F1** | 22.86% | **91.14%** | +68.28% |
-| **Neutral F1** | 47.67% | **93.63%** | +45.96% |
+#### Benchmark A: In-Domain Alignment Benchmark (Financial PhraseBank, N=300)
+> *Methodology Note:* Financial PhraseBank is documented as part of FinBERT's fine-tuning corpus. Evaluating on this set verifies that model weights reproduce expected domain performance without catastrophic degradation.
+
+| Model / Architecture | Accuracy | Macro-F1 | Positive F1 | Neutral F1 | Negative F1 |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Naive Keyword Baseline** | 50.67% | 43.88% | 51.65% | 62.30% | 17.70% |
+| **FinSight AI (FinBERT Engine)** | **89.00%** | **88.70%** | **87.85%** | **83.91%** | **94.34%** |
+| *Net Improvement* | *+38.33%* | *+44.82%* | *+36.20%* | *+21.61%* | *+76.64%* |
+
+#### Benchmark B: Independent Generalization Benchmark (Financial News & Social, N=300)
+> *Defensible Generalization:* Evaluated on 300 stratified financial headlines, earnings announcements, and analyst notes from the `zeroshot/TFNS` validation corpus. This dataset was **never seen during FinBERT fine-tuning**, providing a leakage-free out-of-distribution evaluation.
+
+| Model / Architecture | Accuracy | Macro-F1 | Positive F1 | Neutral F1 | Negative F1 |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Naive Keyword Baseline** | 42.67% | 35.43% | 28.57% | 53.78% | 23.93% |
+| **FinSight AI (FinBERT Engine)** | **69.33%** | **68.60%** | **71.29%** | **58.62%** | **75.89%** |
+| *Net Improvement* | *+26.66%* | *+33.17%* | *+42.72%* | *+4.84%* | *+51.96%* |
 
 ### Measured Inference Latency (Intel Core i5-12450HX CPU)
-- **Cold Start (Model Weights Loading):** 4,606 ms
-- **Warm Inference Median:** **30.52 ms**
-- **Warm Inference 95th Percentile (P95):** **50.15 ms**
-- **Warm Inference Mean:** 32.84 ms (tested across 300 sequential sentences)
+- **Cold Start (Model Weights Loading):** 4,373.8 ms
+- **Warm Inference Median:** **29.0 ms** per headline
+- **Warm Inference 95th Percentile (P95):** **46.2 ms** per headline
+- **Warm Inference Mean:** 30.9 ms (tested across 600 sequential sentences)
 
 ---
 
@@ -173,18 +181,25 @@ The NLP engine was evaluated against a stratified test set of 300 human-annotate
 
 ### Module B — Strategic Wholesale Stress Testing
 - **$50.0M Wholesale Banking Book:** Equities ($22.5M, 45%), Bonds ($15.0M, 30%), Derivatives ($7.5M, 15%), Cash ($5.0M, 10%).
-- **Central Trigger Mapping:** Events with an NLP impact score $\ge 7.0$ automatically trigger wholesale banking stress evaluations with SHA-256 event deduplication.
+- **Central Trigger Mapping:** Events with an NLP impact score $> 7.0$ automatically trigger wholesale banking stress evaluations with SHA-256 event deduplication.
 - **Asset-Level Shock Transmission:**
   - **Equities:** Sector shock waterfall based on scenario sensitivity.
   - **Bonds:** Modified duration approximation with credit spread widening / flight-to-safety gains.
   - **Derivatives:** Non-linear vega/volatility margin shock proxies.
   - **Cash:** Liquidity buffer with zero principal depreciation.
-- **Deterministic Geopolitical Stress Result:**
-  - Equities: -$3,712,500 (-16.50%)
-  - Bonds: +$675,000 (+4.50% flight-to-safety)
-  - Derivatives: -$1,650,000 (-22.00%)
-  - Cash: $0 (0.00%)
-  - **Total Book Loss:** **-$4,687,500 (-9.38%)** (Pre-stress: $50.0M $\to$ Post-stress: $45.31M).
+- **Reconciled Deterministic Stress Settings:**
+  - **Baseline Shock (1.0x Severity Multiplier):**
+    - Equities: -$3,712,500 (-16.50%)
+    - Bonds: +$675,000 (+4.50% flight-to-safety)
+    - Derivatives: -$1,650,000 (-22.00%)
+    - Cash: $0 (0.00%)
+    - **Total Book Loss:** **-$4,687,500 (-9.38%)** $\to$ Post-stress value: **$45,312,500**.
+  - **Amplified Shock (1.6x Severity Multiplier — As Demonstrated in Video Walkthrough):**
+    - Equities: -$5,940,000 (-26.40%)
+    - Bonds: +$1,080,000 (+7.20% flight-to-safety)
+    - Derivatives: -$2,640,000 (-35.20%)
+    - Cash: $0 (0.00%)
+    - **Total Book Loss:** **-$7,500,000 (-15.00%)** $\to$ Post-stress value: **$42,500,000**.
 
 ---
 
@@ -251,13 +266,13 @@ All backend unit, service, market, and API integration tests execute against iso
 ```bash
 pytest backend/tests/ -v
 ```
-**Verified Result:** **37 passed in 11.91s** (100% passing across 5 test modules).
+**Verified Result:** **40 passed out of 40 in 10.61s** (100% passing across 5 test modules).
 
-### Reproducible NLP Evaluation Script
+### Reproducible Dual NLP Evaluation Script
 ```bash
 python scripts/evaluate_nlp_models.py
 ```
-Downloads the public Financial PhraseBank dataset, evaluates 300 test sentences, measures CPU latency, compares FinBERT vs the Naive Baseline, and writes detailed Markdown and JSON reports to `docs/model_evaluation_report.md`.
+Evaluates both Benchmark A (PhraseBank in-domain) and Benchmark B (Independent financial news), measures CPU latency, compares FinBERT vs the Naive Baseline, and writes detailed Markdown and JSON reports to `docs/model_evaluation_report.md` and `docs/model_evaluation_results.json`.
 
 ---
 
@@ -269,7 +284,7 @@ Downloads the public Financial PhraseBank dataset, evaluates 300 test sentences,
 {
   "text": "NVIDIA quarterly data center revenue skyrockets 260% to record $22.6B on insatiable Blackwell GPU compute demand; raises guidance by $2B.",
   "headline": "NVIDIA Reports Record Q4 Revenue",
-  "source": "Reuters Live Wire",
+  "source": "Curated Tech Earnings Demo",
   "source_type": "News"
 }
 ```
@@ -277,24 +292,19 @@ Downloads the public Financial PhraseBank dataset, evaluates 300 test sentences,
 **Structured Response:**
 ```json
 {
-  "event_id": "EVT-MANUAL-f182c19c",
+  "event_id": "EVT-29184",
   "headline": "NVIDIA Reports Record Q4 Revenue",
   "text": "NVIDIA quarterly data center revenue skyrockets 260% to record $22.6B on insatiable Blackwell GPU compute demand; raises guidance by $2B.",
   "source_type": "News",
-  "source": "Reuters Live Wire",
+  "source": "Curated Tech Earnings Demo",
   "category": "Earnings",
   "sentiment_score": 0.8872,
   "impact_score": 8.45,
-  "confidence": 0.9436,
+  "confidence": 0.94,
   "tickers": ["NVDA"],
   "company": "NVIDIA Corporation",
   "sector": "Technology",
-  "timestamp": "2026-10-10 16:20:00",
-  "raw_finbert_probabilities": {
-    "positive": 0.9436,
-    "negative": 0.0564,
-    "neutral": 0.0000
-  }
+  "timestamp": "2026-10-10 17:20:00"
 }
 ```
 
@@ -307,7 +317,7 @@ Downloads the public Financial PhraseBank dataset, evaluates 300 test sentences,
 - **System Architecture Diagram:** `docs/architecture.png`
 - **NLP Model Evaluation Report:** `docs/model_evaluation_report.md`
 - **Submission Verification Checklist:** `SUBMISSION_CHECKLIST.md`
-- **Step-by-Step Demo Script:** `docs/demo_script.md`
+- **Step-by-Step Demo Script (&le; 5 Minutes):** `docs/demo_script.md`
 - **License (MIT):** `LICENSE` (Copyright 2026 Arpit Sharma)
 
 ---
