@@ -117,7 +117,7 @@ export default function ModuleBStressTesting({ showToast }) {
             </h3>
           </div>
           <span className="badge badge-severity-high">
-            High-Impact Trigger Threshold &ge; 7.0
+            High-Impact Trigger Threshold &gt; 7.0 (Systemic Breach)
           </span>
         </div>
 

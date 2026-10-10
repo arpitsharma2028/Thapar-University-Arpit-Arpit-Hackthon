@@ -85,16 +85,15 @@ def test_api_rss_ingestion_endpoint(client):
     assert data["status"] in ("success", "offline", "empty")
 
 def test_api_stress_test_boundary_below_threshold(client):
-    # Event with impact < 7.0 should NOT trigger wholesale stress test
+    # Event with impact <= 7.0 should NOT trigger wholesale stress test (threshold is > 7.0)
     low_event = {
         "event_id": "EVT-LOW-IMPACT",
         "headline": "Minor retail store renovations announced",
-        "impact_score": 4.5,
+        "impact_score": 7.0,
         "sentiment_score": 0.1,
         "category": "Other"
     }
-    # Direct run with trigger event
     from backend.services.stress_test_service import StressTestService
     service = StressTestService()
     mapped = service.map_event_to_scenario(low_event)
-    assert mapped is None  # Below 7.0 threshold, must not trigger
+    assert mapped is None  # Exact 7.0 must not breach > 7.0 threshold

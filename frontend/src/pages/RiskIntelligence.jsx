@@ -28,22 +28,26 @@ const SAMPLE_PROMPTS = [
   {
     title: "Geopolitical Strait Tension",
     text: "Naval escort operations initiated in Red Sea after commercial tanker attacks; oil insurance premiums spike 45% and container rerouting adds 14 days transit.",
-    type: "News"
+    type: "News",
+    source: "Curated Maritime News Demo"
   },
   {
     title: "NVIDIA Mega Earnings Beat",
     text: "NVIDIA quarterly data center revenue skyrockets 260% to record $22.6B on insatiable Blackwell GPU compute demand; raises guidance by $2B.",
-    type: "News"
+    type: "News",
+    source: "Curated Tech Earnings Demo"
   },
   {
     title: "DOJ Antitrust Mandate",
     text: "DOJ announces sweeping antitrust lawsuit against mega-cap cloud providers demanding forced unbundling of enterprise software and AI copilot suites.",
-    type: "News"
+    type: "News",
+    source: "Curated Regulatory Wire Demo"
   },
   {
     title: "Fintech Retail Social Sentiment",
     text: "🚨 Rumors circulating that $BAC fintech division seeing massive headcount cuts and loan book write-downs. Puts are going to print! 📉💥",
-    type: "Social"
+    type: "Social",
+    source: "Curated Social Forum Demo"
   }
 ];
 
@@ -54,8 +58,8 @@ export default function RiskIntelligence({
   showToast
 }) {
   const [inputText, setInputText] = useState(SAMPLE_PROMPTS[0].text);
-  const [inputSource, setInputSource] = useState("Reuters Live Feed");
-  const [sourceType, setSourceType] = useState("News");
+  const [inputSource, setInputSource] = useState(SAMPLE_PROMPTS[0].source);
+  const [sourceType, setSourceType] = useState(SAMPLE_PROMPTS[0].type);
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzedSignal, setAnalyzedSignal] = useState(null);
 
@@ -117,6 +121,7 @@ export default function RiskIntelligence({
                 onClick={() => {
                   setInputText(p.text);
                   setSourceType(p.type);
+                  setInputSource(p.source);
                 }}
                 className="btn btn-sm btn-outline"
               >
@@ -197,9 +202,16 @@ export default function RiskIntelligence({
                   ID: {analyzedSignal.event_id}
                 </span>
               </div>
-              <span className="badge badge-bullish">
-                Model Confidence: {((analyzedSignal.confidence || 0.9) * 100).toFixed(0)}%
+              <span className="badge badge-bullish" title="Softmax decision probability margin output from the FinSight NLP Engine">
+                Decision Margin: {analyzedSignal.confidence ? `${(analyzedSignal.confidence * 100).toFixed(0)}%` : 'Calibrated'}
               </span>
+            </div>
+
+            {/* Source & Traceability Banner */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '14px', fontSize: '0.80rem', color: 'var(--text-secondary)', flexWrap: 'wrap' }}>
+              <span>Source: <strong style={{ color: 'var(--text-primary)' }}>{analyzedSignal.source || 'Manual User Input'}</strong></span>
+              <span>Channel: <strong style={{ color: 'var(--text-primary)' }}>{analyzedSignal.source_type || 'News'}</strong></span>
+              <span>Traceability: <span className="mono-text" style={{ color: '#60a5fa' }}>Persisted in SQLite Event Log</span></span>
             </div>
 
             {/* Grid of Extracted Features */}
@@ -253,13 +265,13 @@ export default function RiskIntelligence({
                 <span>Apply Signal to Tactical Rebalancer</span>
               </button>
 
-              {analyzedSignal.impact_score >= 7.0 && (
+              {analyzedSignal.impact_score > 7.0 && (
                 <button
                   onClick={() => onStressTrigger(analyzedSignal)}
                   className="btn btn-danger"
                 >
                   <AlertTriangle size={15} />
-                  <span>Stress Test Wholesale Portfolio</span>
+                  <span>Stress Test Wholesale Portfolio (Impact &gt; 7.0)</span>
                 </button>
               )}
             </div>

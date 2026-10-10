@@ -121,16 +121,18 @@ export default function ModuleARebalancer({
             </div>
             <div className="mono-text glass-panel" style={{
               padding: '10px 14px',
-              fontSize: '0.84rem',
+              fontSize: '0.80rem',
               color: 'var(--text-primary)',
               background: 'rgba(255, 255, 255, 0.05)',
               border: '1px solid var(--glass-border)',
-              boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1)'
+              boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1)',
+              lineHeight: 1.5
             }}>
-              new_weight<sub>i</sub> = clamp(old_weight<sub>i</sub> + &lambda; &times; sentiment &times; (impact / 10), min=1.0%, max=25.0%)<br />
-              <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
-                &rarr; Normalized: weight<sub>i</sub> = new_weight<sub>i</sub> / &sum; new_weight &nbsp;|&nbsp; Guarantees &sum; w<sub>i</sub> &equiv; 100.0%, w<sub>i</sub> &ge; 1.0%
-              </span>
+              <div><strong>1. Raw Shift:</strong> target_w<sub>i</sub> = old_w<sub>i</sub> + &lambda; &times; sentiment &times; (impact / 10) &times; &beta;<sub>spillover</sub></div>
+              <div><strong>2. Bounded Simplex:</strong> Iterative redistribution ensuring 1.0% &le; w<sub>i</sub> &le; 25.0% and &sum; w<sub>i</sub> &equiv; 100.00%</div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.74rem', marginTop: '2px' }}>
+                <strong>3. Portfolio Controls:</strong> Turnover capped at 15.0% &bull; Tx Cost deducted at 5 bps &bull; Equal-Weight benchmark comparison
+              </div>
             </div>
           </div>
 
@@ -160,6 +162,30 @@ export default function ModuleARebalancer({
           </div>
         </div>
       </div>
+
+      {/* Portfolio Safeguards & Baseline Benchmark Strip (When no recent trigger) */}
+      {!lastRebalanceResult?.trigger_event && (
+        <div className="glass-panel" style={{
+          padding: '12px 18px',
+          marginBottom: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+          fontSize: '0.80rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="badge badge-neutral">Active Safeguards</span>
+            <span style={{ color: 'var(--text-secondary)' }}>
+              Weight Bounds: <strong style={{ color: 'var(--text-primary)' }}>1.0% – 25.0%</strong> &bull; Max Turnover Cap: <strong style={{ color: 'var(--text-primary)' }}>15.0%</strong> &bull; Tx Fee: <strong style={{ color: 'var(--text-primary)' }}>5 bps</strong>
+            </span>
+          </div>
+          <div style={{ color: 'var(--text-secondary)' }}>
+            Benchmark Reference: <strong style={{ color: '#60a5fa' }}>Equal-Weight 16-Stock Index (6.25% per asset)</strong>
+          </div>
+        </div>
+      )}
 
       {/* Last Trigger Event Banner (If available) */}
       {lastRebalanceResult?.trigger_event && (

@@ -123,12 +123,12 @@ export default function EventModal({ event, onClose, onRebalanceTrigger, onStres
               Trigger Module A Rebalance
             </button>
           )}
-          {onStressTrigger && event.impact_score >= 7.0 && (
+          {onStressTrigger && event.impact_score > 7.0 && (
             <button
               onClick={() => { onStressTrigger(event); onClose(); }}
               className="btn btn-danger"
             >
-              Run Module B Stress Test
+              Run Module B Stress Test (Impact &gt; 7.0)
             </button>
           )}
         </div>

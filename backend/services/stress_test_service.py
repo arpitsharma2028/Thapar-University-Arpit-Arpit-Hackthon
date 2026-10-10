@@ -99,11 +99,11 @@ class StressTestService:
     def map_event_to_scenario(self, event: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """
         Evaluates whether an incoming NLP event breaches the systemic threshold
-        (impact_score >= 7.0) and maps it to the corresponding stress scenario.
-        Returns None if impact_score < 7.0.
+        (impact_score > 7.0) and maps it to the corresponding stress scenario.
+        Returns None if impact_score <= 7.0.
         """
         impact = float(event.get("impact_score", 0.0))
-        if impact < HIGH_IMPACT_THRESHOLD:
+        if impact <= HIGH_IMPACT_THRESHOLD:
             return None
 
         category = event.get("category", "Market")
@@ -152,7 +152,7 @@ class StressTestService:
             if scenario is None:
                 # Event does not breach high-impact threshold (impact < 7.0)
                 raise DomainValidationError(
-                    f"Event impact score ({trigger_event.get('impact_score')}) is below systemic threshold ({HIGH_IMPACT_THRESHOLD}). Stress test not triggered.",
+                    f"Event impact score ({trigger_event.get('impact_score')}) does not exceed systemic threshold (> {HIGH_IMPACT_THRESHOLD}). Stress test not triggered.",
                     field="impact_score"
                 )
 
@@ -252,7 +252,7 @@ class StressTestService:
             "severity": float(scenario.get("severity", 7.0)),
             "severity_multiplier": severity_multiplier,
             "trigger_event_id": trigger_event_id,
-            "threshold_applied": f"impact_score >= {HIGH_IMPACT_THRESHOLD}",
+            "threshold_applied": f"impact_score > {HIGH_IMPACT_THRESHOLD}",
             "wholesale_portfolio_nominal": total_nominal,
             "total_value_before": round(total_nominal, 2),
             "total_value_after": round(post_stress_total, 2),
