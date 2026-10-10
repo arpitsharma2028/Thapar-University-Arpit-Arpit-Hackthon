@@ -52,3 +52,10 @@ def get_market_service(
 
 def get_metrics_service() -> MetricsService:
     return MetricsService()
+
+from backend.services.ingestion_service import IngestionService
+
+def get_ingestion_service(
+    repo: EventRepository = Depends(get_event_repository)
+) -> IngestionService:
+    return IngestionService(event_repo=repo)

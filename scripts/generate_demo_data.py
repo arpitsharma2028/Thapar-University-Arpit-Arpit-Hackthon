@@ -227,18 +227,25 @@ def generate_events_csv():
     return news_df, social_df
 
 # 4. MARKET DATA (Historical / Simulated Baseline Prices & Betas)
+CALIBRATED_BASE_PRICES = {
+    "AAPL": 182.50, "MSFT": 415.20, "NVDA": 875.00, "GOOGL": 155.40,
+    "AMZN": 178.90, "JPM": 198.30, "BAC": 37.50, "V": 278.40,
+    "JNJ": 152.10, "UNH": 482.00, "XOM": 118.60, "CVX": 156.20,
+    "PG": 162.80, "TSLA": 175.40, "CAT": 345.00, "NEE": 68.20
+}
+
 def generate_market_data_csv(companies_df):
     records = []
     base_date = datetime.now() - timedelta(days=30)
     
     for _, comp in companies_df.iterrows():
         ticker = comp['ticker']
-        curr_price = float(comp['base_weight']) * 2000.0 + random.uniform(50, 200)
+        curr_price = CALIBRATED_BASE_PRICES.get(ticker, 150.0)
         
         for d in range(30):
             date_str = (base_date + timedelta(days=d)).strftime("%Y-%m-%d")
-            # Random walk
-            pct_change = random.gauss(0.0008, 0.018 * comp['beta'])
+            # Calibrated random walk around true base price
+            pct_change = random.gauss(0.0005, 0.015 * comp['beta'])
             curr_price = round(curr_price * (1 + pct_change), 2)
             vol = int(random.uniform(2_000_000, 15_000_000))
             records.append({
@@ -251,7 +258,7 @@ def generate_market_data_csv(companies_df):
             
     mkt_df = pd.DataFrame(records)
     mkt_df.to_csv(os.path.join(DATA_DIR, "market_data.csv"), index=False)
-    print(f"[OK] Created market_data.csv ({len(mkt_df)} records)")
+    print(f"[OK] Created market_data.csv ({len(mkt_df)} records with calibrated base prices)")
     return mkt_df
 
 # 5. STRESS SCENARIOS JSON (Wholesale Banking Multi-Asset Stress Scenarios)

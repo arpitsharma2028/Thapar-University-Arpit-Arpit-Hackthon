@@ -126,6 +126,10 @@ class MarketIntelligenceService:
 
         company_info = TICKER_MAP.get(clean_symbol, {"name": clean_symbol, "sector": "Broad Market"})
 
+        source_val = str(df["data_source"].iloc[-1]) if "data_source" in df.columns else "yfinance"
+        is_synth = bool("synthetic" in source_val.lower())
+        as_of_date = str(df["date"].iloc[-1]) if "date" in df.columns else datetime.now().strftime("%Y-%m-%d")
+
         return {
             "symbol": clean_symbol,
             "name": company_info["name"],
@@ -137,7 +141,9 @@ class MarketIntelligenceService:
             "volatility_score": volatility,
             "top_3_best_days": top3_best,
             "top_3_worst_days": top3_worst,
-            "data_source": df["data_source"].iloc[-1] if "data_source" in df.columns else "yfinance"
+            "data_source": source_val,
+            "is_synthetic": is_synth,
+            "as_of": as_of_date
         }
 
     def get_monte_carlo_forecast(
@@ -243,7 +249,8 @@ class MarketIntelligenceService:
         d1_common = d1.loc[common_dates]
         d2_common = d2.loc[common_dates]
 
-        corr = round(float(d1_common["daily_return"].corr(d2_common["daily_return"])), 4)
+        raw_corr = d1_common["daily_return"].corr(d2_common["daily_return"])
+        corr = 0.0 if pd.isna(raw_corr) else round(float(raw_corr), 4)
 
         base1 = d1_common["close"].iloc[0]
         base2 = d2_common["close"].iloc[0]
