@@ -64,6 +64,7 @@ class UnifiedRiskEngine:
             "impact_score": impact_score,
             "tickers": entities["tickers"],
             "companies": entities["companies"],
+            "company": entities["companies"][0] if entities.get("companies") else None,
             "sector": entities["sector"],
             "confidence": overall_conf,
             "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
