@@ -65,3 +65,18 @@ def get_next_simulation_event(
     if not evt:
         raise EntityNotFoundException("No simulation events found in registry.", entity_type="Event")
     return evt
+
+from backend.services.ingestion_service import IngestionService
+from backend.api.deps import get_ingestion_service
+
+@router.post("/ingest/rss")
+def ingest_public_rss(
+    limit: int = Query(5, ge=1, le=20, description="Max news headlines to ingest"),
+    ingestion_service: IngestionService = Depends(get_ingestion_service)
+):
+    """
+    Polls genuine unauthenticated public financial RSS feeds (WSJ / MarketWatch),
+    normalizes headlines into risk events, scores them via NLP engine, and persists them.
+    Falls back gracefully if network is unavailable.
+    """
+    return ingestion_service.fetch_and_ingest_rss(max_items=limit)

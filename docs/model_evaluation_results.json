@@ -1,0 +1,62 @@
+{
+  "dataset": {
+    "name": "Financial PhraseBank (Sentences_AllAgree)",
+    "citation": "Malo, P., Sinha, A., Korhonen, P., Wallenius, J., & Takala, P. (2014)",
+    "license": "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)",
+    "sample_size": 300,
+    "label_distribution": {
+      "positive": 100,
+      "neutral": 100,
+      "negative": 100
+    }
+  },
+  "latency_profile": {
+    "cold_start_ms": 4606.48,
+    "median_warm_ms": 30.52,
+    "p95_ms": 50.15,
+    "mean_ms": 33.0,
+    "hardware": "Intel / AMD CPU (Local Execution, Windows 11)"
+  },
+  "naive_baseline": {
+    "accuracy_pct": 50.33,
+    "macro_f1_pct": 43.54,
+    "per_class": {
+      "positive": {
+        "precision": 56.8,
+        "recall": 46.0,
+        "f1": 50.8
+      },
+      "neutral": {
+        "precision": 46.1,
+        "recall": 95.0,
+        "f1": 62.1
+      },
+      "negative": {
+        "precision": 76.9,
+        "recall": 10.0,
+        "f1": 17.7
+      }
+    }
+  },
+  "finsight_engine": {
+    "accuracy_pct": 92.67,
+    "macro_f1_pct": 92.59,
+    "per_class": {
+      "positive": {
+        "precision": 89.5,
+        "recall": 94.0,
+        "f1": 91.7
+      },
+      "neutral": {
+        "precision": 98.8,
+        "recall": 84.0,
+        "f1": 90.8
+      },
+      "negative": {
+        "precision": 90.9,
+        "recall": 100.0,
+        "f1": 95.2
+      }
+    }
+  }
+}
