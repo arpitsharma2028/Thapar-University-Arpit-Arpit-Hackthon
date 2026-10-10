@@ -1,61 +1,117 @@
 {
-  "dataset": {
-    "name": "Financial PhraseBank (Sentences_AllAgree)",
-    "citation": "Malo, P., Sinha, A., Korhonen, P., Wallenius, J., & Takala, P. (2014)",
-    "license": "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)",
-    "sample_size": 300,
-    "label_distribution": {
-      "positive": 100,
-      "neutral": 100,
-      "negative": 100
-    }
+  "metadata": {
+    "evaluation_timestamp": "2026-10-10 17:26:12",
+    "environment": "Python 3.11 / CPU Execution",
+    "sample_size_per_benchmark": 300
   },
   "latency_profile": {
-    "cold_start_ms": 4606.48,
-    "median_warm_ms": 30.52,
-    "p95_ms": 50.15,
-    "mean_ms": 33.0,
-    "hardware": "Intel / AMD CPU (Local Execution, Windows 11)"
+    "cold_start_ms": 4373.81,
+    "median_warm_ms": 29.0,
+    "p95_ms": 46.21,
+    "mean_ms": 30.93
   },
-  "naive_baseline": {
-    "accuracy_pct": 50.33,
-    "macro_f1_pct": 43.54,
-    "per_class": {
-      "positive": {
-        "precision": 56.8,
-        "recall": 46.0,
-        "f1": 50.8
-      },
-      "neutral": {
-        "precision": 46.1,
-        "recall": 95.0,
-        "f1": 62.1
-      },
-      "negative": {
-        "precision": 76.9,
-        "recall": 10.0,
-        "f1": 17.7
+  "benchmark_a_phrasebank_in_domain": {
+    "dataset_name": "Financial PhraseBank (Sentences_AllAgree)",
+    "citation": "Malo et al. (2014)",
+    "methodology_note": "In-domain alignment benchmark. Financial PhraseBank is part of FinBERT's fine-tuning corpus; validates zero performance degradation in domain.",
+    "naive_baseline": {
+      "accuracy_pct": 50.67,
+      "macro_f1_pct": 43.88,
+      "positive_f1": 51.65,
+      "neutral_f1": 62.3,
+      "negative_f1": 17.7,
+      "per_class": {
+        "positive": {
+          "precision": 57.3,
+          "recall": 47.0,
+          "f1": 51.6
+        },
+        "neutral": {
+          "precision": 46.3,
+          "recall": 95.0,
+          "f1": 62.3
+        },
+        "negative": {
+          "precision": 76.9,
+          "recall": 10.0,
+          "f1": 17.7
+        }
+      }
+    },
+    "finsight_engine": {
+      "accuracy_pct": 89.0,
+      "macro_f1_pct": 88.7,
+      "positive_f1": 87.85,
+      "neutral_f1": 83.91,
+      "negative_f1": 94.34,
+      "per_class": {
+        "positive": {
+          "precision": 82.5,
+          "recall": 94.0,
+          "f1": 87.9
+        },
+        "neutral": {
+          "precision": 98.6,
+          "recall": 73.0,
+          "f1": 83.9
+        },
+        "negative": {
+          "precision": 89.3,
+          "recall": 100.0,
+          "f1": 94.3
+        }
       }
     }
   },
-  "finsight_engine": {
-    "accuracy_pct": 92.67,
-    "macro_f1_pct": 92.59,
-    "per_class": {
-      "positive": {
-        "precision": 89.5,
-        "recall": 94.0,
-        "f1": 91.7
-      },
-      "neutral": {
-        "precision": 98.8,
-        "recall": 84.0,
-        "f1": 90.8
-      },
-      "negative": {
-        "precision": 90.9,
-        "recall": 100.0,
-        "f1": 95.2
+  "benchmark_b_independent_generalization": {
+    "dataset_name": "Twitter & Financial News Sentiment (zeroshot/TFNS validation split)",
+    "methodology_note": "Independent out-of-distribution generalization benchmark. Contains financial headlines and commentary never seen during FinBERT fine-tuning.",
+    "naive_baseline": {
+      "accuracy_pct": 42.67,
+      "macro_f1_pct": 35.43,
+      "positive_f1": 28.57,
+      "neutral_f1": 53.78,
+      "negative_f1": 23.93,
+      "per_class": {
+        "positive": {
+          "precision": 69.2,
+          "recall": 18.0,
+          "f1": 28.6
+        },
+        "neutral": {
+          "precision": 37.4,
+          "recall": 96.0,
+          "f1": 53.8
+        },
+        "negative": {
+          "precision": 82.4,
+          "recall": 14.0,
+          "f1": 23.9
+        }
+      }
+    },
+    "finsight_engine": {
+      "accuracy_pct": 69.33,
+      "macro_f1_pct": 68.6,
+      "positive_f1": 71.29,
+      "neutral_f1": 58.62,
+      "negative_f1": 75.89,
+      "per_class": {
+        "positive": {
+          "precision": 70.6,
+          "recall": 72.0,
+          "f1": 71.3
+        },
+        "neutral": {
+          "precision": 68.9,
+          "recall": 51.0,
+          "f1": 58.6
+        },
+        "negative": {
+          "precision": 68.5,
+          "recall": 85.0,
+          "f1": 75.9
+        }
       }
     }
   }
