@@ -173,9 +173,9 @@ To ensure transparent, defensible machine learning evaluation without data leaka
 - **Mark-to-Market Accounting:** Portfolio returns are calculated through asset price changes and previous holdings rather than arbitrary monetary multipliers:
   $$R_{\text{portfolio}} = \sum_{i=1}^{N} w_{i, t-1} \cdot R_{i, t}$$
 - **Target Allocation Shift:**
-  $$\Delta w_i = \lambda \times \text{sentiment} \times \left(\frac{\text{impact\_score}}{10.0}\right) \times \beta_{\text{spillover}}$$
+  $$\Delta w_i = \lambda \times \text{Sentiment} \times \left(\frac{\text{Impact Score}}{10.0}\right) \times \beta_{\text{spillover}}$$
   *($\lambda = 0.025$ default, $\beta = 1.0$ for direct mentions, $0.45$ for sector peers).*
-- **Bounded Simplex Redistribution:** Iterative algorithm strictly projects target weights into $[\text{MIN\_WEIGHT}, \text{MAX\_WEIGHT}] = [1.0\%, 25.0\%]$ such that:
+- **Bounded Simplex Redistribution:** Iterative algorithm strictly projects target weights into $[w_{\min}, w_{\max}] = [1.0\%, 25.0\%]$ such that:
   $$\sum_{i=1}^{16} w_i \equiv 100.00\% \quad \text{and} \quad w_i \ge 1.0\% \quad \forall i$$
 - **Portfolio Controls:** 15% maximum turnover cap per rebalance, 5 bps transaction cost deduction, and continuous tracking against an equal-weight benchmark index.
 
