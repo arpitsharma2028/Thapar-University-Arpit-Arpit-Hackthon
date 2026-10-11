@@ -3,7 +3,7 @@
 **S&P Global & CRISIL Campus Hackathon 2026 Submission**
 
 **Candidate Name:** Arpit Sharma  
-**College Email ID:** asharma32_be22@thapar.edu  
+**College Email ID:** aarpit1_be24@thapar.edu  
 **GitHub Profile:** [arpitsharma2028](https://github.com/arpitsharma2028)  
 **College / Campus:** Thapar Institute of Engineering and Technology (TIET)  
 
@@ -203,7 +203,7 @@ To ensure transparent, defensible machine learning evaluation without data leaka
 
 ---
 
-## 6. Installation & Quickstart
+## 6. How to Run & Quickstart
 
 Clone the repository to your local machine:
 ```bash
@@ -211,7 +211,31 @@ git clone https://github.com/arpitsharma2028/Thapar-University-Arpit-Arpit-Hackt
 cd Thapar-University-Arpit-Arpit-Hackthon
 ```
 
-### Windows Setup (PowerShell)
+### Method 1: One-Click Launch with `start.bat` (Recommended for Windows)
+
+The easiest and quickest way to run the entire platform on Windows:
+
+1. **Double-click on `start.bat`** in the project root directory (or run `.\start.bat` in CMD / PowerShell).
+2. The script will automatically handle all setup and startup:
+   - Verifies / creates the Python virtual environment (`venv`).
+   - Installs backend dependencies from `requirements.txt`.
+   - Generates demo datasets, trains local ML models, and seeds the SQLite database.
+   - Installs frontend packages (`npm install`) if needed.
+   - Starts the **FastAPI Backend Server** at `http://127.0.0.1:8000` in a dedicated terminal window.
+   - Starts the **React / Vite Frontend Client** at `http://localhost:5173` in a dedicated terminal window.
+   - Automatically opens your web browser to **`http://localhost:5173`**.
+
+> **To Stop Platform Services:** Simply double-click on **`stop.bat`** (or close the terminal windows) to cleanly terminate Python and Node background processes.
+
+---
+
+### Method 2: Manual Step-by-Step Terminal Launch
+
+If you prefer manual setup or are running on macOS/Linux:
+
+#### Step 1: Backend Setup & Server Launch
+
+**Windows (PowerShell):**
 ```powershell
 # 1. Create and activate virtual environment
 python -m venv venv
@@ -230,7 +254,7 @@ python scripts/seed_database.py
 uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
-### macOS / Linux Setup (Bash / Zsh)
+**macOS / Linux (Bash / Zsh):**
 ```bash
 # 1. Create and activate virtual environment
 python3 -m venv venv
@@ -249,13 +273,17 @@ python scripts/seed_database.py
 uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
-### Frontend Dashboard Launch (Terminal 2)
+#### Step 2: Frontend Dashboard Launch (In a New Terminal)
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open **`http://localhost:5173`** in your browser. Interactive Swagger API documentation is available at **`http://127.0.0.1:8000/docs`**.
+
+#### Service URLs
+- **Interactive Web Dashboard:** Open **`http://localhost:5173`**
+- **Interactive Swagger API Documentation:** Open **`http://127.0.0.1:8000/docs`**
+- **Backend Health Check:** Open **`http://127.0.0.1:8000/api/health`**
 
 ---
 
@@ -313,6 +341,7 @@ Evaluates both Benchmark A (PhraseBank in-domain) and Benchmark B (Independent f
 ## 9. Submission Deliverables & Documentation Index
 
 - **Source Code Repository:** [GitHub Repo](https://github.com/arpitsharma2028/Thapar-University-Arpit-Arpit-Hackthon)
+- **One-Click Automation Scripts:** `start.bat` (automated launcher) & `stop.bat` (process termination)
 - **Demonstration Video (YouTube):** [FinSight AI Platform Walkthrough](https://youtu.be/5Oz4tZ-phwo)
 - **Presentation Deck (Google Slides):** [FinSight AI Presentation Deck](https://docs.google.com/presentation/d/1MfY5WYjfj4uUubKmW_YZOqm4KXUJ1Nfc/edit?usp=sharing&ouid=115230347381016892346&rtpof=true&sd=true)
 - **System Architecture Diagram:** `docs/architecture.png`
